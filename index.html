@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Swinging Cat</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript"
+        src="https://embeds.iubenda.com/widgets/5d372bd0-eb09-4f22-b81f-2b9ec266edd0.js"></script>
+</head>
+
+<body>
+
+    <div id="authPopup" class="overlay">
+        <div class="popup-content">
+            <h1>Benvenuto!</h1>
+            <p>Accedi per salvare i tuoi record mondiali:</p>
+            <!-- Esempio di aggiunta nel popup -->
+            <input type="text" id="nameInput" placeholder="Inserisci il tuo nome">
+            <input type="email" id="emailInput" placeholder="Email">
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button id="forgotPasswordBtn"
+                style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; margin: 5px 0;">
+                Hai dimenticato la password?
+            </button>
+            <div style="margin: 15px 0; display: flex; align-items: left; justify-content: left; gap: 8px;">
+                <input type="checkbox" id="ageCheck" style="width: auto; margin: 0;">
+                <label for="ageCheck" style="color: #000; cursor: pointer; user-select: none;">Dichiaro di avere almeno
+                    18 anni</label>
+            </div>
+            <div style="margin: 15px 0; font-size: 0.9em; text-align: left;">
+                <input type="checkbox" id="privacyCheck" style="width: auto;">
+                <label for="privacyCheck" style="cursor: pointer;">
+                    Dichiaro di aver letto, compreso e accettato
+                    l' <a href="https://www.iubenda.com/privacy-policy/73452321" target="_blank">Informativa sulla
+                        Privacy</a>,
+                    la <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target="_blank">Cookie
+                        Policy</a> e
+                    i <a href="https://scrawny-maturing-chance.ngrok-free.dev/terms_conds.html" target="_blank">Termini
+                        e Condizioni</a>.
+                </label>
+            </div>
+            <button id="magicLinkBtn">Registrati / Accedi</button>
+            <button id="guestBtn" class="guest-btn">Gioca come Ospite</button>
+        </div>
+    </div>
+
+    <!-- Popup Classifica Globale Organizzato e Pulito -->
+    <div id="leaderboardPopup" class="overlay hidden">
+        <div class="popup-content" style="max-height: 80vh; overflow-y: auto;">
+            <!-- Pulsante di chiusura integrato elegantemente -->
+            <button id="closeLeaderboardBtn" class="guest-btn"
+                style="position: sticky; top: 3px; left: 100%; width: auto; padding: 6px 12px; margin: 0; font-size: 14px;">Chiudi</button>
+
+            <h2>Classifica Globale 🏆</h2>
+            <p>I migliori acrobati della community</p>
+
+            <div id="leaderboardContent" style="margin-top: 15px; text-align: left;">
+                <p style="text-align: center;">Caricamento in corso...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Principale (Simula MainActivity.kt) -->
+    <div id="mainMenu">
+        <h1 id="menuTitle">Swinging Cat</h1>
+        <button id="buttonGame2">Gioca</button>
+        <button id="ranking2">Classifica Globale</button>
+        <button id="multiplayerBtn">Multiplayer</button>
+    </div> <!-- 🔴 CHIUDI IL DIV DEL MENU PRINCIPALE QUI -->
+
+    <!-- Lobby -->
+    <div id="multiplayerLobby" class="hidden">
+        <h2>Lobby Multiplayer</h2>
+
+        <div class="lobby-card">
+            <h3>Crea la tua Stanza</h3>
+            <button id="createRoomBtn">Crea Stanza</button>
+        </div>
+
+        <div class="lobby-card">
+            <h3>Unisciti a una Stanza</h3>
+            <input type="text" id="roomCodeInput" placeholder="Codice Stanza (es. XJ92K)">
+            <button id="joinRoomBtn">Entra</button>
+        </div>
+
+        <button id="backToMenuBtn">Torna Indietro</button>
+    </div>
+
+    <!-- Schermata di Attesa (Prima dell'avvio partita) -->
+    <div id="roomWaitingScreen" class="hidden">
+        <h2>Stanza: <span id="displayRoomCode"></span></h2>
+        <ul id="playersList"></ul>
+
+        <button id="readyBtn" class="hidden" style="background-color: #2ecc71;">Pronto!</button>
+        <button id="startGameBtn" class="hidden" disabled>Avvia Partita</button>
+        <button id="backToLobbyBtn">Torna Indietro</button>
+    </div>
+
+    <!-- Pannello Impostazioni -->
+    <div id="settingsPanel" class="hidden">
+        <h3>Impostazioni</h3>
+        <p id="userEmailDisplay" style="font-size: 0.85em; color: #666; margin-bottom: 15px;"></p>
+        <div class="setting-row">
+            <label>Musica</label>
+            <input type="range" id="musicVolume" min="0" max="1" step="0.1" value="1">
+        </div>
+        <div class="setting-row">
+            <label>Effetti</label>
+            <input type="range" id="sfxVolume" min="0" max="0.3" step="0.03" value="0.3">
+        </div>
+        <hr>
+        <button id="btnChangeAccountSettings">Cambia Account</button>
+        <button id="btnLogoutSettings">Logout</button>
+        <button id="btnUpgradeAccount" class="hidden" style="background: #000000; color: white;">Registrati</button>
+        <button id="btnDeleteAccount" style="color: white; background: #ec3a34; margin-top: 10px;">Elimina
+            Account</button>
+        <a href="https://scrawny-maturing-chance.ngrok-free.dev/terms_conds.html" target="_blank"
+            style="display: flex; align-items: center; justify-content: center; margin-top: 15px;">Termini e
+            Condizioni</a>
+        <div
+            style="font-size: 11px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; margin-top: 15px; text-align: center;">
+            <p style="margin: 0;"><b>TEAM BICTRON</b></p>
+            <p style="margin: 0;">Development, Assets & Design: Zen C. Novi</p>
+            <p style="margin: 0;">Music: Ivan G. Novi</p>
+        </div>
+    </div>
+
+    <!-- Bottone per aprire le impostazioni -->
+    <button id="settingsBtn" class="icon-btn" style="position:fixed; top:10px; right:10px; z-index: 1000;">⚙️</button>
+
+    <!-- Container del Gioco -->
+    <div id="gameContainer" class="hidden">
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- UI di Controllo Sovrapposta -->
+        <div id="ui-layer">
+            <button id="exitButton" class="icon-btn">❌</button>
+            <button id="soundOn" class="icon-btn">🔊</button>
+            <button id="soundOff" class="icon-btn hidden">🔇</button>
+            <button id="pauseButton" class="icon-btn">⏸️</button>
+            <button id="resumeButton" class="icon-btn hidden">▶️</button>
+            <button id="tutorialButton" class="icon-btn">ℹ️</button>
+        </div>
+
+        <!-- Schermata Tutorial Overlay -->
+        <div id="tutorialPanel" class="overlay hidden">
+            <h1>Come Giocare</h1>
+            <p>Tocca lo schermo per staccarti dalla corda al momento giusto e dondolare verso la prossima!</p>
+            <h3 class="blink">TOCCA PER INIZIARE</h3>
+        </div>
+
+        <!-- Schermata Game Over Overlay -->
+        <div id="gameOverPanel" class="overlay hidden">
+            <h1 style="color: #ff3333; font-size: 48px;">GAME OVER</h1>
+            <h2 id="finalScore">Punteggio: 0</h2>
+            <h3 class="blink">TOCCA PER RIPROVARE</h3>
+        </div>
+
+        <!-- Tabella Punteggi Live -->
+        <div id="liveScoreboard" class="hidden">
+            <h3>Sfida in corso</h3>
+            <table id="scoreTable">
+                <thead>
+                    <tr>
+                        <th>Giocatore</th>
+                        <th>Punteggio</th>
+                    </tr>
+                </thead>
+                <tbody id="scoreBody"></tbody>
+            </table>
+            <!-- AGGIUNGI QUESTO BOTTONE -->
+            <button id="returnLobbyBtn" class="hidden" style="margin-top: 15px; width: 100%;">Torna alla Lobby</button>
+        </div>
+    </div>
+
+    <div id="cookiePrivacyLinks" style="position: fixed; bottom: 5px; left: 570px; z-index: 9999; font-size: 12px;">
+        <a href="https://www.iubenda.com/privacy-policy/73452321" class="iubenda-white iubenda-noiframe iubenda-embed"
+            title="Privacy Policy ">Privacy Policy</a>
+        <script
+            type="text/javascript">(function (w, d) { var loader = function () { var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s, tag); }; if (w.addEventListener) { w.addEventListener("load", loader, false); } else if (w.attachEvent) { w.attachEvent("onload", loader); } else { w.onload = loader; } })(window, document);</script>
+
+        <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy"
+            class="iubenda-white iubenda-noiframe iubenda-embed" title="Cookie Policy ">Cookie Policy</a>
+        <script
+            type="text/javascript">(function (w, d) { var loader = function () { var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s, tag); }; if (w.addEventListener) { w.addEventListener("load", loader, false); } else if (w.attachEvent) { w.attachEvent("onload", loader); } else { w.onload = loader; } })(window, document);</script>
+    </div>
+
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="game.js"></script>
+    <script type="module" src="multiplayer.js"></script>
+
+</body>
+
+</html>
