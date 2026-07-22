@@ -455,10 +455,10 @@ button {
 
 /* Sostituisci il vecchio #cookiePrivacyLinks con questo */
 #cookiePrivacyLinks {
-    position: fixed;
+    position: absolute;
     bottom: 10px;
     left: 0;
-    margin-block-start: 50%;
+    width: 100%;
     z-index: 9999;
     font-size: 12px;
     /* Leggermente più piccolo su mobile */

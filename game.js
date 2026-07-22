@@ -1258,7 +1258,7 @@ function updateScoreboardUI(players, matchEnded) {
             else if (position === 3) medal = "🥉 ";
         }
 
-        const row = `<tr><td>${position}°${medal}${p.name}</td><td>${p.score}</td></tr>`;
+         const row = `<tr><td>${position}°${medal}<strong>${p.name}</strong></td><td><strong style="color: #1853b8;">${p.score}</strong></td></tr>`;
         scoreBody.innerHTML += row;
     });
 }
