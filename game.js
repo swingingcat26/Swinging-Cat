@@ -952,7 +952,9 @@ async function updateGameLogic() {
 
     // Condizione di Game Over (Caduta oltre il limite inferiore dello schermo)
     if (playerY > h + playerHeight + 100) {
-        // 1. BLOCCO IMMEDIATO: Se siamo già in Game Over, esci subito dalla funzione
+        // 1. BLOCCO IMMEDIATO: Se siamo già in Game Over, esci subito dalla 
+         const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
+            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
         if (gameState === 'GAME_OVER') return;
 
         gameState = 'GAME_OVER'; // Cambio stato prima di ogni altra cosa
@@ -960,8 +962,6 @@ async function updateGameLogic() {
         // 2. LOGICA DI SALVATAGGIO (Eseguita una sola volta)
 
             // Salvataggio Locale (sempre attivo)
-            const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
-            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
             highScore = Math.max(score, currentLocal, highScore);
             localStorage.setItem(localKey, highScore);
