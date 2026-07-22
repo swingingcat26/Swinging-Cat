@@ -986,7 +986,7 @@ if (auth.currentUser && !auth.currentUser.isAnonymous) {
         playSound(sounds.falling);
         stopAndReleaseMusic();
 
-        finalScoreText.innerText = `Punteggio: ${score}`;
+        finalScoreText.innerText = `Score: ${score}`;
         gameOverPanel.classList.remove('hidden');
         gameOverPanel.style.display = 'flex';
 
