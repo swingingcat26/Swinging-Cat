@@ -18,6 +18,25 @@ export function initMultiplayer(uiElements) {
     }
         ui.mainMenu.classList.add('hidden');
         ui.multiplayerLobby.classList.remove('hidden');
+
+        // Intercetta la chiusura della pagina o il cambio tab
+        window.addEventListener('beforeunload', (event) => {
+            if (!currentRoomId || !auth.currentUser) return;
+        
+            const roomRef = doc(db, "rooms", currentRoomId);
+        
+            // Se l'utente è il creatore, eliminiamo la stanza
+            if (isCreator) {
+                // Usiamo sendBeacon o una chiamata sincrona/rapida se possibile, 
+                // ma in Firestore possiamo fare una richiesta di eliminazione asincrona
+                deleteDoc(roomRef).catch(err => console.error("Errore pulizia stanza alla chiusura:", err));
+            } else {
+                // Se è un semplice partecipante, lo rimuoviamo dalla lista dei giocatori
+                updateDoc(roomRef, {
+                    [`players.${auth.currentUser.uid}`]: deleteField()
+                }).catch(err => console.error("Errore rimozione giocatore alla chiusura:", err));
+            }
+        });
     });
 
 ui.backToLobbyBtn.addEventListener('click', async () => {
