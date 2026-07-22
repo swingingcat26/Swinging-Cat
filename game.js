@@ -337,6 +337,7 @@ buttonGame2.addEventListener('click', () => {
     settingsBtn.classList.add('hidden');
     gameContainer.classList.remove('hidden');
     cookieDiv.classList.add('hide-ui');
+    tutorialButton.classList.remove('hidden');
 
 
 
