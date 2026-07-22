@@ -112,12 +112,12 @@ closeLeaderboardBtn.addEventListener('click', () => {
 // Gestione click sul pulsante "Classifica Globale"
 document.getElementById('ranking2').addEventListener('click', async () => {
     if (!auth.currentUser || auth.currentUser.isAnonymous) {
-        alert("La classifica globale è disponibile solo per gli utenti registrati.");
+        alert("The global leaderboard is available only for registered users.");
         return;
     }
 
     leaderboardPopup.style.zIndex = "10000";
-    leaderboardContent.innerHTML = '<p style="text-align: center; color: #333;">Caricamento in corso...</p>';
+    leaderboardContent.innerHTML = '<p style="text-align: center; color: #333;">Loading...</p>';
     leaderboardPopup.classList.remove('hidden');
 
     try {
@@ -125,7 +125,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         const { top10, myPos, totalUsers, myScore } = await getGlobalLeaderboard();
 
         if (!top10 || top10.length === 0) {
-            leaderboardContent.innerHTML = '<p style="text-align: center; color: #333;">Non hai ancora giocato nessuna partita. Fai il tuo primo record!</p>';
+            leaderboardContent.innerHTML = '<p style="text-align: center; color: #333;">You have not played any games yet. Set your first highscore!</p>';
             return;
         }
 
@@ -136,7 +136,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
             let medal = (index === 0) ? '🥇 ' : (index === 1) ? '🥈 ' : (index === 2) ? '🥉 ' : '';
             htmlClassifica += `
                 <li style="display: flex; justify-content: space-between; padding: 12px 6px; border-bottom: 1px solid #f1f5f9;">
-                    <span style="font-weight: 600;">${medal}${index + 1}. ${score.displayName || "Sconosciuto"}</span>
+                    <span style="font-weight: 600;">${medal}${index + 1}. ${score.displayName || "Player"}</span>
                     <span style="font-weight: 700; color: #2575fc;">${score.score} pt</span>
                 </li>`;
         });
@@ -145,8 +145,8 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         // 🟢 AGGIUNTA SBARRA IN FONDO
         if (myPos) {
             let footerText = (myPos <= 250)
-                ? `La tua posizione: ${myPos}°  <span style="font-weight: 700; color: #2575fc; margin-left: 10px;">${myScore} pt</span>`
-                : `Sei migliore del ${(((totalUsers - myPos) / totalUsers) * 100).toFixed(1)}% dei giocatori`;
+                ? `Your position: ${myPos}°  <span style="font-weight: 700; color: #2575fc; margin-left: 10px;">${myScore} pt</span>`
+                : `You are better than ${(((totalUsers - myPos) / totalUsers) * 100).toFixed(1)}% of players`;
 
             htmlClassifica += `
                 <div style="border-top: 2px solid #e2e8f0; padding: 15px; margin-top: 10px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 0 0 8px 8px;">
@@ -265,7 +265,7 @@ let ropes = [];
 function checkPrivacy() {
     const privacyCheck = document.getElementById('privacyCheck');
     if (!privacyCheck.checked) {
-        alert("Devi accettare l'informativa sulla privacy per continuare.");
+        alert("You must accept the privacy policy to continue.");
         return false;
     }
     return true;
@@ -475,22 +475,22 @@ document.getElementById('magicLinkBtn').addEventListener('click', async () => {
             await signInAnonymously(auth);
             document.getElementById('authPopup').style.display = 'none';
         } catch (error) {
-            alert("Errore accesso anonimo: " + error.message);
+            alert("Error: " + error.message);
         }
         return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
     }
 
     try {
         await loginWithEmail(email, password);
-        alert("Bentornato!");
+        alert("Welcome Back!");
     } catch (error) {
         if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
             try {
                 // Passiamo il nome alla funzione di registrazione
                 await registerWithEmail(email, password, displayName);
-                alert("Account creato!");
+                alert("Account created!");
             } catch (regError) {
-                alert("Errore: " + regError.message);
+                alert("Error: " + regError.message);
             }
         }
     }
@@ -507,9 +507,9 @@ document.getElementById('guestBtn').addEventListener('click', async () => {
         localStorage.setItem('playingAsGuest', 'true');
         authPopup.style.display = 'none';
 
-        alert("Stai giocando in modalità anonima. Le tue partite saranno salvate solo in locale.");
+        alert("You're playing in guest mode. Your games will only be saved locally.");
     } catch (error) {
-        alert("Errore accesso ospite: " + error.message);
+        alert("Error: " + error.message);
     }
 });
 
@@ -553,7 +553,7 @@ document.getElementById('returnLobbyBtn').addEventListener('click', async () => 
 
     // 3. Reset dei bottoni locali
     const readyBtn = document.getElementById('readyBtn');
-    readyBtn.innerText = "Non Pronto";
+    readyBtn.innerText = "Not ready";
     readyBtn.style.backgroundColor = "#e74c3c";
 
     // 4. Reset stato di gioco
@@ -568,10 +568,10 @@ settingsBtn.addEventListener('click', () => {
         userEmailDisplay.innerText = "Account: " + user.email;
         upgradeBtn.classList.add('hidden');
     } else if (user && user.isAnonymous) {
-        userEmailDisplay.innerText = "Account: Ospite_ " + auth.currentUser.uid.substring(0, 4);
+        userEmailDisplay.innerText = "Account: Player_ " + auth.currentUser.uid.substring(0, 4);
         upgradeBtn.classList.remove('hidden');
     } else {
-        userEmailDisplay.innerText = "Non loggato";
+        userEmailDisplay.innerText = "Not logged in";
         upgradeBtn.classList.add('hidden');
     }
 
@@ -579,24 +579,24 @@ settingsBtn.addEventListener('click', () => {
 });;
 
 document.getElementById('btnUpgradeAccount').addEventListener('click', async () => {
-    const isOver18 = confirm("Per convertire il tuo account anonimo in un account registrato e salvare i record nel cloud, devi avere almeno 18 anni. Cliccando 'OK' confermi di essere maggiorenne?");
+    const isOver18 = confirm("To convert your guest account to a registered account and save your highscores in the cloud, you must be at least 18 years old. By clicking 'OK', you confirm that you are of legal age.");
     
     if (!isOver18) {
-        alert("Siamo spiacenti, la registrazione è riservata ai soli utenti maggiorenni.");
+        alert("Registration is restricted to adults only.");
         return; // Interrompe qui, senza eseguire nulla
     }
     // Apri un mini-form o usa degli input già presenti
-    const email = prompt("Inserisci la tua email:");
-    const password = prompt("Inserisci una password:");
-    const name = prompt("Scegli il tuo nome:");
+    const email = prompt("Enter your email:");
+    const password = prompt("Enter your password:");
+    const name = prompt("Choose a nickname:");
 
     if (email && password && name) {
         try {
             await upgradeAnonymousAccount(email, password, name);
-            alert("Account registrato con successo! I tuoi record sono ora al sicuro sul cloud.");
+            alert("Account registered successfully!");
             location.reload(); // Ricarica per pulire lo stato da ospite
         } catch (error) {
-            alert("Errore: " + error.message);
+            alert("Error: " + error.message);
         }
     }
 });
@@ -631,7 +631,7 @@ document.getElementById('btnDeleteAccount').addEventListener('click', async () =
 
     if (!user) return;
 
-    const confirmDelete = confirm("Sei sicuro? Questa operazione eliminerà permanentemente il tuo account e tutti i tuoi punteggi. Non è reversibile.");
+    const confirmDelete = confirm("Are you sure? This action will permanently delete your account and all your scores. This is irreversible.");
 
     if (confirmDelete) {
         try {
@@ -642,19 +642,19 @@ document.getElementById('btnDeleteAccount').addEventListener('click', async () =
             // 2. Elimina l'utente da Firebase Auth
             await deleteUser(user);
 
-            alert("Account eliminato con successo.");
+            alert("Account deleted successfully!");
             localStorage.removeItem('playingAsGuest');
             location.reload(); // Ricarica per tornare allo stato di avvio
         } catch (error) {
             console.error("Errore durante l'eliminazione:", error);
             if (error.code === 'auth/requires-recent-login') {
-                alert("Per sicurezza, effettua di nuovo il login prima di eliminare l'account.");
+                alert("For security reasons, please log in again before deleting your account.");
                 await signOut(auth);
                 settingsPanel.classList.add('hidden');
                 document.getElementById('authPopup').style.display = 'flex';
                 location.reload();
             } else {
-                alert("Errore: " + error.message);
+                alert("Error: " + error.message);
             }
         }
     }
@@ -664,16 +664,16 @@ document.getElementById('forgotPasswordBtn').addEventListener('click', async () 
     const email = document.getElementById('emailInput').value;
 
     if (!email) {
-        alert("Per favore, inserisci la tua email nel campo sopra per procedere con il recupero.");
+        alert("Please enter your email address above to proceed with the password recovery.");
         return;
     }
 
     try {
         await recoverPassword(email);
-        alert("Email di recupero inviata! Controlla la tua casella di posta (anche nello spam).");
+        alert("Password recovery email sent! Please check your inbox (and spam folder).");
     } catch (error) {
-        console.error("Errore recupero password:", error);
-        alert("Errore: " + error.message);
+        console.error("Error recovering password:", error);
+        alert("Error: " + error.message);
     }
 });
 

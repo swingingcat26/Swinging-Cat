@@ -47,7 +47,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
             status: 'WAITING',
             players: {
                 [user.uid]: {
-                    name: user.displayName || "Giocatore",
+                    name: user.displayName || "Player",
                     ready: true, // Il creatore è sempre pronto
                     score: 0
                 }
@@ -62,18 +62,18 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
     ui.joinRoomBtn.addEventListener('click', async () => {
         const user = auth.currentUser;
         let roomCode = ui.roomCodeInput.value.trim().toUpperCase();
-        if (!roomCode) return alert("Inserisci un codice valido.");
+        if (!roomCode) return alert("Please enter a valid room code.");
         
         const roomRef = doc(db, "rooms", roomCode);
         const roomSnap = await getDoc(roomRef);
 
-        if (!roomSnap.exists()) return alert("Stanza non trovata!");
-        if (roomSnap.data().status !== 'WAITING') return alert("Partita già in corso o chiusa!");
+        if (!roomSnap.exists()) return alert("Room not found!");
+        if (roomSnap.data().status !== 'WAITING') return alert("Game already in progress or closed!");
 
         await updateDoc(roomRef, {
             [`players.${user.uid}`]: {
         // Se displayName è null/undefined, usa una stringa sicura
-        name: user.displayName || "Ospite-" + user.uid.substring(0, 4), 
+        name: user.displayName || "Player-" + user.uid.substring(0, 4), 
         ready: false,
         score: 0
     }
@@ -94,7 +94,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
         if(roomSnap.exists()){
             const isReady = roomSnap.data().players[user.uid].ready;
             await updateDoc(roomRef, { [`players.${user.uid}.ready`]: !isReady });
-            ui.readyBtn.innerText = !isReady ? "Pronto!" : "Non Pronto";
+            ui.readyBtn.innerText = !isReady ? "Ready!" : "Not Ready";
             ui.readyBtn.style.backgroundColor = !isReady ? "#2ecc71" : "#e74c3c";
         }
     });
@@ -117,7 +117,7 @@ function enterWaitingRoom(roomCode) {
     } else {
         ui.startGameBtn.classList.add('hidden');
         ui.readyBtn.classList.remove('hidden');
-        ui.readyBtn.innerText = "Non Pronto";
+        ui.readyBtn.innerText = "Not Ready";
         ui.readyBtn.style.backgroundColor = "#e74c3c";
     }
 
@@ -127,7 +127,7 @@ function enterWaitingRoom(roomCode) {
 unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
     if (!docSnap.exists()) {
         // La stanza è stata eliminata!
-        alert("La stanza è stata chiusa dal creatore.");
+        alert("The room has been closed by the creator.");
         ui.roomWaitingScreen.classList.add('hidden');
         ui.multiplayerLobby.classList.remove('hidden');
         return;
@@ -150,7 +150,7 @@ unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
 
     playersEntries.forEach(([uid, p]) => {
         const li = document.createElement('li');
-        li.innerText = `${p.name} - ${p.ready ? '🟢 Pronto' : '🔴 In Attesa'}`;
+        li.innerText = `${p.name} - ${p.ready ? '🟢 Ready' : '🔴 Waiting'}`;
         ui.playersList.appendChild(li);
         if (!p.ready) allReady = false;
     });
@@ -161,7 +161,7 @@ unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
         const li = document.createElement('li');
         li.style.color = '#94a3b8'; // Colore grigino/disattivato
         li.style.fontStyle = 'italic';
-        li.innerHTML = `⏳ Posto libero (${playersCount + i + 1}/4)`;
+        li.innerHTML = `⏳ Free Slot (${playersCount + i + 1}/4)`;
        ui.playersList.appendChild(li);
     }
 
@@ -169,11 +169,11 @@ unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
     if (isCreator) {
         if (playersCount < 2) {
             ui.startGameBtn.disabled = true;
-            ui.startGameBtn.innerText = "In attesa di altri...";
+            ui.startGameBtn.innerText = "Waiting...";
             ui.startGameBtn.style.opacity = "0.5";
         } else {
             ui.startGameBtn.disabled = !allReady;
-            ui.startGameBtn.innerText = allReady ? "Avvia Partita" : "Attendo altri...";
+            ui.startGameBtn.innerText = allReady ? "Start Game" : "Waiting...";
             ui.startGameBtn.style.opacity = allReady ? "1" : "0.5";
         }
     }
