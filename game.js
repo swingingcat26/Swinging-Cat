@@ -57,9 +57,9 @@ onAuthStateChanged(auth, async (user) => {
             } catch (error) {
                 console.error("Errore durante la sincronizzazione iniziale dell'utente:", error.message);
             }
+             }
     } else {
         authPopup.style.display = 'flex';
-    }
 }
 });
 
@@ -889,7 +889,7 @@ function checkRopeCollision() {
     return false;
 }
 
-async function updateGameLogic() {
+function updateGameLogic() {
     if (gameState !== 'PLAYING') return;
 
     frame++;
@@ -953,11 +953,13 @@ async function updateGameLogic() {
     // Condizione di Game Over (Caduta oltre il limite inferiore dello schermo)
     if (playerY > h + playerHeight + 100) {
         // 1. BLOCCO IMMEDIATO: Se siamo già in Game Over, esci subito dalla 
-         const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
-            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
+        
         if (gameState === 'GAME_OVER') return;
 
         gameState = 'GAME_OVER'; // Cambio stato prima di ogni altra cosa
+
+         const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
+            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
         // 2. LOGICA DI SALVATAGGIO (Eseguita una sola volta)
 
@@ -981,7 +983,7 @@ if (auth.currentUser && !auth.currentUser.isAnonymous) {
     
     try {
         // Inviamo solo le informazioni necessarie verificate dalle nuove regole
-        await setDoc(userRef, {
+        setDoc(userRef, {
             score: highScore,
             lastUpdateAt: serverTimestamp()
         }, { merge: true });
@@ -1262,10 +1264,10 @@ function updateScoreboardUI(players, matchEnded) {
 
 // 3. Chiamata da inserire nel tuo ciclo di gioco
 // Ogni volta che il giocatore segna un punto, chiama questa:
-async function sendMyScore(newScore) {
-    if (!currentRoomId) return;
+function sendMyScore(newScore) {
+    if (!currentRoomId || !auth.currentUser) return;
     const roomRef = doc(db, "rooms", currentRoomId);
-    await updateDoc(roomRef, {
+    updateDoc(roomRef, {
         [`players.${auth.currentUser.uid}.score`]: newScore
     });
 }
