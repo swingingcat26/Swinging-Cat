@@ -966,6 +966,15 @@ async function updateGameLogic() {
             highScore = Math.max(score, currentLocal, highScore);
             localStorage.setItem(localKey, highScore);
 
+            // 3. CAMBIO STATO E UI (Eseguito una sola volta)
+
+        playSound(sounds.falling);
+        stopAndReleaseMusic();
+
+        finalScoreText.innerText = `Score: ${score}`;
+        gameOverPanel.classList.remove('hidden');
+        gameOverPanel.style.display = 'flex';
+
             // Salvataggio Cloud (solo per utenti non anonimi)
 if (auth.currentUser && !auth.currentUser.isAnonymous) {
         const userRef = doc(db, "users", auth.currentUser.uid);
@@ -981,14 +990,6 @@ if (auth.currentUser && !auth.currentUser.isAnonymous) {
     };
 }
 
-        // 3. CAMBIO STATO E UI (Eseguito una sola volta)
-
-        playSound(sounds.falling);
-        stopAndReleaseMusic();
-
-        finalScoreText.innerText = `Score: ${score}`;
-        gameOverPanel.classList.remove('hidden');
-        gameOverPanel.style.display = 'flex';
 
         // 4. Gestione Multiplayer
         if (currentRoomId && auth.currentUser) {
