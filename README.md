@@ -21,7 +21,7 @@
   - Barra in basso che segna la propria posizione dall'11° al 250° posto.
   - Calcolo relativo della propria posizione percentuale rispetto all'intera community a partirea dal 251° posto.
 - **Modalità Multiplayer in Tempo Reale:**
-  - Creazione e unione a stanze private tramite codice a 6 caratteri con circa 1.54 miliardi di combinazioni possibili(34⁶).
+  - Creazione e unione a stanze private tramite codice a 6 caratteri con circa 1.54 miliardi di combinazioni possibili(34⁶). Il codice della stanza viene eliminato dopo 1 ora dalla creazione.
   - Lobby d'attesa per ogni giocatore.
   - Tabella dei punteggi Live sincronizzata mediante `onSnapshot` di Firestore.
   - Schermata di fine partita unificata per la sessione multiplayer.
