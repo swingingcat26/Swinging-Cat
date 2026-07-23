@@ -99,8 +99,10 @@
         <h2>3. Account, Punteggi e Sicurezza</h2>
         <p>In base alla tipologia di account scelto, si applicano condizioni diverse per il salvataggio dei dati:</p>
         <ul>
-            <li><strong>Account Registrato:</strong> I punteggi e i progressi vengono salvati sui nostri server (Firebase). L'utente è responsabile del mantenimento della riservatezza delle proprie credenziali.</li>
-            <li><strong>Account Ospite (Anonimo):</strong> I dati vengono salvati principalmente nella memoria locale del browser (Local Storage) o associati a un ID temporaneo. La cancellazione della cache o la disinstallazione del browser comporta la <span class="highlight">perdita irreversibile</span> dei progressi. Il fornitore del servizio non è responsabile per la perdita di tali dati.</li>
+            <li><strong>Account Registrato:</strong> I punteggi e i progressi vengono salvati stabilmente sui nostri server (Firebase). L'utente è responsabile del mantenimento della riservatezza delle proprie credenziali.</li>
+            <li><strong>Account Ospite (Anonimo):</strong> I dati di gioco principali vengono salvati nella memoria locale del browser (Local Storage) o associati a un ID temporaneo. La cancellazione della cache o la disinstallazione del browser comporta la <span class="highlight">perdita irreversibile</span> dei progressi. 
+                Tuttavia, qualora l'utente Ospite utilizzi la modalità "Multiplayer", un ID anonimo, un nome generico (es. "Player-XXXX") e il punteggio della partita in corso verranno temporaneamente trasmessi e salvati sui nostri server per consentire la sincronizzazione della partita con gli altri giocatori.</li>
+                <p><strong>Sincronizzazione dei Punteggi:</strong> Per gli utenti registrati, i punteggi locali salvati sul dispositivo (tramite Local Storage) vengono automaticamente confrontati e sincronizzati con i server cloud (Firestore) al momento dell'accesso o della riconnessione. Qualora il punteggio salvato localmente sul dispositivo risulti superiore a quello registrato sul cloud, il sistema aggiornerà automaticamente il record sul server al fine di preservare i progressi dell'utente.</p>
         </ul>
 
         <h2>4. Classifica Globale</h2>
@@ -139,12 +141,15 @@
       e della loro rimozione o modifica</strong>. Il mancato o ritardato intervento di moderazione non 
       costituisce inadempimento contrattuale né attribuisce il diritto a risarcimenti di alcun genere.</p>
 
-      <h2>Multiplayer</h2>
-      <p>Durante l'utilizzo delle funzionalità "Multiplayer" l'utente si impegna a:
-      Non interrompere intenzionalmente o sabotare l'esperienza di gioco degli altri utenti nelle stanze multiplayer.</p>
+ <h2>5. Modalità Multiplayer</h2>
+      <p>Durante l'utilizzo delle funzionalità "Multiplayer" l'utente accetta e comprende quanto segue:</p>
+      <ul>
+          <li><strong>Condivisione dati in partita:</strong> Accedendo a una stanza multiplayer, il proprio nome utente (o un nome generato automaticamente per gli ospiti, es. "Player-XXXX") e il proprio punteggio in tempo reale saranno visibili agli altri partecipanti presenti nella medesima stanza.</li>
+          <li><strong>Conservazione delle Stanze e Dati Locali:</strong> Il codice della stanza creata viene salvato temporaneamente nella memoria locale del browser (Local Storage) per permettere il rientro in caso di disconnessione accidentale. Per garantire l'efficienza dei server, le stanze multiplayer e i dati in esse contenuti vengono automaticamente eliminati dopo 1 ora dalla loro creazione.</li>
+          <li><strong>Comportamento:</strong> L'utente si impegna a non interrompere intenzionalmente o sabotare l'esperienza di gioco degli altri utenti.</li>
+      </ul>
 
-
-        <h2>5. Servizi di Terze Parti</h2>
+        <h2>6. Servizi di Terze Parti</h2>
         <p>Il gioco utilizza servizi forniti da terze parti che regolano il trattamento dei tuoi dati:</p>
         <ul>
             <li><strong>Google Firebase:</strong> Utilizzato per l'autenticazione (Firebase Auth) e per il salvataggio dei dati e delle stanze multiplayer (Firestore).</li>
@@ -152,10 +157,10 @@
         </ul>
        <p>Per maggiori dettagli sul trattamento dei dati personali e sull'estensione dei consensi gestiti dai nostri partner, ti invitiamo a leggere la nostra <a href="https://www.iubenda.com/privacy-policy/73452321" target="_blank">Privacy Policy</a> e la relativa <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target="_blank">Cookie Policy</a>.</p>
 
-        <h2>6. Proprietà Intellettuale</h2>
+        <h2>7. Proprietà Intellettuale</h2>
         <p>Tutti i diritti di proprietà intellettuale relativi al gioco "Swinging Cat", inclusi, a titolo esemplificativo, codice sorgente, meccaniche di gioco, design dell'interfaccia, grafica (es. asset del gatto, corde), musiche ed effetti sonori, sono di proprietà esclusiva del creatore del gioco o dei rispettivi licenzianti. È severamente vietato copiare, modificare, distribuire, vendere o decodificare qualsiasi parte del Servizio.</p>
 
-        <h2>7. Limitazione di Responsabilità ("As Is")</h2>
+        <h2>8. Limitazione di Responsabilità ("As Is")</h2>
         <p>Il gioco è fornito "COSÌ COM'È" ("As Is") e "COME DISPONIBILE". Non garantiamo che il servizio sarà ininterrotto, privo di errori, sicuro o esente da virus. </p>
         <p>Nella misura massima consentita dalla legge applicabile, decliniamo ogni responsabilità per eventuali danni diretti, indiretti, accidentali o consequenziali derivanti da:</p>
         <ul>
@@ -164,10 +169,10 @@
             <li>Accesso non autorizzato ai server o ai dati in essi contenuti.</li>
         </ul>
 
-        <h2>8. Modifiche al Servizio e ai Termini</h2>
+        <h2>9. Modifiche al Servizio e ai Termini</h2>
         <p>Ci riserviamo il diritto di modificare, sospendere o interrompere il gioco (inclusa la cancellazione di stanze inattive e punteggi) in qualsiasi momento, senza preavviso. Ci riserviamo inoltre il diritto di aggiornare i presenti Termini; l'uso continuato del gioco dopo tali modifiche costituisce l'accettazione dei nuovi Termini.</p>
 
-        <h2>9. Eliminazione dell'Account</h2>
+        <h2>10. Eliminazione dell'Account</h2>
         <p>Gli utenti registrati possono richiedere o eseguire in autonomia l'eliminazione permanente del proprio account tramite l'apposito pulsante nel pannello Impostazioni ("Elimina Account"). Questa operazione rimuoverà in modo irreversibile tutti i record personali, i dati di accesso e la presenza nelle classifiche.</p>
         
         <div class="footer">
