@@ -1,85 +1,85 @@
 # 🐱 Swinging Cat
 
-**Swinging Cat** è un gioco web (endless runner 2D) sviluppato in HTML5, CSS3, JavaScript (ES6 Modules) e integrato con la piattaforma **Firebase v12**. Il giocatore si basa su un gatto che dondola di corda in corda per coprire la massima distanza possibile, accumulare punteggi elevati e scalare la classifica globale o sfidare gli amici in tempo reale.
+**Swinging Cat** is a 2D web-based endless runner game built with HTML5, CSS3, JavaScript (ES6 Modules), and integrated with the **Firebase v12** platform. The gameplay centers on a cat swinging from rope to rope to cover the maximum distance possible, achieve high scores, climb the global leaderboard, or challenge friends in real time.
 
 ---
 
-## 🚀 Caratteristiche Principali
+## 🚀 Key Features
 
-- **Fisica del Pendolo & Meccanica di Rilascio:** Sistema personalizzato basato sulla trigonometria e conservazione della quantità di moto per simulare l'oscillazione sulle corde.
-- **Tipi di Corde Variabili:**
-  - *Corda Standard:* Consente dondolii stabili e continui.
-  - *Corda Scivolosa (Slippery):* Rilascia il gatto dopo un lasso di tempo di 300ms.
-  - *Corda Fragile:* Si spezza se l'angolo di oscillazione diventa è di 17.2°(0.3 rad).
-- **Autenticazione Firebase (Firebase Auth):**
-  - Accesso / Registrazione tramite Email e Password.
-  - Modalità **Ospite / Anonima** con salvataggio locale dei record.
-  - **Upgrade dell'account anonimo:** Possibilità di registrare l'account mantenendo progressi e UID.
-  - Recupero password e gestione della cancellazione definitiva dell'account (GDPR compliant).
-- **Classifica Globale (Cloud Firestore):**
-  - Tabella Top 10 mondiale con aggiornamenti dinamici.
-  - Barra in basso che segna la propria posizione dall'11° al 250° posto.
-  - Calcolo relativo della propria posizione percentuale rispetto all'intera community a partirea dal 251° posto.
-- **Modalità Multiplayer in Tempo Reale:**
-  - Creazione e unione a stanze private tramite codice a 6 caratteri con circa 1.54 miliardi di combinazioni possibili(34⁶). Il codice della stanza viene eliminato dopo 1 ora dalla creazione.
-  - Lobby d'attesa per ogni giocatore.
-  - Tabella dei punteggi Live sincronizzata mediante `onSnapshot` di Firestore.
-  - Schermata di fine partita unificata per la sessione multiplayer.
+- **Pendulum Physics & Release Mechanics:** Custom system based on trigonometry and conservation of momentum to simulate swinging on ropes.
+- **Variable Rope Types:**
+  - *Standard Rope:* Allows stable and continuous swinging.
+  - *Slippery Rope:* Releases the cat automatically after a duration of 300ms.
+  - *Fragile Rope:* Breaks if the swing angle reaches or exceeds 17.2° (0.3 rad).
+- **Firebase Authentication (Firebase Auth):**
+  - Sign Up / Log In via Email and Password.
+  - **Guest / Anonymous** mode with local record saving.
+  - **Anonymous Account Upgrade:** Ability to register an account while preserving progress and UID.
+  - Password recovery and permanent account deletion management (GDPR compliant).
+- **Global Leaderboard (Cloud Firestore):**
+  - World Top 10 leaderboard table with dynamic updates.
+  - Bottom bar displaying the user's specific rank from 11th to 250th place.
+  - Relative calculation of the user's percentile position compared to the entire community starting from 251st place.
+- **Real-Time Multiplayer Mode:**
+  - Create and join private rooms via a 6-character code with approximately 1.54 billion possible combinations (34⁶). Room codes are automatically deleted 1 hour after creation.
+  - Waiting lobby for all participants.
+  - Live score table synchronized via Firestore's `onSnapshot`.
+  - Unified end-game screen for the multiplayer session.
 - **Audio & Sound Design:**
-  - Effetti sonori di salto, caduta e colonna sonora dinamica a loop.
-  - Controlli separati per volume Musica ed Effetti SFX.
-- **Conformità Privacy & Legal:**
-  - Integrazione con i widget **Iubenda** per Cookie Policy e Privacy Policy.
-  - Controlli sull'età (18+) e accettazione termini di servizio.
+  - Sound effects for jumping, falling, and a dynamic looping background soundtrack.
+  - Separate volume controls for Music and SFX.
+- **Privacy & Legal Compliance:**
+  - Integration with **Iubenda** widgets for Cookie Policy and Privacy Policy.
+  - Age verification controls (18+) and Terms of Service acceptance.
 
 ---
 
-## 🛠️ Tecnologie Utilizzate
+## 🛠️ Tech Stack
 
 - **Frontend:** HTML5, Canvas 2D API, CSS3 (Flexbox, CSS Variables, Animations)
 - **Logic Engine:** JavaScript (ES6 Modules)
 - **Backend as a Service (BaaS):** 
   - Firebase Authentication (`12.16.0`)
   - Cloud Firestore (`12.16.0`)
-  - Firebase Emulators (Firestore & UI per sviluppo locale)
+  - Firebase Emulators (Firestore & UI for local development)
 - **Privacy & Compliance:** Iubenda Cookie & Privacy Solution
 
 ---
 
-## 📁 Struttura del Progetto
+## 📁 Project Structure
 
 ```text
 .
-├── index.html            # Markup della UI, popup, HUD di gioco e modali
-├── style.css             # Stili globali, layout responsivo e temi
-├── game.js               # Ciclo di gioco principale, fisica, input e rendering Canvas
-├── auth.js               # Helper per autenticazione e interrogazione Firestore (Leaderboard)
-├── multiplayer.js        # Gestione della lobby multiplayer, stanze e sincronizzazione live
-├── firebase-init.js      # Inizializzazione centralizzata dell'app Firebase Auth e Firestore
-├── .firebaserc           # Configurazione del progetto Firebase CLI (`swingingcat-87b69`)
-├── firebase.json         # Configurazione degli emulatori Firebase locali
-├── .gitignore            # Esclusione log, moduli, dipendenze ed elementi sensibili
-├── terms_conds.html      # Termini e condizioni
-├── LICENSE               # Licenza sul copyright
-└── assets/               # Risorse grafiche (immagini del gatto, corde) ed audio (.ogg)
+├── index.html            # UI markup, popups, in-game HUD, and modals
+├── style.css             # Global styles, responsive layout, and themes
+├── game.js               # Main game loop, physics, user input, and Canvas rendering
+├── auth.js               # Helpers for authentication and Firestore queries (Leaderboard)
+├── multiplayer.js        # Multiplayer lobby management, rooms, and live synchronization
+├── firebase-init.js      # Centralized initialization of Firebase Auth and Firestore apps
+├── .firebaserc           # Firebase CLI project configuration (`swingingcat-87b69`)
+├── firebase.json         # Local Firebase Emulators configuration
+├── .gitignore            # Excludes logs, modules, dependencies, and sensitive data
+├── terms_conds.html      # Terms and Conditions
+├── LICENSE               # Copyright license
+└── assets/               # Graphical resources (cat images, ropes) and audio (.ogg)
 ```
 
 ---
 
-## ⚙️ Configurazione e Installazione
+## ⚙️ Setup and Installation
 
-### Pre-requisiti
-- Un server web locale (es. **Live Server** per VS Code, `npx serve`, o `python3 -m http.server`).
-- Node.js (opzionale, consigliato se si utilizzano la Firebase CLI e gli emulatori).
+### Prerequisites
+- A local web server (e.g. **Live Server** for VS Code, `npx serve`, or `python3 -m http.server`).
+- Node.js (optional, recommended if using Firebase CLI and emulators).
 
-### 1. Clona il Repository
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/tuo-username/swinging-cat.git
 cd swinging-cat
 ```
 
-### 2. Configurazione Firebase
-L'applicazione si collega al progetto Firebase `swingingcat-87b69`. La configurazione è memorizzata nel file `firebase-init.js`:
+### 2. Firebase Configuration
+The application connects to the Firebase project `swingingcat-87b69`. The configuration is stored in the `firebase-init.js` file :
 
 ```javascript
 const firebaseConfig = {
@@ -92,30 +92,30 @@ const firebaseConfig = {
 };
 ```
 
-### 3. Avvio degli Emulatori Firebase (Opzionale per Sviluppo Locale)
-Se desideri testare il database senza influenzare il progetto in produzione:
+### 3. Start Firebase Emulators (Optional for Local Development)
+If you wish to test database operations without affecting the production project:
 ```bash
 firebase emulators:start
 ```
 - **Firestore Port:** `8080`
 - **Emulator UI:** `http://localhost:4000`
 
-### 4. Esecuzione del Gioco
-Apri `index.html` attraverso il tuo server locale:
+### 4. Running the Game
+Serve `index.html` through your local web server:
 ```bash
-# Esempio con Python:
+# Example using Python:
 python3 -m http.server 8000
 ```
-Apri il browser all'indirizzo `http://localhost:8000`.
+Open your browser and navigate to `http://localhost:8000`.
 
 ---
 
-## 👥 Crediti & Team
+## 👥 Credits & Team
 **TEAM BICTRON**
-- **Sviluppo, Design & Asset Grafici:** Zen C. Novi
-- **Musica & Comparto Sonoro:** Ivan G. Novi
+- **Development, Design & Graphic Assets:** Zen C. Novi
+- **Music:** Ivan G. Novi
 
 ---
 
-## 📜 Licenza
- &copy; 2026 Swinging Cat. Tutti i diritti sono riservati al **TEAM BICTRON**.
+## 📜 License
+ &copy; 2026 Swinging Cat. All rights reserved by **TEAM BICTRON**.

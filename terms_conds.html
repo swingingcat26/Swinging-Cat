@@ -1,182 +1,187 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Termini e Condizioni - Swinging Cat</title>
+    <title>Terms and Conditions - Swinging Cat</title>
     <style>
-        :root {
-            --bg-color: #f8fafc;
-            --text-main: #1e293b;
-            --text-light: #64748b;
-            --primary: #2575fc;
-            --border-color: #e2e8f0;
+        @page {
+            size: A4;
+            margin: 18mm 15mm;
+            background-color: #f8fafc;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
             line-height: 1.6;
             margin: 0;
             padding: 0;
+            font-size: 10.5pt;
         }
         .container {
-            max-width: 800px;
-            margin: 40px auto;
             background: #ffffff;
-            padding: 40px;
+            padding: 30px 35px;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
         }
         h1 {
             color: #0f172a;
-            font-size: 32px;
-            border-bottom: 2px solid var(--border-color);
+            font-size: 22pt;
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 10px;
-            margin-bottom: 30px;
+            margin-top: 0;
+            margin-bottom: 20px;
         }
         h2 {
-            color: var(--primary);
-            font-size: 22px;
-            margin-top: 30px;
-            margin-bottom: 15px;
+            color: #2575fc;
+            font-size: 14pt;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            page-break-after: avoid;
         }
         p, li {
-            font-size: 16px;
-            color: var(--text-main);
-            margin-bottom: 15px;
+            font-size: 10.5pt;
+            color: #1e293b;
+            margin-bottom: 12px;
         }
         ul {
-            margin-bottom: 20px;
+            margin-top: 5px;
+            margin-bottom: 15px;
             padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
         }
         .highlight {
             font-weight: bold;
             color: #0f172a;
         }
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            font-size: 14px;
-            color: var(--text-light);
+        .owner-box {
+            background-color: #f1f5f9;
+            border-left: 4px solid #2575fc;
+            padding: 12px 16px;
+            margin-bottom: 18px;
+            border-radius: 0 8px 8px 0;
+            page-break-inside: avoid;
+        }
+        .owner-box p {
+            margin: 0;
         }
         .warning {
             background-color: #fffbeb;
             border-left: 4px solid #f59e0b;
-            padding: 15px;
+            padding: 12px 16px;
             margin-bottom: 20px;
             border-radius: 0 8px 8px 0;
+            page-break-inside: avoid;
+        }
+        .warning p {
+            margin: 0 0 6px 0;
+        }
+        .warning p:last-child {
+            margin: 0;
+        }
+        a {
+            color: #2575fc;
+            text-decoration: none;
+        }
+        .footer {
+            margin-top: 35px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 9.5pt;
+            color: #64748b;
         }
     </style>
 </head>
 <body>
     <div class="container">
-       <h1>Termini e Condizioni di Servizio</h1>
-<div style="background-color: #f1f5f9; border-left: 4px solid #2575fc; padding: 15px; margin-bottom: 20px; border-radius: 0 8px 8px 0;">
-    <p><strong>Titolare del Servizio:</strong> Il Gioco e il Servizio sono gestiti a livello indipendente dal creatore dell'applicazione, contattabile per scopi legali, richieste degli utenti o chiarimenti sul trattamento dei dati esclusivamente all'indirizzo email: <a href="mailto:swingingcat26@gmail.com">swingingcat26@gmail.com</a>.</p>
-</div>
-<div class="warning">
-            <p><strong>Ultimo aggiornamento:</strong> 18/07/2026</p>
-            <p>Ti preghiamo di leggere attentamente i seguenti Termini e Condizioni ("Termini") prima di utilizzare l'applicazione web "Swinging Cat" ("Gioco", "Servizio").</p>
+        <h1>Terms and Conditions of Service</h1>
+        
+        <div class="owner-box">
+            <p><strong>Service Provider / Owner:</strong> The Game and the Service are managed independently by the application's creator, who can be contacted for legal purposes, user requests, or clarifications on data processing exclusively at the following email address: <a href="mailto:swingingcat26@gmail.com">swingingcat26@gmail.com</a>.</p>
         </div>
 
-        <h2>1. Accettazione dei Termini</h2>
-        <p>Accedendo, registrandoti o giocando a "Swinging Cat", accetti di essere vincolato da questi Termini. Se non accetti tutte le disposizioni qui indicate, ti è fatto divieto di utilizzare il Servizio.</p>
+        <div class="warning">
+            <p><strong>Last updated:</strong> 23/07/2026</p>
+            <p>Please read these Terms and Conditions ("Terms") carefully before using the "Swinging Cat" web application ("Game", "Service").</p>
+        </div>
 
-        <h2>2. Requisiti di Età e Registrazione</h2>
-        <p>Il gioco prevede due modalità di accesso, strutturate per rispettare le normative sulla privacy dei minori (es. GDPR):</p>
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing, registering for, or playing "Swinging Cat", you agree to be bound by these Terms. If you do not agree to all the provisions set forth herein, you are prohibited from using the Service.</p>
+
+        <h2>2. Age Requirements and Registration</h2>
+        <p>The game offers two access modes, structured to comply with minor privacy regulations (e.g., GDPR):</p>
         <ul> 
-        <li><span class="highlight">Utenti minori di 18 anni:</span> Non sono autorizzati a creare un account fornendo dati anagrafici diretti (quali email, password e nickname).
-        Possono utilizzare esclusivamente la modalità 'Gioca come Ospite' (Accesso Anonimo). In tale modalità non vengono richiesti dati di contatto, tuttavia l'infrastruttura di base
-        (Google Firebase) genera un ID temporaneo anonimo e potrebbe elaborare dati tecnici strettamente necessari al funzionamento del servizio (come l'indirizzo IP per la
-        connessione di rete), nel rispetto della nostra Privacy Policy e senza scopi di profilazione.</li>
-        <li><span class="highlight">Utenti con 18 anni o più:</span> Possono creare un account registrato per salvare i progressi sul cloud e partecipare alla Classifica Globale, dichiarando esplicitamente e sotto la propria responsabilità la maggiore età al momento dell'iscrizione.</li>
+            <li><span class="highlight">Users under 18 years of age:</span> They are not permitted to create an account by providing direct personal data (such as email, password, and nickname). They may exclusively use the 'Play as Guest' mode (Anonymous Access). In this mode, no contact details are requested; however, the underlying infrastructure (Google Firebase) generates a temporary anonymous ID and may process technical data strictly necessary for the operation of the service (such as IP address for network connection), in compliance with our Privacy Policy and without profiling purposes.</li>
+            <li><span class="highlight">Users aged 18 or older:</span> They may create a registered account to save progress to the cloud and participate in the Global Leaderboard, explicitly declaring under their own responsibility that they have reached the age of majority at the time of registration.</li>
         </ul>
-        <p>L'utente garantisce che le informazioni fornite al momento della registrazione siano accurate e veritiere.</p>
+        <p>The user guarantees that the information provided at the time of registration is accurate and truthful.</p>
 
-        <h2>3. Account, Punteggi e Sicurezza</h2>
-        <p>In base alla tipologia di account scelto, si applicano condizioni diverse per il salvataggio dei dati:</p>
+        <h2>3. Accounts, Scores, and Security</h2>
+        <p>Depending on the chosen account type, different conditions apply to data saving:</p>
         <ul>
-            <li><strong>Account Registrato:</strong> I punteggi e i progressi vengono salvati stabilmente sui nostri server (Firebase). L'utente è responsabile del mantenimento della riservatezza delle proprie credenziali.</li>
-            <li><strong>Account Ospite (Anonimo):</strong> I dati di gioco principali vengono salvati nella memoria locale del browser (Local Storage) o associati a un ID temporaneo. La cancellazione della cache o la disinstallazione del browser comporta la <span class="highlight">perdita irreversibile</span> dei progressi. 
-                Tuttavia, qualora l'utente Ospite utilizzi la modalità "Multiplayer", un ID anonimo, un nome generico (es. "Player-XXXX") e il punteggio della partita in corso verranno temporaneamente trasmessi e salvati sui nostri server per consentire la sincronizzazione della partita con gli altri giocatori.</li>
-                <p><strong>Sincronizzazione dei Punteggi:</strong> Per gli utenti registrati, i punteggi locali salvati sul dispositivo (tramite Local Storage) vengono automaticamente confrontati e sincronizzati con i server cloud (Firestore) al momento dell'accesso o della riconnessione. Qualora il punteggio salvato localmente sul dispositivo risulti superiore a quello registrato sul cloud, il sistema aggiornerà automaticamente il record sul server al fine di preservare i progressi dell'utente.</p>
+            <li><strong>Registered Account:</strong> Scores and progress are permanently saved on our servers (Firebase). The user is responsible for maintaining the confidentiality of their account credentials.</li>
+            <li><strong>Guest Account (Anonymous):</strong> Main gameplay data is saved in the browser's local memory (Local Storage) or associated with a temporary ID. Clearing the browser cache or uninstalling the browser results in the <span class="highlight">irreversible loss</span> of progress. However, if a Guest user uses the "Multiplayer" mode, an anonymous ID, a generic display name (e.g., "Player-XXXX"), and the current match score will be temporarily transmitted and saved on our servers to enable match synchronization with other players.</li>
         </ul>
+        <p><strong>Score Synchronization:</strong> For registered users, local scores saved on the device (via Local Storage) are automatically compared and synchronized with the cloud servers (Firestore) upon login or reconnection. If the score saved locally on the device is higher than the score recorded on the cloud, the system will automatically update the record on the server in order to preserve user progress.</p>
 
-        <h2>4. Classifica Globale</h2>
-        <p>Durante l'utilizzo delle funzionalità "Classifica Globale" l'utente si impegna a:</p>
+        <h2>4. Global Leaderboard</h2>
+        <p>When using the "Global Leaderboard" features, the user undertakes to:</p>
         <ul>
-            <li>Non utilizzare hack, cheat, bot, script o qualsiasi software di terze parti per alterare artificialmente il proprio punteggio o manipolare il gioco.</li>
-            <li>Non utilizzare nomi utente (Display Name) offensivi, razzisti, discriminatori, volgari o che violino diritti di terzi.</li>
+            <li>Not use hacks, cheats, bots, scripts, or any third-party software to artificially alter their score or manipulate the game.</li>
+            <li>Not use usernames (Display Names) that are offensive, racist, discriminatory, vulgar, or that violate the rights of third parties.</li>
         </ul>
-        <p>Per preservare l'integrità del Servizio, l'amministrazione si riserva il diritto di monitorare, filtrare o invalidare periodicamente punteggi che risultino palesemente
-            anomali, manipolati o impossibili da ottenere tramite tempistiche di gioco umane. In caso di rilevamento di attività sospette o uso di script per alterare i dati di gioco, il
-            sistema o gli amministratori ignoreranno i punteggi non conformi, escludendoli dalla Classifica Globale al fine di mantenere equi i risultati ottenuti lealmente. Non è
-            prevista la sospensione forzata degli account, ma decliniamo ogni responsabilità per rimozioni di record ritenuti fraudolenti.
-        </p>
-        <p>
-  Gli utenti si impegnano a non scegliere Nickname contenenti termini offensivi o volgari che incitino all'odio o che violino diritti di terzi. Poiché il sistema
-  non applica un filtro preventivo automatico alla creazione dell'account, l'amministrazione
-  si riserva il diritto di revisionare periodicamente i nomi visualizzati nella Classifica Globale (Top 10).
-</p>
-<p>Qualora un Nickname presente in classifica venga ritenuto non consentito o inappropriato:</p>
-  <ul>
-    <li>
-      Il titolare del Servizio provvederà alla modifica manuale o al ripristino ad un nome predefinito 
-      (es. <em>"GiocatoreAnonimo"</em> o simile) per garantire un ambiente di gioco equo e decoroso.
-    </li>
-    <li>
-      Il Titolare provvederà ad inviare una comunicazione 
-      all'indirizzo e-mail associato all'account per notificare l'avvenuta modifica.
-    </li>
-    <li>
-      Per richiedere la personalizzazione o il cambio del proprio Nickname modificato, l'utente potrà 
-      contattare il servizio di assistenza all'indirizzo e-mail <a href="mailto:swingingcat26@gmail.com">swingingcat26@gmail.com</a> .
-    </li>
-  </ul>
-  <p>Nei limiti consentiti dalla legge, <strong>l'amministrazione declina ogni responsabilità per la temporanea 
-      visualizzazione di nickname indecorosi, offensivi o non conformi prima del loro effettivo rilevamento 
-      e della loro rimozione o modifica</strong>. Il mancato o ritardato intervento di moderazione non 
-      costituisce inadempimento contrattuale né attribuisce il diritto a risarcimenti di alcun genere.</p>
-
- <h2>5. Modalità Multiplayer</h2>
-      <p>Durante l'utilizzo delle funzionalità "Multiplayer" l'utente accetta e comprende quanto segue:</p>
-      <ul>
-          <li><strong>Condivisione dati in partita:</strong> Accedendo a una stanza multiplayer, il proprio nome utente (o un nome generato automaticamente per gli ospiti, es. "Player-XXXX") e il proprio punteggio in tempo reale saranno visibili agli altri partecipanti presenti nella medesima stanza.</li>
-          <li><strong>Conservazione delle Stanze e Dati Locali:</strong> Il codice della stanza creata viene salvato temporaneamente nella memoria locale del browser (Local Storage) per permettere il rientro in caso di disconnessione accidentale. Per garantire l'efficienza dei server, le stanze multiplayer e i dati in esse contenuti vengono automaticamente eliminati dopo 1 ora dalla loro creazione.</li>
-          <li><strong>Comportamento:</strong> L'utente si impegna a non interrompere intenzionalmente o sabotare l'esperienza di gioco degli altri utenti.</li>
-      </ul>
-
-        <h2>6. Servizi di Terze Parti</h2>
-        <p>Il gioco utilizza servizi forniti da terze parti che regolano il trattamento dei tuoi dati:</p>
+        <p>To preserve the integrity of the Service, the administration reserves the right to monitor, filter, or periodically invalidate scores that appear clearly anomalous, manipulated, or impossible to achieve through human gameplay timing. If suspicious activity or the use of scripts to alter game data is detected, the system or administrators will disregard non-compliant scores, excluding them from the Global Leaderboard to ensure fair results achieved legitimately. Forced account suspension is not planned, but we disclaim any liability for the removal of records deemed fraudulent.</p>
+        <p>Users undertake not to choose Nicknames containing offensive or vulgar terms, inciting hatred, or violating third-party rights. As the system does not apply an automatic pre-filter upon account creation, the administration reserves the right to periodically review display names shown on the Global Leaderboard (Top 10).</p>
+        <p>If a Nickname on the leaderboard is deemed unacceptable or inappropriate:</p>
         <ul>
-            <li><strong>Google Firebase:</strong> Utilizzato per l'autenticazione (Firebase Auth) e per il salvataggio dei dati e delle stanze multiplayer (Firestore).</li>
-            <li><strong>Iubenda:</strong> Utilizzato per la gestione della Cookie Policy, della Privacy Policy e del consenso degli utenti.</li>
+            <li>The Service Provider will manually modify or reset it to a default name (e.g., <em>"AnonymousPlayer"</em> or similar) to ensure a fair and decent gaming environment.</li>
+            <li>The Owner will send a notification to the email address associated with the account to inform the user of the modification.</li>
+            <li>To request customization or a change of their modified Nickname, the user may contact customer support at <a href="mailto:swingingcat26@gmail.com">swingingcat26@gmail.com</a>.</li>
         </ul>
-       <p>Per maggiori dettagli sul trattamento dei dati personali e sull'estensione dei consensi gestiti dai nostri partner, ti invitiamo a leggere la nostra <a href="https://www.iubenda.com/privacy-policy/73452321" target="_blank">Privacy Policy</a> e la relativa <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target="_blank">Cookie Policy</a>.</p>
+        <p>To the maximum extent permitted by law, <strong>the administration disclaims any liability for the temporary display of indecent, offensive, or non-compliant nicknames prior to their actual detection and removal or modification</strong>. Any failure or delay in moderation does not constitute a breach of contract nor does it grant entitlement to damages of any kind.</p>
 
-        <h2>7. Proprietà Intellettuale</h2>
-        <p>Tutti i diritti di proprietà intellettuale relativi al gioco "Swinging Cat", inclusi, a titolo esemplificativo, codice sorgente, meccaniche di gioco, design dell'interfaccia, grafica (es. asset del gatto, corde), musiche ed effetti sonori, sono di proprietà esclusiva del creatore del gioco o dei rispettivi licenzianti. È severamente vietato copiare, modificare, distribuire, vendere o decodificare qualsiasi parte del Servizio.</p>
-
-        <h2>8. Limitazione di Responsabilità ("As Is")</h2>
-        <p>Il gioco è fornito "COSÌ COM'È" ("As Is") e "COME DISPONIBILE". Non garantiamo che il servizio sarà ininterrotto, privo di errori, sicuro o esente da virus. </p>
-        <p>Nella misura massima consentita dalla legge applicabile, decliniamo ogni responsabilità per eventuali danni diretti, indiretti, accidentali o consequenziali derivanti da:</p>
+        <h2>5. Multiplayer Mode</h2>
+        <p>When using the "Multiplayer" features, the user agrees to and understands the following:</p>
         <ul>
-            <li>L'impossibilità di accedere o utilizzare il gioco.</li>
-            <li>Eventuali perdite di dati, punteggi, stanze multiplayer o account.</li>
-            <li>Accesso non autorizzato ai server o ai dati in essi contenuti.</li>
+            <li><strong>In-game Data Sharing:</strong> Upon joining a multiplayer room, your username (or an automatically generated guest name, e.g., "Player-XXXX") and your real-time score will be visible to other participants in the same room.</li>
+            <li><strong>Room Retention and Local Data:</strong> The created room code is temporarily saved in the browser's local storage (Local Storage) to allow re-entry in case of accidental disconnection. To ensure server efficiency, multiplayer rooms and the data contained within them are automatically deleted 1 hour after creation.</li>
+            <li><strong>Conduct:</strong> The user agrees not to intentionally disrupt or sabotage the gaming experience of other users.</li>
         </ul>
 
-        <h2>9. Modifiche al Servizio e ai Termini</h2>
-        <p>Ci riserviamo il diritto di modificare, sospendere o interrompere il gioco (inclusa la cancellazione di stanze inattive e punteggi) in qualsiasi momento, senza preavviso. Ci riserviamo inoltre il diritto di aggiornare i presenti Termini; l'uso continuato del gioco dopo tali modifiche costituisce l'accettazione dei nuovi Termini.</p>
+        <h2>6. Third-Party Services</h2>
+        <p>The game utilizes services provided by third parties that govern the processing of your data:</p>
+        <ul>
+            <li><strong>Google Firebase:</strong> Used for authentication (Firebase Auth) and for saving data and multiplayer rooms (Firestore).</li>
+            <li><strong>Iubenda:</strong> Used for managing Cookie Policy, Privacy Policy, and user consent.</li>
+        </ul>
+        <p>For more details on the processing of personal data and the scope of consents managed by our partners, please read our <a href="https://www.iubenda.com/privacy-policy/73452321" target="_blank">Privacy Policy</a> and related <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target="_blank">Cookie Policy</a>.</p>
 
-        <h2>10. Eliminazione dell'Account</h2>
-        <p>Gli utenti registrati possono richiedere o eseguire in autonomia l'eliminazione permanente del proprio account tramite l'apposito pulsante nel pannello Impostazioni ("Elimina Account"). Questa operazione rimuoverà in modo irreversibile tutti i record personali, i dati di accesso e la presenza nelle classifiche.</p>
+        <h2>7. Intellectual Property</h2>
+        <p>All intellectual property rights relating to the game "Swinging Cat", including but not limited to source code, gameplay mechanics, interface design, graphics (e.g., cat assets, ropes), music, and sound effects, are the exclusive property of the game's creator or respective licensors. It is strictly prohibited to copy, modify, distribute, sell, or reverse engineer any part of the Service.</p>
+
+        <h2>8. Limitation of Liability ("As Is")</h2>
+        <p>The game is provided "AS IS" and "AS AVAILABLE". We do not guarantee that the service will be uninterrupted, error-free, secure, or free from viruses.</p>
+        <p>To the maximum extent permitted by applicable law, we disclaim all liability for any direct, indirect, incidental, or consequential damages resulting from:</p>
+        <ul>
+            <li>The inability to access or use the game.</li>
+            <li>Any loss of data, scores, multiplayer rooms, or accounts.</li>
+            <li>Unauthorized access to servers or data contained therein.</li>
+        </ul>
+
+        <h2>9. Modifications to the Service and Terms</h2>
+        <p>We reserve the right to modify, suspend, or discontinue the game (including the deletion of inactive rooms and scores) at any time without prior notice. We also reserve the right to update these Terms; continued use of the game following such changes constitutes acceptance of the new Terms.</p>
+
+        <h2>10. Account Deletion</h2>
+        <p>Registered users can request or independently execute the permanent deletion of their account via the designated button in the Settings panel ("Delete Account"). This operation will irreversibly remove all personal records, access data, and presence on leaderboards.</p>
         
         <div class="footer">
-            <p>&copy; 2026 Swinging Cat. Tutti i diritti riservati.</p>
+            <p>&copy; 2026 Swinging Cat. All rights reserved.</p>
         </div>
     </div>
 </body>
