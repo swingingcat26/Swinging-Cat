@@ -1,4 +1,4 @@
-import { getFirestore, doc, setDoc, updateDoc, onSnapshot, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, updateDoc, onSnapshot, getDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import { db, auth } from "./firebase-init.js"; // Usa l'istanza centralizzata
 
@@ -10,39 +10,55 @@ let ui = {};
 export function initMultiplayer(uiElements) {
     ui = uiElements;
     
-    ui.multiplayerBtn.addEventListener('click', () => {
-    // CONSENTI L'ACCESSO A TUTTI GLI UTENTI (inclusi gli anonimi/UUID)
-    if (!auth.currentUser) {
-        // Se non è loggato affatto, forza un accesso anonimo veloce
-        signInAnonymously(auth);
-    }
+    ui.multiplayerBtn.addEventListener('click', async () => {
+        // 1. CONSENTI L'ACCESSO A TUTTI GLI UTENTI (inclusi gli anonimi/UUID)
+        if (!auth.currentUser) {
+            await signInAnonymously(auth);
+        }
+    
+        const savedRoomCode = localStorage.getItem('lastCreatedRoom');
+    
+        // 🟢 2. CONTROLLO STANZA SCADUTA (se l'utente aveva una stanza salvata/attiva)
+        if (savedRoomCode) {
+            const roomRef = doc(db, "rooms", savedRoomCode);
+            const roomSnap = await getDoc(roomRef);
+    
+            if (roomSnap.exists()) {
+                const roomData = roomSnap.data();
+                if (roomData.createdAt) {
+                    const creationTime = roomData.createdAt.toMillis();
+                    const now = Date.now();
+                    const oneHour = 60 * 60 * 1000;
+    
+                    // Se è passata più di un'ora
+                    if (now - creationTime > oneHour) {
+                        await deleteDoc(roomRef); // Elimina la stanza scaduta
+                        localStorage.removeItem('lastCreatedRoom');
+                        alert("Your previous room has been deleted because 1 hour has passed.");
+                        currentRoomId = null;
+                    }
+                    else {
+                        // Se non è ancora passata un'ora, reimposta la variabile corrente
+                        currentRoomId = savedRoomCode;
+                        isCreator = true;
+                    }
+                }
+            } else {
+                // Se la stanza non esiste più nel DB, pulisci lo stato locale
+                localStorage.removeItem('lastCreatedRoom');
+            }
+        }
+    
+        // 3. Mostra la lobby normalmente
         ui.mainMenu.classList.add('hidden');
         ui.multiplayerLobby.classList.remove('hidden');
-
-        // Intercetta la chiusura della pagina o il cambio tab
-        window.addEventListener('beforeunload', (event) => {
-            if (!currentRoomId || !auth.currentUser) return;
-        
-            const roomRef = doc(db, "rooms", currentRoomId);
-        
-            // Se l'utente è il creatore, eliminiamo la stanza
-            if (isCreator) {
-                // Usiamo sendBeacon o una chiamata sincrona/rapida se possibile, 
-                // ma in Firestore possiamo fare una richiesta di eliminazione asincrona
-                deleteDoc(roomRef).catch(err => console.error("Errore pulizia stanza alla chiusura:", err));
-            } else {
-                // Se è un semplice partecipante, lo rimuoviamo dalla lista dei giocatori
-                updateDoc(roomRef, {
-                    [`players.${auth.currentUser.uid}`]: deleteField()
-                }).catch(err => console.error("Errore rimozione giocatore alla chiusura:", err));
-            }
-        });
     });
 
 ui.backToLobbyBtn.addEventListener('click', async () => {
     // Se sono il creatore, elimino la stanza
     if (isCreator && currentRoomId) {
         await deleteRoom(currentRoomId);
+        localStorage.removeItem('lastCreatedRoom');
     }
 
     ui.roomWaitingScreen.classList.add('hidden');
@@ -64,6 +80,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
         await setDoc(roomRef, {
             creator: user.uid,
             status: 'WAITING',
+            createdAt: serverTimestamp(),
             players: {
                 [user.uid]: {
                     name: user.displayName || "Player",
@@ -75,6 +92,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
 
         isCreator = true;
         currentRoomId = roomCode;
+        localStorage.setItem('lastCreatedRoom', roomCode);
         enterWaitingRoom(roomCode);
     });
 
@@ -123,6 +141,25 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
         const roomRef = doc(db, "rooms", currentRoomId);
         await updateDoc(roomRef, { status: 'PLAYING' });
     });
+
+    window.addEventListener('beforeunload', (event) => {
+            if (!currentRoomId || !auth.currentUser) return;
+    
+            const roomRef = doc(db, "rooms", currentRoomId);
+    
+            // Se l'utente è il creatore, eliminiamo la stanza
+            if (isCreator) {
+                // Usiamo sendBeacon o una chiamata sincrona/rapida se possibile, 
+                // ma in Firestore possiamo fare una richiesta di eliminazione asincrona
+                deleteDoc(roomRef).catch(err => console.error("Errore pulizia stanza alla chiusura:", err));
+                localStorage.removeItem('lastCreatedRoom');
+            } else {
+                // Se è un semplice partecipante, lo rimuoviamo dalla lista dei giocatori
+                updateDoc(roomRef, {
+                    [`players.${auth.currentUser.uid}`]: deleteField()
+                }).catch(err => console.error("Errore rimozione giocatore alla chiusura:", err));
+            }
+        });
 }
 
 function enterWaitingRoom(roomCode) {

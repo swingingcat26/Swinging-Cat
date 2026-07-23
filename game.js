@@ -378,6 +378,7 @@ exitButton.addEventListener('click', async (e) => {
                 const roomData = roomSnap.data();
                 if (roomData.creator === auth.currentUser.uid) {
                     await deleteRoom(roomIdToLeave);
+                    localStorage.removeItem('lastCreatedRoom');
                 } else {
                     await updateDoc(roomRef, {
                         [`players.${auth.currentUser.uid}`]: deleteField()
