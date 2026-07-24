@@ -241,13 +241,14 @@ let graceFramesAfterReset = 0;
 let showTutorialPanel = false;
 
 // Fisica del Giocatore
+const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 1 || window.innerWidth <= 768;
 let playerX = 150;
 let playerY = 100;
 const playerWidth = 60;
 const playerHeight = 100;
 let velocityX = 0;
 let velocityY = 0;
-const gravity = 0.8;
+const gravity = isMobile ? 0.7 : 0.8;
 let cameraOffsetX = 0;
 const cameraFollowSpeed = 0.35;
 
@@ -897,7 +898,7 @@ function updateGameLogic() {
     frame++;
 
     if (playerState === 'ATTACHED') {
-        const g = 0.6; // Gravità pendolare bilanciata
+        const g = isMobile ? 0.5 : 0.6; // Gravità pendolare bilanciata
         const damping = 0.998; // Conservazione energia del moto armonico
 
         const acceleration = (-g / ropeLength) * Math.sin(angle);
@@ -1201,7 +1202,7 @@ function handleActionInput(e) {
             // Spinta minima propulsiva in avanti per fluidità e prevenzione stallo verticale
             if (velocityX < 7) velocityX = 8.5;
             if (velocityX > 15) velocityX = 15;
-            if (velocityY < -10) velocityY = -10;
+            if (velocityY < -10) velocityY = isMobile ? -8 : -10;
         }
     }
 }
