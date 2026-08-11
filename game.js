@@ -2,6 +2,7 @@ import { getPersonalRecord, registerWithEmail, loginWithEmail, signInAnonymously
 import { getAuth, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, deleteDoc, serverTimestamp, deleteField } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { initMultiplayer, deleteRoom, leaveRoomCleanup } from './multiplayer.js';
+import { analytics, logEvent } from "./firebase-init.js";
 
 const auth = getAuth();
 const authPopup = document.getElementById('authPopup');
@@ -357,6 +358,10 @@ buttonGame2.addEventListener('click', () => {
         gameState = 'PLAYING';
         startMusic();
     }
+
+    logEvent(analytics, 'level_start', {
+        level_name: 'Singleplayer_Mode'
+    });
     // Avvia stabilmente il ciclo di disegno e fisica
     requestAnimationFrame(gameLoop);
 });
@@ -485,12 +490,14 @@ document.getElementById('magicLinkBtn').addEventListener('click', async () => {
 
     try {
         await loginWithEmail(email, password);
+        logEvent(analytics, 'login', { method: 'email' });
         alert("Welcome Back!");
     } catch (error) {
         if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
             try {
                 // Passiamo il nome alla funzione di registrazione
                 await registerWithEmail(email, password, displayName);
+                logEvent(analytics, 'sign_up', { method: 'email' });
                 alert("Account created!");
             } catch (regError) {
                 alert("Error: " + regError.message);
@@ -506,6 +513,7 @@ document.getElementById('guestBtn').addEventListener('click', async () => {
     try {
         // Esegue lo stesso flusso di "signInAnonymously" usato per i minori
         await signInAnonymously(auth);
+        logEvent(analytics, 'login', { method: 'anonymous' });
 
         localStorage.setItem('playingAsGuest', 'true');
         authPopup.style.display = 'none';
@@ -960,6 +968,11 @@ function updateGameLogic() {
         if (gameState === 'GAME_OVER') return;
 
         gameState = 'GAME_OVER'; // Cambio stato prima di ogni altra cosa
+
+        logEvent(analytics, 'level_end', {
+        level_name: currentRoomId ? 'Multiplayer_Mode' : 'Singleplayer_Mode',
+        score: score
+    });
 
          const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
             const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
