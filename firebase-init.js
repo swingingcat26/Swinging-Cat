@@ -1,7 +1,7 @@
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-import { getAnalytics, logEvent as firebaseLogEvent, isSupported } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+import { getAnalytics, initializeAnalytics, logEvent as firebaseLogEvent, isSupported } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDLDTUpXEfDufWTFZFVg1l2nco_TdmFzMc",
@@ -23,10 +23,17 @@ let analytics = null;
 isSupported().then((supported) => {
     if (supported) {
         try {
-            analytics = getAnalytics(app);
+            // 🟢 2. USA initializeAnalytics PER REGISTRARE IL COMPONENTE IN MODO SICURO
+            analytics = initializeAnalytics(app);
             console.log("🟢 Firebase Analytics inizializzato con successo!");
         } catch (e) {
-            console.warn("⚠️ Errore durante l'inizializzazione di Analytics:", e);
+            // Fallback: se l'app aveva già registrato analytics (es. ricaricamento pagina), lo recuperiamo
+            try {
+                analytics = getAnalytics(app);
+                console.log("🟢 Firebase Analytics recuperato con successo dall'istanza esistente!");
+            } catch (innerE) {
+                console.warn("⚠️ Errore critico durante l'inizializzazione di Analytics:", innerE);
+            }
         }
     } else {
         console.warn("⚠️ Firebase Analytics non è supportato in questo browser/ambiente.");
