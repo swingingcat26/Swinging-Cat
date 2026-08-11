@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Swinging Cat is an endless runner 2D web game based on a cat swinging from rope to rope. It features a global leaderboard and a multiplayer mode for up to 4 players, allowing you to challenge your friends.">
     <title>Swinging Cat</title>
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript"
@@ -14,13 +15,13 @@
 
     <div id="authPopup" class="overlay">
         <div class="popup-content">
-            <h1>Welcome!</h1>
+            <p style="font-size: 32px; font-weight: bold;">Welcome!</p>
             <!-- Esempio di aggiunta nel popup -->
-            <input type="text" id="nameInput" placeholder="Enter your name">
+            <input type="text" id="nameInput" placeholder="Username">
             <input type="email" id="emailInput" placeholder="Email">
             <input type="password" id="passwordInput" placeholder="Password">
             <button id="forgotPasswordBtn"
-                style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; margin: 5px 0;">
+                style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; margin: 5px 0; box-shadow: none;">
                 Forgot Password?
             </button>
             <div style="margin: 15px 0; display: flex; align-items: left; justify-content: left; gap: 8px;">
@@ -152,7 +153,7 @@
 
         <!-- Schermata Tutorial Overlay -->
         <div id="tutorialPanel" class="overlay hidden">
-            <h1>How to Play</h1>
+            <p style="font-size: 32px; font-weight: bold;">How to Play</p>
             <p>Tap the screen to detach from the rope at the right moment and swing towards the next! 
                 Blue ropes can be stable or fragile, meaning they break immediately. Green ropes are sticky and delay the jump by 300ms.</p>
             <h3 class="blink">TAP TO START</h3>
@@ -160,7 +161,7 @@
 
         <!-- Schermata Game Over Overlay -->
         <div id="gameOverPanel" class="overlay hidden">
-            <h1 style="color: #ff3333; font-size: 48px;">GAME OVER</h1>
+            <p style="color: #ff3333; font-size: 48px;">GAME OVER</p>
             <h2 id="finalScore">Score: 0</h2>
             <h3 class="blink">TAP TO RETRY</h3>
         </div>
