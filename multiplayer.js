@@ -1,6 +1,6 @@
 import { getFirestore, doc, setDoc, updateDoc, onSnapshot, getDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import { db, auth, analytics, logEvent } from "./firebase-init.js"; // Usa l'istanza centralizzata
+import { db, auth, logEvent } from "./firebase-init.js"; // Usa l'istanza centralizzata
 
 let currentRoomId = null;
 let isCreator = false;
@@ -94,7 +94,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
         currentRoomId = roomCode;
         localStorage.setItem('lastCreatedRoom', roomCode);
         enterWaitingRoom(roomCode);
-        logEvent(analytics, 'create_group', { group_id: roomCode });
+        logEvent('create_group', { group_id: roomCode });
     });
 
     ui.joinRoomBtn.addEventListener('click', async () => {
@@ -120,7 +120,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
         isCreator = false;
         currentRoomId = roomCode;
         enterWaitingRoom(roomCode);
-        logEvent(analytics, 'join_group', { group_id: roomCode });
+        logEvent('join_group', { group_id: roomCode });
     });
 
     ui.readyBtn.addEventListener('click', async () => {
