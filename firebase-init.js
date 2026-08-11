@@ -19,27 +19,30 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 let analytics = null;
 
-// isSupported() verifica se l'ambiente corrente (browser/cookies/IndexedDB) supporta Analytics
+// Eseguiamo l'inizializzazione dopo che il contesto Firebase è completamente pronto
 isSupported().then((supported) => {
     if (supported) {
-        analytics = getAnalytics(app);
-        console.log("🟢 Firebase Analytics inizializzato con successo!");
+        try {
+            analytics = getAnalytics(app);
+            console.log("🟢 Firebase Analytics inizializzato con successo!");
+        } catch (e) {
+            console.warn("⚠️ Errore durante l'inizializzazione di Analytics:", e);
+        }
     } else {
-        console.warn("⚠️ Firebase Analytics non è supportato in questo ambiente.");
+        console.warn("⚠️ Firebase Analytics non è supportato in questo browser/ambiente.");
     }
 }).catch((err) => {
-    console.error("Errore durante il controllo del supporto ad Analytics:", err);
+    console.error("Errore controllo supporto Analytics:", err);
 });
 
-// 🟢 Wrapper sicuro per inviare gli eventi senza far crashare il gioco
+// 3. Wrapper per il logEvent
 export const logEvent = (eventName, eventParams) => {
     if (analytics) {
-        // Stampa il log in F12 per facilitare il debug
         console.log(`📊 [Analytics]: ${eventName}`, eventParams || {});
         firebaseLogEvent(analytics, eventName, eventParams);
     } else {
-        // Se analytics non è ancora pronto o non è supportato, stampa solo il log senza crash
-        console.log(`📊 [Analytics (non inviato)]: ${eventName}`, eventParams || {});
+        // Se Analytics non è ancora pronto o è bloccato (ad es. da AdBlock/GDPR)
+        console.log(`📊 [Analytics non inviato]: ${eventName}`, eventParams || {});
     }
 };
 
