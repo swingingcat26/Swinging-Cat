@@ -1298,21 +1298,39 @@ window.addEventListener('keydown', (e) => {
 
 // ====== GESTIONE INSTALLAZIONE PWA ======
 let deferredPrompt;
+const installBtn = document.getElementById('btnInstall');
+
+// Funzione helper per verificare se l'app è aperta in modalità PWA (Standalone)
+function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches || 
+           window.navigator.standalone === true;
+}
+
+// Controllo immediato all'avvio della pagina
+if (isStandalone() || localStorage.getItem('pwaInstalled') === 'true') {
+    if (installBtn) {
+        installBtn.classList.add('hidden');
+    }
+}
 
 window.addEventListener('beforeinstallprompt', (e) => {
+    // Se l'app è aperta come PWA standalone o è già stata installata in precedenza, non fare nulla
+    if (isStandalone() || localStorage.getItem('pwaInstalled') === 'true') {
+        if (installBtn) installBtn.classList.add('hidden');
+        return;
+    }
+
     // Impedisce al browser di mostrare il banner automatico standard
     e.preventDefault();
     // Salva l'evento per poterlo richiamare con il click del bottone
     deferredPrompt = e;
     
-    // Mostra il tuo pulsante personalizzato nel menu
-    const installBtn = document.getElementById('btnInstall');
+    // Mostra il pulsante personalizzato nel menu
     if (installBtn) {
         installBtn.classList.remove('hidden');
     }
 });
 
-const installBtn = document.getElementById('btnInstall');
 if (installBtn) {
     installBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
@@ -1323,6 +1341,8 @@ if (installBtn) {
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
                 console.log('L\'utente ha accettato di installare la PWA');
+                // Salva lo stato in localStorage per nascondere il tasto nelle visite future
+                localStorage.setItem('pwaInstalled', 'true');
                 installBtn.classList.add('hidden');
             } else {
                 console.log('L\'utente ha rifiutato l\'installazione');
@@ -1333,9 +1353,11 @@ if (installBtn) {
     });
 }
 
-// Nascondi il bottone se l'app è già stata installata e aperta come PWA
+// Nascondi il bottone ed esegui il salvataggio quando l'app viene installata con successo
 window.addEventListener('appinstalled', () => {
     console.log('PWA installata con successo');
+    logEvent('pwa', { app: 'installed' });
+    localStorage.setItem('pwaInstalled', 'true');
     if (installBtn) {
         installBtn.classList.add('hidden');
     }
