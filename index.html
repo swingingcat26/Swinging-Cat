@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript"
         src="https://embeds.iubenda.com/widgets/5d372bd0-eb09-4f22-b81f-2b9ec266edd0.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
 </head>
 
 <body>
@@ -67,6 +69,7 @@
         <button id="buttonGame2">Play</button>
         <button id="ranking2">Global Leaderboard</button>
         <button id="multiplayerBtn">Multiplayer</button>
+        <button id="btnInstall" class="hidden" style="background-color: #2ecc71;">📲 Aggiungi alla Home</button>
         <div id="cookiePrivacyLinks">
         <a href="https://www.iubenda.com/privacy-policy/73452321" class="iubenda-white iubenda-noiframe iubenda-embed"
             title="Privacy Policy ">Privacy Policy</a>
@@ -188,6 +191,14 @@
     <script type="module" src="firebase-init.js"></script>
     <script type="module" src="game.js"></script>
     <script type="module" src="multiplayer.js"></script>
+
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log("Service Worker registrato con successo!"))
+      .catch((error) => console.log("Errore registrazione SW: ", error));
+  }
+</script>
 
 </body>
 

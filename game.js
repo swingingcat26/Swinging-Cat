@@ -1295,3 +1295,49 @@ window.addEventListener('keydown', (e) => {
         handleActionInput(e);
     }
 });
+
+// ====== GESTIONE INSTALLAZIONE PWA ======
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Impedisce al browser di mostrare il banner automatico standard
+    e.preventDefault();
+    // Salva l'evento per poterlo richiamare con il click del bottone
+    deferredPrompt = e;
+    
+    // Mostra il tuo pulsante personalizzato nel menu
+    const installBtn = document.getElementById('btnInstall');
+    if (installBtn) {
+        installBtn.classList.remove('hidden');
+    }
+});
+
+const installBtn = document.getElementById('btnInstall');
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            // Mostra la finestra di dialogo nativa del browser per l'installazione
+            deferredPrompt.prompt();
+            
+            // Attendi la risposta dell'utente
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('L\'utente ha accettato di installare la PWA');
+                installBtn.classList.add('hidden');
+            } else {
+                console.log('L\'utente ha rifiutato l\'installazione');
+            }
+            // L'evento può essere usato una sola volta, azzeriamolo
+            deferredPrompt = null;
+        }
+    });
+}
+
+// Nascondi il bottone se l'app è già stata installata e aperta come PWA
+window.addEventListener('appinstalled', () => {
+    console.log('PWA installata con successo');
+    if (installBtn) {
+        installBtn.classList.add('hidden');
+    }
+    deferredPrompt = null;
+});
