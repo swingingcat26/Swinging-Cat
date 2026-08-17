@@ -19,9 +19,10 @@
         <div class="popup-content">
             <p style="font-size: 32px; font-weight: bold; color: #000;">Welcome!</p>
             <!-- Esempio di aggiunta nel popup -->
-            <input type="text" id="nameInput" placeholder="Username">
-            <input type="email" id="emailInput" placeholder="Email">
-            <input type="password" id="passwordInput" placeholder="Password">
+             <form>
+            <input type="text" id="nameInput" placeholder="Username" required>
+            <input type="email" id="emailInput" placeholder="Email" required>
+            <input type="password" id="passwordInput" placeholder="Password" required>
             <div style="display: flex; justify-content: flex-end; width: 100%; margin: 5px 0 15px 0;">
             <button id="forgotPasswordBtn"
                 style="background: none; border: none; color: blue; font-size: 0.85em; text-decoration: underline; cursor: pointer; padding: 0; box-shadow: none;">
@@ -42,7 +43,8 @@
                     the <a href="https://swingingcat26.github.io/Swinging-Cat/terms_conds.html" target="_blank">Terms of Service</a>.
                 </label>
             </div>
-            <button id="magicLinkBtn">Register / Login</button>
+            <button id="magicLinkBtn" type="submit">Register / Login</button>
+            </form>
             <button id="guestBtn" class="guest-btn">Play as Guest</button>
         </div>
     </div>

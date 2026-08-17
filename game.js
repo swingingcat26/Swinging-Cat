@@ -466,7 +466,16 @@ tutorialButton.addEventListener('click', (e) => {
 
 // Nel game.js, sostituisci il listener del vecchio MagicLinkBtn
 // In game.js
-document.getElementById('magicLinkBtn').addEventListener('click', async () => {
+document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
+     const form = e.target.closest('form');
+    
+    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
+    if (form && !form.checkValidity()) {
+        form.reportValidity();
+        return; // Interrompe l'esecuzione se il form non è valido
+    }
+    e.preventDefault();
+
     if (!checkPrivacy()) return;
     const isOver18 = document.getElementById('ageCheck').checked;
     const email = document.getElementById('emailInput').value;
@@ -482,6 +491,7 @@ document.getElementById('magicLinkBtn').addEventListener('click', async () => {
         try {
             await signInAnonymously(auth);
             document.getElementById('authPopup').style.display = 'none';
+            alert("You are not at least 18 years old and cannot register, so your account has been switched to a guest account and your scores will only be saved locally.");
         } catch (error) {
             alert("Error: " + error.message);
         }
