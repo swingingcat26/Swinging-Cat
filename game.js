@@ -188,7 +188,8 @@ const images = {
     catFlying: new Image(),
     catFalling: new Image(),
     rope: new Image(),
-    ropeSlippery: new Image()
+    ropeSlippery: new Image(),
+    ropeFragile: new Image()
 };
 
 images.catAttached.src = 'assets/cat_on_rope.png';
@@ -197,6 +198,7 @@ images.catFlying.src = 'assets/flying_cat.png';
 images.catFalling.src = 'assets/falling_cat.png';
 images.rope.src = 'assets/rope.png';
 images.ropeSlippery.src = 'assets/slippery_rope.png';
+images.ropeFragile.src = 'assets/fragile_rope.png';
 
 const sounds = {
     swing: new Audio('assets/jump_cat_sound.ogg'),
@@ -1059,12 +1061,13 @@ function draw() {
             ctx.stroke();
         } else {
             // Corda statica verticale (Usa coordinate pure del mondo)
-            let currentRopeImg = rope.isSlippery ? images.ropeSlippery : images.rope;
-            const wRope = rope.isSlippery ? 70 : 150;
+            let currentRopeImg = rope.isSlippery ? images.ropeSlippery : (rope.isFragile ? images.ropeFragile : images.rope);
+            const wRope = rope.isSlippery || rope.isFragile ? 70 : 150;
+            const hRope = rope.isSlippery || rope.isFragile ? rope.length - 20 : rope.length;
             const drawX = rope.x - (wRope / 2); // Centrato rispetto a rope.x del mondo
 
             if (currentRopeImg.complete && currentRopeImg.naturalHeight !== 0) {
-                ctx.drawImage(currentRopeImg, drawX, rope.y, wRope, rope.length);
+                ctx.drawImage(currentRopeImg, drawX, rope.y, wRope, hRope);
             } else {
                 // Fallback geometrico visivo colorato
                 ctx.strokeStyle = rope.isSlippery ? '#2ecc71' : (rope.isFragile ? '#e74c3c' : '#7f8c8d');
