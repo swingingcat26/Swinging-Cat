@@ -490,8 +490,8 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     if (!isOver18) {
         try {
             await signInAnonymously(auth);
-            document.getElementById('authPopup').style.display = 'none';
             alert("You are not at least 18 years old and cannot register, so your account has been switched to a guest account and your scores will only be saved locally.");
+            document.getElementById('authPopup').style.display = 'none';
         } catch (error) {
             alert("Error: " + error.message);
         }
