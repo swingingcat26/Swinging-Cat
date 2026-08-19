@@ -638,11 +638,6 @@ sfxVolume.addEventListener('input', (e) => {
 // 4. Logout e Cambio Account dal pannello
 document.getElementById('btnLogoutSettings').addEventListener('click', async () => {
     await signOut(auth);
-    location.reload();
-});
-
-document.getElementById('btnChangeAccountSettings').addEventListener('click', async () => {
-    await signOut(auth);
     settingsPanel.classList.add('hidden');
     document.getElementById('authPopup').style.display = 'flex';
     location.reload();
