@@ -486,3 +486,45 @@ button {
 #authPopup.hidden {
     display: none !important;   /* Vince su 'display: flex !important' */
 }
+
+/* Contenitore */
+.input-container {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 15px;
+}
+
+/* Stile dell'input */
+.input-container .styled-input {
+  width: 100%;
+  padding: 15px 15px 15px 45px !important; /* Forza il padding a sinistra */
+  font-size: 16px;
+  border: 1px solid #bebebe;
+  border-radius: 12px;
+  outline: none;
+  background-color: #eeeded;
+  box-sizing: border-box;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+/* Effetto focus e animazione */
+.input-container .styled-input:focus {
+  border-color: #3b82f6;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Posizionamento icona */
+.input-container .input-icon {
+  position: absolute;
+  left: 15px;
+  top: 40%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 18px;
+  pointer-events: none;
+  z-index: 2; /* Assicura che l'icona stia sopra lo sfondo ma non blocchi i clic */
+}

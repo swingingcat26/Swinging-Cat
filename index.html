@@ -11,21 +11,36 @@
         src="https://embeds.iubenda.com/widgets/5d372bd0-eb09-4f22-b81f-2b9ec266edd0.js"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
     <div id="authPopup" class="overlay">
         <div class="popup-content">
-            <p style="font-size: 32px; font-weight: bold; color: #000;">Welcome!</p>
+             <p style="font-weight: 760; font-size: 18px; color: #5f5f5f;">Register to unlock all features!</p>
             <!-- Esempio di aggiunta nel popup -->
              <form>
-            <input type="text" id="nameInput" placeholder="Username" required>
-            <input type="email" id="emailInput" placeholder="Email" required>
-            <input type="password" id="passwordInput" placeholder="Password" required>
-            <div style="display: flex; justify-content: flex-end; width: 100%; margin: 5px 0 15px 0;">
+            <div class="input-container">
+  <!-- Icona utente -->
+  <i class="fa-solid fa-user input-icon"></i>
+   <input type="text" id="nameInput" placeholder="Username" class="styled-input" required >
+</div>
+
+<div class="input-container">
+  <!-- Icona email -->
+  <i class="fa-solid fa-envelope input-icon"></i>
+  <input type="email" id="emailInput" placeholder="Email" class="styled-input" required>
+</div>
+
+<div class="input-container" style="margin-bottom: -10px;">
+  <!-- Icona lucchetto (password) -->
+  <i class="fa-solid fa-lock input-icon"></i>
+   <input type="password" id="passwordInput" placeholder="Password" class="styled-input" required>
+</div>
+            <div style="display: flex; justify-content: flex-end; width: 100%;">
             <button id="forgotPasswordBtn"
-                style="background: none; border: none; color: blue; font-size: 0.85em; text-decoration: underline; cursor: pointer; padding: 0; box-shadow: none;">
+                style="background: none; border: none; color: blue; font-size: 0.85em; text-decoration: underline; cursor: pointer; padding: 0; box-shadow: none; text-align: end;">
                 Forgot Password?
             </button>
         </div>
