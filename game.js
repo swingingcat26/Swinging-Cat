@@ -1,4 +1,4 @@
-import { getPersonalRecord, registerWithEmail, loginWithEmail, signInAnonymously, getGlobalLeaderboard, recoverPassword, upgradeAnonymousAccount } from './auth.js';
+import { getPersonalRecord, registerWithEmail, loginWithEmail, signInAnonymously, getGlobalLeaderboard, recoverPassword, upgradeAnonymousAccount, signInWithGoogle } from './auth.js';
 import { getAuth, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, deleteDoc, serverTimestamp, deleteField } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { initMultiplayer, deleteRoom, leaveRoomCleanup } from './multiplayer.js';
@@ -6,6 +6,7 @@ import { logEvent } from "./firebase-init.js";
 
 const auth = getAuth();
 const authPopup = document.getElementById('authPopup');
+const chooseAuth = document.getElementById('chooseAuth');
 const profileMenu = document.getElementById('profileMenu');
 const userProfile = document.getElementById('userProfile');
 const db = getFirestore();
@@ -36,6 +37,9 @@ onAuthStateChanged(auth, async (user) => {
     if (user) {
         authPopup.classList.add('hidden');
         authPopup.style.display = 'none';
+        chooseAuth.classList.add('hidden');
+        chooseAuth.style.display = 'none';
+
 
         // 🟢 USA L'ID UTENTE PER LA CHIAVE LOCALE
         const localKey = `highScore2_${user.uid}`;
@@ -60,7 +64,7 @@ onAuthStateChanged(auth, async (user) => {
             }
              }
     } else {
-        authPopup.style.display = 'flex';
+        chooseAuth.style.display = 'flex';
 }
 });
 
@@ -77,6 +81,9 @@ const tutorialButton = document.getElementById('tutorialButton');
 const tutorialPanel = document.getElementById('tutorialPanel');
 const gameOverPanel = document.getElementById('gameOverPanel');
 const finalScoreText = document.getElementById('finalScore');
+const emailBtn = document.getElementById('emailBtn');
+const googleBtn = document.getElementById('googleBtn');
+const backBtn = document.getElementById('backBtn');
 const uiElements = {
     mainMenu: document.getElementById('mainMenu'),
     multiplayerBtn: document.getElementById('multiplayerBtn'),
@@ -469,17 +476,8 @@ tutorialButton.addEventListener('click', (e) => {
 // Nel game.js, sostituisci il listener del vecchio MagicLinkBtn
 // In game.js
 document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
-     const form = e.target.closest('form');
-    
-    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
-    if (form && !form.checkValidity()) {
-        form.reportValidity();
-        return; // Interrompe l'esecuzione se il form non è valido
-    }
     e.preventDefault();
 
-    if (!checkPrivacy()) return;
-    const isOver18 = document.getElementById('ageCheck').checked;
     const email = document.getElementById('emailInput').value;
     const password = document.getElementById('passwordInput').value;
     const displayName = document.getElementById('nameInput').value
@@ -488,17 +486,6 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
         await signOut(auth);
     }
 
-    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
-    if (!isOver18) {
-        try {
-            await signInAnonymously(auth);
-            alert("You are not at least 18 years old and cannot register, so your account has been switched to a guest account and your scores will only be saved locally.");
-            document.getElementById('authPopup').style.display = 'none';
-        } catch (error) {
-            alert("Error: " + error.message);
-        }
-        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
-    }
 
     try {
         await loginWithEmail(email, password);
@@ -528,12 +515,80 @@ document.getElementById('guestBtn').addEventListener('click', async () => {
         logEvent('login', { method: 'anonymous' });
 
         localStorage.setItem('playingAsGuest', 'true');
-        authPopup.style.display = 'none';
+        chooseAuth.style.display = 'none';
 
         alert("You're playing in guest mode. Your games will only be saved locally.");
     } catch (error) {
         alert("Error: " + error.message);
     }
+});
+
+document.getElementById('emailBtn').addEventListener('click', async (e) => {
+     const form = e.target.closest('form');
+    
+    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
+    if (form && !form.checkValidity()) {
+        form.reportValidity();
+        return; // Interrompe l'esecuzione se il form non è valido
+    }
+    e.preventDefault();
+    if (!checkPrivacy()) return;
+    const isOver18 = document.getElementById('ageCheck').checked;
+    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
+    if (!isOver18) {
+        try {
+            await signInAnonymously(auth);
+            alert("You are not at least 18 years old and cannot register, so your account has been switched to a guest account and your scores will only be saved locally.");
+            document.getElementById('chooseAuth').style.display = 'none';
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
+    }
+    chooseAuth.classList.add('hidden');
+    chooseAuth.style.setProperty('display', 'none', 'important'); // Sforza la sparizione
+
+    authPopup.classList.remove('hidden');
+    authPopup.style.display = 'flex';
+    authPopup.style.zIndex = '100000';
+
+});
+
+document.getElementById('googleBtn').addEventListener('click', async (e) => {
+     const form = e.target.closest('form');
+    
+    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
+    if (form && !form.checkValidity()) {
+        form.reportValidity();
+        return; // Interrompe l'esecuzione se il form non è valido
+    }
+    e.preventDefault();
+    if (!checkPrivacy()) return;
+    const displayName = document.getElementById('nameInput').value;
+    const isOver18 = document.getElementById('ageCheck').checked;
+    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
+    if (!isOver18) {
+        try {
+            await signInAnonymously(auth);
+            alert("You are not at least 18 years old and cannot register, so your account has been switched to a guest account and your scores will only be saved locally.");
+            document.getElementById('chooseAuth').style.display = 'none';
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
+    }
+
+    signInWithGoogle(displayName);
+    logEvent('sign_up', { method: 'google' });
+    chooseAuth.style.display = 'none';
+
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+    authPopup.classList.add('hidden');
+    authPopup.style.display = 'none';
+    chooseAuth.classList.remove('hidden');
+    chooseAuth.style.display = 'flex';
 });
 
 
@@ -639,7 +694,7 @@ sfxVolume.addEventListener('input', (e) => {
 document.getElementById('btnLogoutSettings').addEventListener('click', async () => {
     await signOut(auth);
     settingsPanel.classList.add('hidden');
-    document.getElementById('authPopup').style.display = 'flex';
+    document.getElementById('chooseAuth').style.display = 'flex';
     location.reload();
 });
 

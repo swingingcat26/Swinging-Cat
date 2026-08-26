@@ -16,17 +16,65 @@
 
 <body>
 
-    <div id="authPopup" class="overlay">
+    <div id="chooseAuth" class="overlay">
         <div class="popup-content">
             <p style="font-weight: bold; font-size: 32px; color: #000;">Join Us</p>
-             <p style="font-weight: 760; font-size: 18px; color: #5f5f5f;">Register to unlock all features!</p>
-            <!-- Esempio di aggiunta nel popup -->
-             <form>
+            <p style="font-weight: 760; font-size: 18px; color: #5f5f5f;">Register to unlock all features!</p>
+            <form>
             <div class="input-container">
   <!-- Icona utente -->
-  <i class="fa-solid fa-user input-icon"></i>
-   <input type="text" id="nameInput" placeholder="Username" class="styled-input" required >
+  <i class="fa-solid fa-user input-icon" style="left: 25px;"></i>
+   <input type="text" id="nameInput" placeholder="Username" class="styled-input" required style="width: 300px;">
 </div>
+            <div class="input-container">
+                <i class="fa-solid fa-envelope input-icon" style="top: 50%; left: 10%;"></i>
+            <button id="emailBtn"  type="submit">Email/Password</button>
+            </div>
+            <div class="input-container">
+               <i class="fa-brands fa-google input-icon" style="top: 50%; left: 10%;"></i>
+               <button id="googleBtn" type="submit">Sign in with Google</button>
+            </div>
+            </form>
+            <div style="margin: 15px 0; display: flex; align-items: left; justify-content: left; gap: 8px;">
+                <input type="checkbox" id="ageCheck" style="width: auto; margin: 0;">
+                <label for="ageCheck" style="color: #000; cursor: pointer; user-select: none;">I am at least 18 years old</label>
+            </div>
+            <div style="margin: 15px 0; font-size: 0.9em; text-align: left;">
+                <input type="checkbox" id="privacyCheck" style="width: auto;">
+                <label for="privacyCheck" style="cursor: pointer;">
+                    I declare to have read, understood and accepted
+                    the <a href="https://www.iubenda.com/privacy-policy/73452321" target="_blank">Privacy Policy</a>,
+                    the <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target="_blank">Cookie
+                        Policy</a> and
+                    the <a href="https://swingingcat26.github.io/Swinging-Cat/terms_conds.html" target="_blank">Terms of Service</a>.
+                </label>
+            </div>
+            <div class="divider"><span>or</span></div>
+            <div class="input-container">
+            <i class="fa-solid fa-user-secret input-icon" style="top: 60%; left: 70%;"></i>
+            <button id="guestBtn" class="guest-btn">Play as Guest</button>
+            </div>
+        </div>
+    </div>
+
+   <div id="authPopup" class="overlay">
+        <div class="popup-content">
+           <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 15px; position: relative;">
+    <!-- Pulsante Indietro -->
+    <button id="backBtn" style="background: none; border: none; cursor: pointer; padding: 5px; z-index: 2; width: 34px;">
+        <i class="fa-solid fa-arrow-left-long" style="font-size: 24px; color: #000;"></i>
+    </button>
+    
+    <!-- Titolo Centrato -->
+    <p style="font-weight: bold; font-size: 32px; color: #000; margin: 0; position: absolute; width: 100%; text-align: center; left: 0; pointer-events: none;">
+        Join Us
+    </p>
+    
+    <!-- Elemento vuoto per bilanciare lo spazio e mantenere il titolo perfettamente centrato -->
+    <div style="width: 34px;"></div>
+</div>
+            <!-- Esempio di aggiunta nel popup -->
+             <form>
 
 <div class="input-container">
   <!-- Icona email -->
@@ -45,26 +93,8 @@
                 Forgot Password?
             </button>
         </div>
-            <div style="margin: 15px 0; display: flex; align-items: left; justify-content: left; gap: 8px;">
-                <input type="checkbox" id="ageCheck" style="width: auto; margin: 0;">
-                <label for="ageCheck" style="color: #000; cursor: pointer; user-select: none;">I am at least 18 years old</label>
-            </div>
-            <div style="margin: 15px 0; font-size: 0.9em; text-align: left;">
-                <input type="checkbox" id="privacyCheck" style="width: auto;">
-                <label for="privacyCheck" style="cursor: pointer;">
-                    I declare to have read, understood and accepted
-                    the <a href="https://www.iubenda.com/privacy-policy/73452321" target="_blank">Privacy Policy</a>,
-                    the <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target="_blank">Cookie
-                        Policy</a> and
-                    the <a href="https://swingingcat26.github.io/Swinging-Cat/terms_conds.html" target="_blank">Terms of Service</a>.
-                </label>
-            </div>
             <button id="magicLinkBtn" type="submit">Register / Login</button>
             </form>
-            <div class="input-container">
-            <i class="fa-solid fa-user-secret input-icon" style="top: 60%; left: 225px;"></i>
-            <button id="guestBtn" class="guest-btn">Play as Guest</button>
-            </div>
         </div>
     </div>
 

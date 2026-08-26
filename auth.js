@@ -7,7 +7,9 @@ import {
     sendPasswordResetEmail,
     signOut,
     EmailAuthProvider,       // 👈 AGGIUNGI QUESTO
-    linkWithCredential
+    linkWithCredential,
+    signInWithPopup,
+    GoogleAuthProvider
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import {
     collection,
@@ -43,6 +45,21 @@ export const loginWithEmail = async (email, password) => {
         throw error;
     }
 };
+
+export const signInWithGoogle = async (displayName) => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    try {
+        const result = await signInWithPopup(auth, provider);
+        await updateProfile(result.user, { displayName: displayName });
+        await setDoc(doc(db, "users", result.user.uid), {
+            displayName: displayName,
+        });
+        return result.user;
+        } catch (error) {
+        console.error("Errore login con Google:", error.message);
+    }
+ };     
 
 export const getGlobalLeaderboard = async () => {
     // 🟢 Protezione aggiuntiva lato logica

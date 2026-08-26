@@ -469,14 +469,14 @@ button {
 }
 
 /* 2. Il popup di autenticazione (overlay) quando è ATTIVO */
-#authPopup {
+#chooseAuth {
     position: fixed;            /* Copre l'intero schermo sopra il Main Menu */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.85); /* Sfondo scuro semitrasparente */
-    display: flex !important;   /* Forza il flex per centrare il box di login */
+    display: flex;   /* Forza il flex per centrare il box di login */
     justify-content: center;
     align-items: center;
     z-index: 99999;             /* Sta sopra a qualsiasi cosa nel Main Menu */
@@ -486,6 +486,11 @@ button {
 #authPopup.hidden {
     display: none !important;   /* Vince su 'display: flex !important' */
 }
+
+#chooseAuth.hidden {
+    display: none !important;   /* Vince su 'display: flex !important' */
+}
+
 
 /* Contenitore */
 .input-container {
@@ -527,4 +532,27 @@ button {
   font-size: 18px;
   pointer-events: none;
   z-index: 2; /* Assicura che l'icona stia sopra lo sfondo ma non blocchi i clic */
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: #666;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #b9b9b9;
+}
+
+.divider::before {
+    margin-right: 15px;
+}
+
+.divider::after {
+    margin-left: 15px;
 }
