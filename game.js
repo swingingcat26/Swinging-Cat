@@ -376,6 +376,8 @@ buttonGame2.addEventListener('click', () => {
     gameContainer.classList.remove('hidden');
     cookieDiv.classList.add('hide-ui');
     tutorialButton.classList.remove('hidden');
+    authPopup.style.display = 'none';
+    chooseAuth.style.display = 'none';
 
 
 
