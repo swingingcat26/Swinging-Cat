@@ -42,6 +42,7 @@
   - Firebase Authentication (`12.16.0`)
   - Cloud Firestore (`12.16.0`)
   - Firebase Emulators (Firestore & UI for local development)
+  - Google Analytics 4
 - **Privacy & Compliance:** Iubenda Cookie & Privacy Solution
 
 ---
@@ -61,7 +62,8 @@
 ├── .gitignore            # Excludes logs, modules, dependencies, and sensitive data
 ├── terms_conds.html      # Terms and Conditions
 ├── LICENSE               # Copyright license
-└── assets/               # Graphical resources (cat images, ropes) and audio (.ogg)
+├── assets/               # Graphical resources (cat images, ropes) and audio (.ogg)
+└── manifest.json         # Allow the installation of the site
 ```
 
 ---
