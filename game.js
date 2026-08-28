@@ -76,7 +76,7 @@ onAuthStateChanged(auth, async (user) => {
             }
              }
     } else {
-        chooseAuth.style.display = 'flex';
+        chooseAuth.style.display = 'none';
 
         lock.classList.remove('hidden');
         lock2.classList.remove('hidden');
