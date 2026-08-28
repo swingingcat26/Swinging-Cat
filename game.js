@@ -40,9 +40,21 @@ onAuthStateChanged(auth, async (user) => {
         chooseAuth.classList.add('hidden');
         chooseAuth.style.display = 'none';
 
+        if (auth.currentUser.isAnonymous) { 
+       lock.classList.remove('hidden');
+       lock2.classList.add('hidden');
+        ranking2.style.background = 'gray';
+        multiplayerBtn.style.background = '';
+    } else {
+        lock.classList.add('hidden');
+        lock2.classList.add('hidden');
+        ranking2.style.background = '';
+        multiplayerBtn.style.background = '';
+    };
+
 
         // 🟢 USA L'ID UTENTE PER LA CHIAVE LOCALE
-        const localKey = `highScore2_${user.uid}`;
+        const localKey = `highScore2_guest`;
         const dbRecord = await getPersonalRecord(user.uid);
         const localRecord = parseInt(localStorage.getItem(localKey)) || 0;
 
@@ -65,6 +77,17 @@ onAuthStateChanged(auth, async (user) => {
              }
     } else {
         chooseAuth.style.display = 'flex';
+
+        lock.classList.remove('hidden');
+        lock2.classList.remove('hidden');
+        ranking2.style.background = 'gray';
+        multiplayerBtn.style.background = 'gray';
+        
+         const localKey = 'highScore2_guest';
+            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
+
+            highScore = Math.max(score, currentLocal, highScore);
+            localStorage.setItem(localKey, highScore);
 }
 });
 
@@ -84,6 +107,8 @@ const finalScoreText = document.getElementById('finalScore');
 const emailBtn = document.getElementById('emailBtn');
 const googleBtn = document.getElementById('googleBtn');
 const backBtn = document.getElementById('backBtn');
+const ranking2 = document.getElementById('ranking2');
+const multiplayerBtn = document.getElementById('multiplayerBtn');
 const uiElements = {
     mainMenu: document.getElementById('mainMenu'),
     multiplayerBtn: document.getElementById('multiplayerBtn'),
@@ -109,6 +134,8 @@ const settingsBtn = document.getElementById('settingsBtn');
 const musicVolume = document.getElementById('musicVolume');
 const sfxVolume = document.getElementById('sfxVolume');
 const userEmailDisplay = document.getElementById('userEmailDisplay');
+const lock = document.getElementById('lock');
+const lock2 = document.getElementById('lock2');
 
 let isMatchOver = false;
 
@@ -120,7 +147,7 @@ closeLeaderboardBtn.addEventListener('click', () => {
 // Gestione click sul pulsante "Classifica Globale"
 document.getElementById('ranking2').addEventListener('click', async () => {
     if (!auth.currentUser || auth.currentUser.isAnonymous) {
-        alert("The global leaderboard is available only for registered users.");
+        alert("The global leaderboard is available only for registered users (Settings -> Register or Log in).");
         return;
     }
 
@@ -644,13 +671,26 @@ settingsBtn.addEventListener('click', () => {
     const user = auth.currentUser;
     if (user && !user.isAnonymous) {
         userEmailDisplay.innerText = "Account: " + user.email;
+        btnDeleteAccount.classList.remove('hidden');
         upgradeBtn.classList.add('hidden');
+        btnLogoutSettings.textContent = 'Log Out'; // o il testo originale che avevi
+        btnLogoutSettings.style.color = ''; // Rimuove lo stile inline per tornare al CSS originale
+        btnLogoutSettings.style.background = '';
     } else if (user && user.isAnonymous) {
         userEmailDisplay.innerText = "Account: Player_ " + auth.currentUser.uid.substring(0, 4);
+         btnDeleteAccount.classList.remove('hidden');
         upgradeBtn.classList.remove('hidden');
+        btnLogoutSettings.textContent = 'Log Out'; // o il testo originale che avevi
+        btnLogoutSettings.style.color = ''; // Rimuove lo stile inline per tornare al CSS originale
+        btnLogoutSettings.style.background = '';
     } else {
+        const btnLogoutSettings = document.getElementById('btnLogoutSettings');
         userEmailDisplay.innerText = "Not logged in";
         upgradeBtn.classList.add('hidden');
+        btnDeleteAccount.classList.add('hidden');
+        btnLogoutSettings.textContent ='Log In';
+        btnLogoutSettings.style.color ='white';
+        btnLogoutSettings.style.background='black';
     }
 
     settingsPanel.classList.toggle('hidden');
@@ -695,7 +735,6 @@ document.getElementById('btnLogoutSettings').addEventListener('click', async () 
     await signOut(auth);
     settingsPanel.classList.add('hidden');
     document.getElementById('chooseAuth').style.display = 'flex';
-    location.reload();
 });
 
 document.getElementById('btnDeleteAccount').addEventListener('click', async () => {

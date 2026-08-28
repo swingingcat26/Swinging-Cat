@@ -131,7 +131,7 @@ export const upgradeAnonymousAccount = async (email, password, displayName) => {
     // 3. Salva nickname e punteggio su Firestore
     await updateProfile(userCredential.user, { displayName: displayName });
     await setDoc(doc(db, "users", userCredential.user.uid), {
-        score: parseInt(localStorage.getItem(`highScore2_${user.uid}`)) || 0,
+        score: parseInt(localStorage.getItem(`highScore2_guest`)) || 0,
         displayName: displayName,
     });
     

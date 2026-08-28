@@ -11,11 +11,11 @@ export function initMultiplayer(uiElements) {
     ui = uiElements;
     
     ui.multiplayerBtn.addEventListener('click', async () => {
-        // 1. CONSENTI L'ACCESSO A TUTTI GLI UTENTI (inclusi gli anonimi/UUID)
-        if (!auth.currentUser) {
-            await signInAnonymously(auth);
-        }
-    
+         if (!auth.currentUser) {
+                alert("The global leaderboard is available only for logged in users (Settings -> Log in).");
+                return;
+            }
+            
         const savedRoomCode = localStorage.getItem('lastCreatedRoom');
     
         // 🟢 2. CONTROLLO STANZA SCADUTA (se l'utente aveva una stanza salvata/attiva)
