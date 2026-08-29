@@ -675,6 +675,7 @@ settingsBtn.addEventListener('click', () => {
         userEmailDisplay.innerText = "Account: " + user.email;
         btnDeleteAccount.classList.remove('hidden');
         upgradeBtn.classList.add('hidden');
+        btnLogoutSettings.classList.remove('hidden');
         btnLogoutSettings.textContent = 'Log Out'; // o il testo originale che avevi
         btnLogoutSettings.style.color = ''; // Rimuove lo stile inline per tornare al CSS originale
         btnLogoutSettings.style.background = '';
@@ -682,14 +683,13 @@ settingsBtn.addEventListener('click', () => {
         userEmailDisplay.innerText = "Account: Player_ " + auth.currentUser.uid.substring(0, 4);
          btnDeleteAccount.classList.remove('hidden');
         upgradeBtn.classList.remove('hidden');
-        btnLogoutSettings.textContent = 'Log Out'; // o il testo originale che avevi
-        btnLogoutSettings.style.color = ''; // Rimuove lo stile inline per tornare al CSS originale
-        btnLogoutSettings.style.background = '';
+        btnLogoutSettings.classList.add('hidden');
     } else {
         const btnLogoutSettings = document.getElementById('btnLogoutSettings');
         userEmailDisplay.innerText = "Not logged in";
         upgradeBtn.classList.add('hidden');
         btnDeleteAccount.classList.add('hidden');
+        btnLogoutSettings.classList.remove('hidden');
         btnLogoutSettings.textContent ='Log In';
         btnLogoutSettings.style.color ='white';
         btnLogoutSettings.style.background='black';
