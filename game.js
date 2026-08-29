@@ -505,6 +505,13 @@ tutorialButton.addEventListener('click', (e) => {
 // Nel game.js, sostituisci il listener del vecchio MagicLinkBtn
 // In game.js
 document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
+    const form = e.target.closest('form');
+    
+    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
+    if (form && !form.checkValidity()) {
+        form.reportValidity();
+        return; // Interrompe l'esecuzione se il form non è valido
+    }
     e.preventDefault();
 
     const email = document.getElementById('emailInput').value;
