@@ -3,7 +3,7 @@
    ========================================================================== */
 :root {
     --primary-gradient: linear-gradient(135deg, #2575fc 0%, #1a4cb0 100%);
-    --play-gradient: linear-gradient(135deg, #ff9800 0%, #fe5115 100%);
+    --play-gradient: linear-gradient(135deg, #ff7300 0%, #ff4000 100%);
     --bg-dark: #0f172a;
     --bg-card: #ffffff;
     --text-main: #1e293b;
