@@ -91,7 +91,7 @@ html {
 
 /* Pulsanti stile Gaming-Moderno */
 button {
-    padding: 14px 32px;
+    padding: 16px 32px;
     font-size: 18px;
     font-weight: 700;
     border: none;
@@ -107,7 +107,7 @@ button {
     background: var(--play-gradient);
     color: white;
     font-size: 22px;
-    padding: 18px 40px;
+    padding: 20px 40px;
 }
 
 #buttonGame2:hover {
@@ -159,11 +159,11 @@ button {
 .lobby-card input,
 .popup-content input {
     width: 100%;
-    padding: 14px;
+    padding: 16px;
     border-radius: var(--radius-md);
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: #f8fafc;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     font-size: 16px;
     color: var(--text-main);
     outline: none;
@@ -247,7 +247,7 @@ button {
 #magicLinkBtn {
     background: var(--primary-gradient);
     color: white;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 #magicLinkBtn:hover {
@@ -259,7 +259,7 @@ button {
     background: #f1f5f9 !important;
     color: #475569 !important;
     box-shadow: none !important;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .guest-btn:hover {
@@ -381,8 +381,7 @@ button {
     top: 80px;
     right: 20px;
     background: white;
-    padding: 18px;
-    padding-bottom: 15px;
+    padding: 16px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     z-index: 2000;
@@ -465,7 +464,7 @@ button {
     display: flex;
     justify-content: center;
     gap: 10px;
-    padding: 5px;
+    padding: 4px;
 }
 
 /* 2. Il popup di autenticazione (overlay) quando è ATTIVO */
@@ -497,13 +496,13 @@ button {
   position: relative;
   width: 100%;
   max-width: 350px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 /* Stile dell'input */
 .input-container .styled-input {
   width: 100%;
-  padding: 15px 15px 15px 45px !important; /* Forza il padding a sinistra */
+  padding: 16px 16px 16px 44px !important; /* Forza il padding a sinistra */
   font-size: 16px;
   border: 1px solid #bebebe;
   border-radius: 12px;
@@ -550,9 +549,9 @@ button {
 }
 
 .divider::before {
-    margin-right: 15px;
+    margin-right: 16px;
 }
 
 .divider::after {
-    margin-left: 15px;
+    margin-left: 16px;
 }
