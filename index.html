@@ -22,8 +22,8 @@
 
     <div id="chooseAuth" class="overlay">
         <div class="popup-content">
-            <p style="font-weight: bold; font-size: 32px; color: #000; font-family: Arial;">Join Us</p>
-            <p style="font-weight: 760; font-size: 18px; color: #5f5f5f; font-family: Arial;">Register to unlock all features!</p>
+            <p style="font-weight: bold; font-size: 32px; color: #000;">Join Us</p>
+            <p style="font-weight: 760; font-size: 18px; color: #5f5f5f;">Register to unlock all features!</p>
             <form>
             <div class="input-container" style="margin-bottom: 12px;">
   <!-- Icona utente -->
@@ -32,20 +32,20 @@
 </div>
             <div class="input-container">
                 <i class="fa-solid fa-envelope input-icon" style="top: 50%; left: 10%;"></i>
-            <button id="emailBtn"  type="submit" style="font-family: Arial;">Email/Password</button>
+            <button id="emailBtn"  type="submit">Email/Password</button>
             </div>
             <div class="input-container">
                <i class="fa-brands fa-google input-icon" style="top: 50%; left: 10%;"></i>
-               <button id="googleBtn" type="submit" style="font-family: Arial;">Sign in with Google</button>
+               <button id="googleBtn" type="submit">Sign in with Google</button>
             </div>
             </form>
             <div style="margin: 16px 0; display: flex; align-items: left; justify-content: left; gap: 8px;">
                 <input type="checkbox" id="ageCheck" style="width: auto; margin: 0;">
-                <label for="ageCheck" style="color: #000; cursor: pointer; user-select: none; font-family: Arial;">I am at least 18 years old</label>
+                <label for="ageCheck" style="color: #000; cursor: pointer; user-select: none;">I am at least 18 years old</label>
             </div>
             <div style="margin: 16px 0; font-size: 0.9em; text-align: left;">
                 <input type="checkbox" id="privacyCheck" style="width: auto;">
-                <label for="privacyCheck" style="cursor: pointer; font-family: Arial;">
+                <label for="privacyCheck" style="cursor: pointer;">
                     I declare to have read, understood and accepted
                     the <a href="https://www.iubenda.com/privacy-policy/73452321" target="_blank">Privacy Policy</a>,
                     the <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target="_blank">Cookie
@@ -54,7 +54,7 @@
                 </label>
             </div>
             <div class="divider"><span>or</span></div>
-            <button id="guestBtn" class="guest-btn" style="font-family: Arial;">Play as Guest <i class="fa-solid fa-user-secret input-icon"></i></button>
+            <button id="guestBtn" class="guest-btn">Play as Guest <i class="fa-solid fa-user-secret input-icon"></i></button>
         </div>
     </div>
 
@@ -67,7 +67,7 @@
     </button>
     
     <!-- Titolo Centrato -->
-    <p style="font-weight: bold; font-size: 32px; color: #000; margin: 0; position: absolute; width: 100%; text-align: center; left: 0; pointer-events: none; font-family: Arial;">
+    <p style="font-weight: bold; font-size: 32px; color: #000; margin: 0; position: absolute; width: 100%; text-align: center; left: 0; pointer-events: none;">
         Join Us
     </p>
     
@@ -90,11 +90,11 @@
                 <input type="password" id="passwordInput" placeholder="Password" class="styled-input" style="display: block;" required>
             </div>
             <button id="forgotPasswordBtn"
-                style="background: none; border: none; color: blue; font-size: 14px; text-decoration: underline; cursor: pointer; padding: 0; box-shadow: none; font-weight: 700; text-align: end; top: -8px; position: relative; font-family: Arial;" >
+                style="background: none; border: none; color: blue; font-size: 14px; text-decoration: underline; cursor: pointer; padding: 0; box-shadow: none; font-weight: 700; text-align: end; top: -8px; position: relative;" >
                 Forgot Password?
             </button>
         </div>
-            <button id="magicLinkBtn" type="submit" style="font-family: Arial;">Register</button>
+            <button id="magicLinkBtn" type="submit">Register</button>
             </form>
         </div>
     </div>
@@ -118,21 +118,13 @@
     <!-- Menu Principale (Simula MainActivity.kt) -->
     <div id="mainMenu">
         <h1 id="menuTitle">Swinging Cat</h1>
-        <button id="buttonGame2">PLAY</button>
+        <button id="buttonGame2">Play</button>
         <button id="ranking2">Global Leaderboard <span id="lock"><i class="fa-solid fa-lock input-icon"></i></span></button>
         <button id="multiplayerBtn">Multiplayer <span id="lock2"><i class="fa-solid fa-lock input-icon"></i></span></button>
         <button id="btnInstall" style="background-color: #00ac00;">📲 Add to Home</button>
         <div id="cookiePrivacyLinks">
-        <a href="https://www.iubenda.com/privacy-policy/73452321" class="iubenda-white iubenda-noiframe iubenda-embed"
-            title="Privacy Policy ">Privacy Policy</a>
-        <script
-            type="text/javascript">(function (w, d) { var loader = function () { var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s, tag); }; if (w.addEventListener) { w.addEventListener("load", loader, false); } else if (w.attachEvent) { w.attachEvent("onload", loader); } else { w.onload = loader; } })(window, document);</script>
-
-        <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy"
-            class="iubenda-white iubenda-noiframe iubenda-embed" title="Cookie Policy ">Cookie Policy</a>
-        <script
-            type="text/javascript">(function (w, d) { var loader = function () { var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s, tag); }; if (w.addEventListener) { w.addEventListener("load", loader, false); } else if (w.attachEvent) { w.attachEvent("onload", loader); } else { w.onload = loader; } })(window, document);</script>
-    </div>
+       <a href="https://www.iubenda.com/privacy-policy/73452321" target=" _blank" style="background-color: rgba(255,255,255,0.6); text-decoration: none; color: black; padding: 2px 4px 2px 4px; border-radius: 3px;">Privacy Policy</a>
+        <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target=" _blank" style="background-color: rgba(255,255,255,0.6); text-decoration: none; color: black; padding: 2px 4px 2px 4px; border-radius: 3px;">Cookie Policy</a>
     </div> <!-- 🔴 CHIUDI IL DIV DEL MENU PRINCIPALE QUI -->
 
     <!-- Lobby -->
@@ -209,8 +201,8 @@
 
         <!-- Schermata Tutorial Overlay -->
         <div id="tutorialPanel" class="overlay hidden">
-            <p style="font-size: 32px; font-weight: bold;">How to Play</p>
-            <p>Tap the screen to detach from the rope at the right moment and swing towards the next! 
+            <p style="font-size: 32px; font-weight: bold; font-family: 'Nunito', sans-serif;">How to Play</p>
+            <p style="font-family: 'Nunito', sans-serif;">Tap the screen to detach from the rope at the right moment and swing towards the next! 
                 Blue ropes can be stable or fragile, meaning they break immediately. Green ropes are sticky and delay the jump by 300ms.</p>
             <h3 class="blink">TAP TO START</h3>
         </div>

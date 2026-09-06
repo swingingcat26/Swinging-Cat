@@ -82,7 +82,7 @@ html {
 
 #menuTitle {
     font-size: 54px;
-    font-weight: 800;
+    font-weight: 600;
     font-family: 'Fredoka', sans-serif;
     margin-bottom: 40px;
     letter-spacing: -1px;
@@ -95,7 +95,6 @@ button {
     padding: 16px 32px;
     font-size: 18px;
     font-weight: 700;
-    font-family: 'Nunito', sans-serif;
     border: none;
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -105,15 +104,10 @@ button {
     max-width: 300px;
 }
 
-h2, h3, p, label {
-    font-family: 'Nunito', sans-serif;
-}
-
 #buttonGame2 {
     background: var(--play-gradient);
     color: white;
     font-size: 22px;
-    font-weight: 800;
     padding: 20px 40px;
 }
 
@@ -462,7 +456,7 @@ h2, h3, p, label {
 /* Sostituisci il vecchio #cookiePrivacyLinks con questo */
 #cookiePrivacyLinks {
     position: absolute;
-    bottom: 10px;
+    bottom: 12px;
     left: 0;
     width: 100%;
     z-index: 9999;

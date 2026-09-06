@@ -1224,7 +1224,7 @@ function draw() {
 
     // ====== DA QUI IN POI LA UI FISSA (Non subisce la telecamera) ======
     ctx.fillStyle = '#2c3e50';
-    ctx.font = 'bold 26px Nunito';
+    ctx.font = 'bold 26px sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(`Score: ${score}`, 60, h - 40);
 
