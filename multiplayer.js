@@ -12,7 +12,7 @@ export function initMultiplayer(uiElements) {
     
     ui.multiplayerBtn.addEventListener('click', async () => {
          if (!auth.currentUser) {
-                alert("The global leaderboard is available only for logged in users (Settings -> Log in).");
+                 alert("This Area is not available to non-logged-in users (Settings -> Log in).");
                 return;
             }
             

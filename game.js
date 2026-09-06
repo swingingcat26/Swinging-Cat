@@ -147,7 +147,7 @@ closeLeaderboardBtn.addEventListener('click', () => {
 // Gestione click sul pulsante "Classifica Globale"
 document.getElementById('ranking2').addEventListener('click', async () => {
     if (!auth.currentUser || auth.currentUser.isAnonymous) {
-        alert("The global leaderboard is available only for registered users (Settings -> Register or Log in).");
+        alert("This Area is not available to guests or non-logged-in users (Settings -> Register or Log in).");
         return;
     }
 
@@ -171,8 +171,8 @@ document.getElementById('ranking2').addEventListener('click', async () => {
             let medal = (index === 0) ? '🥇 ' : (index === 1) ? '🥈 ' : (index === 2) ? '🥉 ' : '';
             htmlClassifica += `
                 <li style="display: flex; justify-content: space-between; padding: 12px 6px; border-bottom: 1px solid #f1f5f9;">
-                    <span style="font-weight: 600;">${medal}${index + 1}. ${score.displayName || "Player"}</span>
-                    <span style="font-weight: 700; color: #2575fc;">${score.score} pt</span>
+                    <span style="font-weight: 600; font-family: 'Nunito', sans-serif;">${medal}${index + 1}. ${score.displayName || "Player"}</span>
+                    <span style="font-weight: 700; color: #2575fc; font-family: 'Nunito', sans-serif;">${score.score} pt</span>
                 </li>`;
         });
         htmlClassifica += '</ul>';
@@ -180,7 +180,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         // 🟢 AGGIUNTA SBARRA IN FONDO
         if (myPos) {
             let footerText = (myPos <= 250)
-                ? `Your position: ${myPos}°  <span style="font-weight: 700; color: #2575fc; margin-left: 10px;">${myScore} pt</span>`
+                ? `Your position: ${myPos}°  <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${myScore} pt</span>`
                 : `You are better than ${(((totalUsers - myPos) / totalUsers) * 100).toFixed(1)}% of players`;
 
             htmlClassifica += `
@@ -1224,7 +1224,7 @@ function draw() {
 
     // ====== DA QUI IN POI LA UI FISSA (Non subisce la telecamera) ======
     ctx.fillStyle = '#2c3e50';
-    ctx.font = 'bold 26px sans-serif';
+    ctx.font = 'bold 26px Nunito';
     ctx.textAlign = 'left';
     ctx.fillText(`Score: ${score}`, 60, h - 40);
 
