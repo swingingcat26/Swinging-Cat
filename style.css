@@ -83,6 +83,7 @@ html {
 #menuTitle {
     font-size: 54px;
     font-weight: 800;
+    font-family: 'Fredoka', sans-serif;
     margin-bottom: 40px;
     letter-spacing: -1px;
     text-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
