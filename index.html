@@ -119,12 +119,15 @@
     <div id="mainMenu">
         <h1 id="menuTitle">Swinging Cat</h1>
         <button id="buttonGame2">Play</button>
-        <button id="ranking2">Global Leaderboard <span id="lock"><i class="fa-solid fa-lock input-icon"></i></span></button>
-        <button id="multiplayerBtn">Multiplayer <span id="lock2"><i class="fa-solid fa-lock input-icon"></i></span></button>
+        <div style="display: flex; flex-direction: row; max-width: 300px; gap: 8px; width: 100%;">
+        <button id="ranking2" style="width: 50%; display: flex; flex-direction: row; gap: 4px; text-align: center; justify-content: center;"><i class="fa-solid fa-trophy"></i> Ranks <span id="lock"><i class="fa-solid fa-lock input-icon"></i></span></button>
+        <button id="multiplayerBtn" style="width: 50%; display: flex; flex-direction: row; gap: 4px; text-align: center; justify-content: center;"><i class="fa-solid fa-users"></i> VS <span id="lock2"><i class="fa-solid fa-lock input-icon"></i></span></button>
+        </div>
         <button id="btnInstall" style="background-color: #00ac00;">📲 Add to Home</button>
         <div id="cookiePrivacyLinks">
-        <a href="https://www.iubenda.com/privacy-policy/73452321" target=" _blank" style=" text-decoration: none; color: rgba(255, 255, 255, 0.8); font-size: 14px;">Privacy Policy</a>
-        <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target=" _blank" style=" text-decoration: none; color: rgba(255, 255, 255, 0.8); font-size: 14px;">Cookie Policy</a>
+        <a href="https://www.iubenda.com/privacy-policy/73452321" target=" _blank" style=" text-decoration: none; color: rgba(255, 255, 255, 0.8); font-size: 12px;">Privacy Policy</a>
+        <a href="https://www.iubenda.com/privacy-policy/73452321/cookie-policy" target=" _blank" style=" text-decoration: none; color: rgba(255, 255, 255, 0.8); font-size: 12px;">Cookie Policy</a>
+        <button id="privacySettings" class="iubenda-cs-preferences-link"  style="background: none; box-shadow: none; width: auto; height: auto; padding: 0; margin: 0; border: none; font-size: 12px; color: rgba(255, 255, 255, 0.8); font-weight: normal; ">Privacy Settings</button>
     </div>
     </div> <!-- 🔴 CHIUDI IL DIV DEL MENU PRINCIPALE QUI -->
 
@@ -184,7 +187,7 @@
     </div>
 
     <!-- Bottone per aprire le impostazioni -->
-    <button id="settingsBtn" class="icon-btn" style="position:fixed; top:10px; right:10px; z-index: 1000; background: none; box-shadow: none; "><i class="fa-solid fa-gear" style=" filter: drop-shadow(2px 0 0 white) drop-shadow(-2px 0 0 white) drop-shadow(0 2px 0 white) drop-shadow(0 -2px 0 white); font-size: 24px;"></i></button>
+    <button id="settingsBtn" class="icon-btn" style="position:fixed; top:24px; right:24px; z-index: 1000; background: none; box-shadow: none; "><i class="fa-solid fa-gear" style=" filter: drop-shadow(2px 0 0 white) drop-shadow(-2px 0 0 white) drop-shadow(0 2px 0 white) drop-shadow(0 -2px 0 white); font-size: 26px;"></i></button>
 
     <!-- Container del Gioco -->
     <div id="gameContainer" class="hidden">

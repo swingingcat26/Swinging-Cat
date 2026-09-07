@@ -85,7 +85,6 @@ html {
     font-weight: 600;
     font-family: 'Fredoka', sans-serif;
     margin-bottom: 40px;
-    letter-spacing: -1px;
     text-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     animation: floating 3s ease-in-out infinite;
 }
