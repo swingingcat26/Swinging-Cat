@@ -1226,7 +1226,7 @@ function draw() {
     ctx.fillStyle = '#2c3e50';
     ctx.font = 'bold 26px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`Score: ${score}`, 60, h - 40);
+    ctx.fillText(`Score: ${score}`, 30, h - 40);
 
     ctx.textAlign = 'right';
     ctx.fillText(`HighScore: ${highScore}`, w - 30, h - 40);
