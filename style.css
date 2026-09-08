@@ -90,7 +90,7 @@ html {
 }
 
 /* Pulsanti stile Gaming-Moderno */
-button {
+button, #divInstall {
     padding: 16px 32px;
     font-size: 18px;
     font-weight: 700;
@@ -115,7 +115,7 @@ button {
     box-shadow: 0 15px 30px rgba(254, 81, 21, 0.4);
 }
 
-#mainMenu button:not(#buttonGame2) {
+#mainMenu button:not(#buttonGame2), #divInstall {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -554,4 +554,58 @@ button {
 
 .divider::after {
     margin-left: 16px;
+}
+
+/* Contenitore principale */
+.legendary-container {
+  position: relative;
+  width: 280px;  /* Regola in base alla dimensione desiderata */
+  height: 35%;
+  max-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 1. Generatore dei RAGGI LUMINOSI (Sunburst) */
+.sunburst {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  
+  /* Crea le strisce alternate d'aria bianca brillante e trasparenza */
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 15deg,
+    rgba(255, 255, 255, 1) 15deg 45deg,
+    transparent 45deg 75deg,
+    rgba(255, 255, 255, 0.65) 75deg 85deg,
+    transparent 85deg 120deg,
+    rgba(255, 255, 255, 0.75) 120deg 140deg,
+    transparent 140deg 180deg,
+    rgba(255, 255, 255, 0.65) 180deg 195deg,
+    transparent 195deg 230deg,
+    rgba(255, 255, 255, 0.85) 230deg 260deg,
+    transparent 260deg 300deg,
+    rgba(255, 255, 255, 0.75) 300deg 320deg,
+    transparent 320deg 360deg
+  );
+
+
+  /* Applica la sfocatura per rendere i raggi morbidi come nell'immagine */
+  filter: blur(12px);
+  z-index: 1;
+}
+
+/* 2. La faccia del gatto */
+.cat-face {
+  position: relative;
+  z-index: 2; /* Sta sopra ai raggi */
+  width: 150px;
+  height: auto;
+  display: block;
+  
+  /* Leggera ombra/glow attorno alla testa per amalgamare il cutout */
+  filter: drop-shadow(0 0 2px rgb(255, 255, 255, 0.6)) drop-shadow(0 0 6px rgb(255, 255, 255, 0.35)) drop-shadow(0 0 8px rgb(255, 255, 255, 0.1));
 }
