@@ -1472,7 +1472,7 @@ window.addEventListener('appinstalled', () => {
     localStorage.setItem('pwaInstalled', 'true');
     if (installBtn) {
         installBtn.classList.add('hidden');
-        divInstall.classList.add('hidden');
+       divInstall.style.display = 'none';
     }
     deferredPrompt = null;
 });
