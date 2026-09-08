@@ -1326,7 +1326,7 @@ function handleActionInput(e) {
             // Spinta minima propulsiva in avanti per fluidità e prevenzione stallo verticale
             if (velocityX < 7) velocityX = 8.5;
             if (velocityX > 15) velocityX = 15;
-            if (velocityY < -10) velocityY = isMobile ? -8 : -10;
+            if (velocityY < -10) velocityY = isMobile ? -8.65 : -10;
         }
     }
 }
@@ -1410,6 +1410,7 @@ window.addEventListener('keydown', (e) => {
 // ====== GESTIONE INSTALLAZIONE PWA ======
 let deferredPrompt;
 const installBtn = document.getElementById('btnInstall');
+const divInstall = document.getElementById('divInstall');
 
 // Funzione helper per verificare se l'app è aperta in modalità PWA (Standalone)
 function isStandalone() {
@@ -1420,14 +1421,14 @@ function isStandalone() {
 // Controllo immediato all'avvio della pagina
 if (isStandalone() || localStorage.getItem('pwaInstalled') === 'true') {
     if (installBtn) {
-        installBtn.classList.add('hidden');
+        divInstall.style.display = 'none';
     }
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
     // Se l'app è aperta come PWA standalone o è già stata installata in precedenza, non fare nulla
     if (isStandalone() || localStorage.getItem('pwaInstalled') === 'true') {
-        if (installBtn) installBtn.classList.add('hidden');
+        if (installBtn) divInstall.style.display = 'none';
         return;
     }
 
@@ -1438,7 +1439,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
     
     // Mostra il pulsante personalizzato nel menu
     if (installBtn) {
-        installBtn.classList.remove('hidden');
+        divInstall.style.display = 'flex';
     }
 });
 
@@ -1454,7 +1455,7 @@ if (installBtn) {
                 console.log('L\'utente ha accettato di installare la PWA');
                 // Salva lo stato in localStorage per nascondere il tasto nelle visite future
                 localStorage.setItem('pwaInstalled', 'true');
-                installBtn.classList.add('hidden');
+                divInstall.style.display = 'none';
             } else {
                 console.log('L\'utente ha rifiutato l\'installazione');
             }
@@ -1464,7 +1465,6 @@ if (installBtn) {
     });
 }
 
-const divInstall = document.getElementById('divInstall');
 // Nascondi il bottone ed esegui il salvataggio quando l'app viene installata con successo
 window.addEventListener('appinstalled', () => {
     console.log('PWA installata con successo');
