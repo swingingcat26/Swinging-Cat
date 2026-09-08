@@ -1464,6 +1464,7 @@ if (installBtn) {
     });
 }
 
+const divInstall = document.getElementById('divInstall');
 // Nascondi il bottone ed esegui il salvataggio quando l'app viene installata con successo
 window.addEventListener('appinstalled', () => {
     console.log('PWA installata con successo');
@@ -1471,7 +1472,7 @@ window.addEventListener('appinstalled', () => {
     localStorage.setItem('pwaInstalled', 'true');
     if (installBtn) {
         installBtn.classList.add('hidden');
-        document.getElementById('divInstall').classList.add('hidden');
+        divInstall.classList.add('hidden');
     }
     deferredPrompt = null;
 });
