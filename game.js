@@ -808,7 +808,7 @@ shareBtn.addEventListener('click', async () => {
                         text: `My Best Score is ${score}! Can you beat me?`,
                         url: 'https://swingingcat26.github.io/Swinging-Cat'
                     });
-                    console.log('Contenuto condiviso con successo');
+                     logEvent('share', { status: 'shared' });
                 } catch (error) {
                     console.error('Errore durante la condivisione:', error);
                 }
