@@ -106,7 +106,7 @@ button, #divInstall {
 #buttonGame2 {
     background: var(--play-gradient);
     color: white;
-    font-size: 22px;
+    font-size: 24px;
     padding: 20px 40px;
 }
 

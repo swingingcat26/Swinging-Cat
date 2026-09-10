@@ -127,8 +127,8 @@
         <h1 id="menuTitle">Swinging Cat</h1>
         <button id="buttonGame2">Play</button>
         <div style="display: flex; flex-direction: row; max-width: 300px; gap: 8px; width: 100%;">
-        <button id="ranking2" style="width: 50%; display: flex; flex-direction: row; gap: 4px; text-align: center; justify-content: center;">Ranking <span id="lock"><i class="fa-solid fa-lock input-icon"></i></span></button>
-        <button id="multiplayerBtn" style="width: 50%; display: flex; flex-direction: row; gap: 4px; text-align: center; justify-content: center;">Party <span id="lock2"><i class="fa-solid fa-lock input-icon"></i></span></button>
+        <button id="ranking2" style="width: 50%; display: flex; flex-direction: row; gap: 4px; text-align: center; justify-content: center;">Ranks <span id="lock"><i class="fa-solid fa-lock input-icon"></i></span></button>
+        <button id="multiplayerBtn" style="width: 50%; display: flex; flex-direction: row; gap: 4px; text-align: center; justify-content: center;">VS <span id="lock2"><i class="fa-solid fa-lock input-icon"></i></span></button>
         </div>
         <div id="divInstall" style="text-align: left; cursor: default; padding: 2px 2px 2px 12px; align-items: center; display: flex; flex-direction: row; width: 100%; box-sizing: border-box;">
             <p>📲 <span style="font-size: 14px; font-weight: 720;">Add to Home</span></p>
@@ -223,8 +223,9 @@
 
         <!-- Schermata Game Over Overlay -->
         <div id="gameOverPanel" class="overlay hidden">
-            <p style="color: #ff3333; font-size: 48px; font-weight: bold;">GAME OVER</p>
-            <h2 id="finalScore">Score: 0</h2>
+            <h2 id="scoreLabel" style="letter-spacing: 1px;"></h2>  
+            <p id="finalScore" style="font-size: 44px; font-weight: bold;">0</p>
+            <button id="shareBtn" style="background-color: rgba(0, 0, 0, 0.3); color: white; width: auto; height: auto; padding: 4px 8px; backdrop-filter: blur(8px); font-size: 16px;">Share Score</button>
             <h3 class="blink">TAP TO RETRY</h3>
         </div>
 

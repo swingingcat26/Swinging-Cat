@@ -104,6 +104,7 @@ const tutorialButton = document.getElementById('tutorialButton');
 const tutorialPanel = document.getElementById('tutorialPanel');
 const gameOverPanel = document.getElementById('gameOverPanel');
 const finalScoreText = document.getElementById('finalScore');
+const scoreLabel = document.getElementById('scoreLabel');
 const emailBtn = document.getElementById('emailBtn');
 const googleBtn = document.getElementById('googleBtn');
 const backBtn = document.getElementById('backBtn');
@@ -272,7 +273,7 @@ let gameState = 'NOT_STARTED'; // NOT_STARTED, PLAYING, PAUSED, GAME_OVER
 let playerState = 'FLYING';    // ATTACHED, FLYING, STOPPED
 let isCatFalling = false;
 let score = 0;
-let highScore = parseInt(localStorage.getItem('highScore2')) || 0;
+let highScore = parseInt(localStorage.getItem('highScore2_guest')) || 0;
 let frame = 0;
 let graceFramesAfterReset = 0;
 let showTutorialPanel = false;
@@ -798,6 +799,25 @@ document.getElementById('forgotPasswordBtn').addEventListener('click', async () 
     }
 });
 
+shareBtn.addEventListener('click', async () => {
+            // Verifica se il browser supporta la Web Share API
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'SwingingCat',
+                        text: `My Best Score is ${score}! Can you beat me?`,
+                        url: 'https://swingingcat26.github.io/Swinging-Cat'
+                    });
+                    console.log('Contenuto condiviso con successo');
+                } catch (error) {
+                    console.error('Errore durante la condivisione:', error);
+                }
+            } else {
+                // Fallback per i browser che non supportano l'API (es. vecchi desktop)
+                alert('The sharing function is not supported by this browser.');
+            }
+        });
+
 initMultiplayer(uiElements);
 
 let isGameRunning = false;
@@ -898,8 +918,6 @@ function checkUserStatus() {
 function closeTutorialAndResume() {
     showTutorialPanel = false;
     tutorialPanel.classList.add('hidden');
-    localStorage.setItem('hasPlayedBefore', 'true');
-    hasPlayedBefore = true;
     resumeButton.classList.add('hidden');
     pauseButton.classList.remove('hidden');
 
@@ -1084,6 +1102,9 @@ function updateGameLogic() {
         score: score
     });
 
+     playSound(sounds.falling);
+        stopAndReleaseMusic();
+
          const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
             const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
@@ -1096,12 +1117,20 @@ function updateGameLogic() {
 
             // 3. CAMBIO STATO E UI (Eseguito una sola volta)
 
-        playSound(sounds.falling);
-        stopAndReleaseMusic();
 
-        finalScoreText.innerText = `Score: ${score}`;
+         finalScoreText.innerText = `${score}`;
+        if (hasPlayedBefore && highScore === score) {
+            scoreLabel.innerText = `Your Best Score`;
+            shareBtn.classList.remove('hidden');
+            } else {
+                scoreLabel.innerText = 'Your Score';
+                shareBtn.classList.add('hidden');
+            }
         gameOverPanel.classList.remove('hidden');
         gameOverPanel.style.display = 'flex';
+
+        localStorage.setItem('hasPlayedBefore', 'true');
+        hasPlayedBefore = true;
 
             // Salvataggio Cloud (solo per utenti non anonimi)
 if (auth.currentUser && !auth.currentUser.isAnonymous) {
