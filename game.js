@@ -165,7 +165,6 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         });
         htmlClassifica += '</ul>';
 
-        // 🟢 AGGIUNTA SBARRA IN FONDO
         if (myPos) {
             let footerText = (myPos <= 250)
                 ? `<label style="font-family: 'Nunito', sans-serif;">Your position: ${myPos}°  <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${myScore} pt</span></label>`
@@ -274,7 +273,7 @@ setupAudioLoop();
 let isMusicPlaying = true;
 let hasPlayedBefore = localStorage.getItem('hasPlayedBefore') === 'true';
 
-// ====== LOGICA CORE DEL GIOCO (Mappatura GameView2.kt) ======
+// ====== LOGICA CORE DEL GIOCO ======
 let gameState = 'NOT_STARTED'; // NOT_STARTED, PLAYING, PAUSED, GAME_OVER
 let playerState = 'FLYING';    // ATTACHED, FLYING, STOPPED
 let isCatFalling = false;
@@ -318,7 +317,6 @@ function checkPrivacy() {
 
 // Funzioni Audio Ausiliarie
 function startMusic() {
-    // RIMOSSO: currentBgm.load(); perché rompe il contesto del gesto dell'utente nei browser mobile
 
     console.log("Stato della traccia bgm1:", {
         src: currentBgm.src,
