@@ -138,10 +138,6 @@ closeLeaderboardBtn.addEventListener('click', () => {
 
 // Gestione click sul pulsante "Classifica Globale"
 document.getElementById('ranking2').addEventListener('click', async () => {
-    if (!auth.currentUser || auth.currentUser.isAnonymous) {
-        alert("This Area is not available to guests or non-logged-in users (Settings -> Register or Log in).");
-        return;
-    }
 
     leaderboardPopup.style.zIndex = "10000";
     leaderboardContent.innerHTML = '<p style="text-align: center; color: #333;">Loading...</p>';
