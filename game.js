@@ -172,7 +172,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
                 : `You are better than ${(((totalUsers - myPos) / totalUsers) * 100).toFixed(1)}% of players`;
 
             htmlClassifica += `
-                <div style="border-top: 2px solid #e2e8f0; padding: 16px; margin-top: 8px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 12px; position: sticky; bottom: -4px;">
+                <div style="border-top: 2px solid #e2e8f0; padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 12px; position: sticky; bottom: -4px;">
                     ${footerText}
                 </div>`;
         };
@@ -181,7 +181,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
                     let ctaRanks = `Register to join the ranks <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${highScore} pt</span>`;
 
 htmlClassifica += `
-    <div style="border-top: 2px solid #e2e8f0; padding: 16px; margin-top: 8px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 12px; position: sticky; bottom: -4px;">
+    <div style="border-top: 2px solid #e2e8f0; padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 12px; position: sticky; bottom: -4px;">
         ${ctaRanks}
     <button id="btnLogin" style="background: black; color: white; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 700; margin-top: 4px;">Log In</button>
     </div>`;
