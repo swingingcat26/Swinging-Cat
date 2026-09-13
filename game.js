@@ -40,18 +40,6 @@ onAuthStateChanged(auth, async (user) => {
         chooseAuth.classList.add('hidden');
         chooseAuth.style.display = 'none';
 
-        if (auth.currentUser.isAnonymous) { 
-       lock.classList.remove('hidden');
-       lock2.classList.add('hidden');
-        ranking2.style.background = 'gray';
-        multiplayerBtn.style.background = '';
-    } else {
-        lock.classList.add('hidden');
-        lock2.classList.add('hidden');
-        ranking2.style.background = '';
-        multiplayerBtn.style.background = '';
-    };
-
 
         // 🟢 USA L'ID UTENTE PER LA CHIAVE LOCALE
         const localKey = `highScore2_guest`;
@@ -75,13 +63,18 @@ onAuthStateChanged(auth, async (user) => {
                 console.error("Errore durante la sincronizzazione iniziale dell'utente:", error.message);
             }
              }
-    } else {
-        chooseAuth.style.display = 'none';
 
-        lock.classList.remove('hidden');
-        lock2.classList.remove('hidden');
-        ranking2.style.background = 'gray';
-        multiplayerBtn.style.background = 'gray';
+                // CONTROLLO ANTI-LOOP: Ricarica la pagina solo se l'utente non era già registrato in questa sessione
+        const lastLoggedUid = sessionStorage.getItem('last_logged_uid');
+        if (lastLoggedUid !== user.uid) {
+            sessionStorage.setItem('last_logged_uid', user.uid);
+            location.reload();
+        }
+
+    } else {
+        sessionStorage.removeItem('last_logged_uid');
+
+        chooseAuth.style.display = 'none';
         
          const localKey = 'highScore2_guest';
             const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
@@ -135,8 +128,6 @@ const settingsBtn = document.getElementById('settingsBtn');
 const musicVolume = document.getElementById('musicVolume');
 const sfxVolume = document.getElementById('sfxVolume');
 const userEmailDisplay = document.getElementById('userEmailDisplay');
-const lock = document.getElementById('lock');
-const lock2 = document.getElementById('lock2');
 
 let isMatchOver = false;
 
@@ -160,7 +151,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         // 🟢 Qui riceviamo l'oggetto completo
         const { top10, myPos, totalUsers, myScore } = await getGlobalLeaderboard();
 
-        if (!top10 || top10.length === 0) {
+        if (!top10 || top10.length === 0 || highScore === 0) {
             leaderboardContent.innerHTML = '<p style="text-align: center; color: #333;">You have not played any games yet. Set your first highscore!</p>';
             return;
         }
@@ -185,18 +176,37 @@ document.getElementById('ranking2').addEventListener('click', async () => {
                 : `You are better than ${(((totalUsers - myPos) / totalUsers) * 100).toFixed(1)}% of players`;
 
             htmlClassifica += `
-                <div style="border-top: 2px solid #e2e8f0; padding: 15px; margin-top: 10px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 0 0 8px 8px;">
+                <div style="border-top: 2px solid #e2e8f0; padding: 16px; margin-top: 8px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 12px; position: sticky; bottom: -4px;">
                     ${footerText}
                 </div>`;
-        }
+        };
+
+        if (!auth.currentUser || auth.currentUser.isAnonymous) { 
+                    let ctaRanks = `Register to join the ranks <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${highScore} pt</span>`;
+
+htmlClassifica += `
+    <div style="border-top: 2px solid #e2e8f0; padding: 16px; margin-top: 8px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 12px; position: sticky; bottom: -4px;">
+        ${ctaRanks}
+    <button id="btnLogin" style="background: black; color: white; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 700; margin-top: 4px;">Log In</button>
+    </div>`;
+                };
 
         leaderboardContent.innerHTML = htmlClassifica;
 
-        console.log("Total Users:", totalUsers)
+        const btnLogin = document.getElementById('btnLogin');
+        if (btnLogin) {
+        btnLogin.addEventListener('click', async () => {
+            await signOut(auth);
+            leaderboardPopup.style.display = 'none';
+            document.getElementById('chooseAuth').style.display = 'flex';
+        });
+        };
+
+        console.log("Total Users:", totalUsers);
 
     } catch (error) {
         console.error("Errore: ", error);
-        leaderboardContent.innerHTML = '<p style="color: red; text-align: center;">Errore nel caricamento.</p>';
+        leaderboardContent.innerHTML = '<p style="color: red; text-align: center;">Loading Error</p>';
     }
 });
 
@@ -774,7 +784,6 @@ document.getElementById('btnDeleteAccount').addEventListener('click', async () =
                 await signOut(auth);
                 settingsPanel.classList.add('hidden');
                 document.getElementById('authPopup').style.display = 'flex';
-                location.reload();
             } else {
                 alert("Error: " + error.message);
             }
@@ -1120,7 +1129,7 @@ function updateGameLogic() {
 
          finalScoreText.innerText = `${score}`;
         if (hasPlayedBefore && highScore === score) {
-            scoreLabel.innerText = `Your Best Score`;
+            scoreLabel.innerHTML = `Your <span style="color: #ff7300; font-size: 28px; letter-spacing: 0; font-style: italic;">Best</span> Score`;
             shareBtn.classList.remove('hidden');
             } else {
                 scoreLabel.innerText = 'Your Score';

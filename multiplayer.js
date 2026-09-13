@@ -11,10 +11,6 @@ export function initMultiplayer(uiElements) {
     ui = uiElements;
     
     ui.multiplayerBtn.addEventListener('click', async () => {
-         if (!auth.currentUser) {
-                 alert("This Area is not available to non-logged-in users (Settings -> Log in).");
-                return;
-            }
             
         const savedRoomCode = localStorage.getItem('lastCreatedRoom');
     
@@ -77,6 +73,11 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
         const roomCode = generateRoomCode().toUpperCase();
         const roomRef = doc(db, "rooms", roomCode);
 
+        if (!auth.currentUser) {
+                 alert("This Area is not available to non-logged-in users (Settings -> Log in).");
+                return;
+            }
+
         await setDoc(roomRef, {
             creator: user.uid,
             status: 'WAITING',
@@ -100,6 +101,12 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
     ui.joinRoomBtn.addEventListener('click', async () => {
         const user = auth.currentUser;
         let roomCode = ui.roomCodeInput.value.trim().toUpperCase();
+
+        if (!auth.currentUser) {
+                 alert("This Area is not available to non-logged-in users (Settings -> Log in).");
+                return;
+            }
+        
         if (!roomCode) return alert("Please enter a valid room code.");
         
         const roomRef = doc(db, "rooms", roomCode);

@@ -64,11 +64,8 @@ export const signInWithGoogle = async (displayName) => {
 export const getGlobalLeaderboard = async () => {
     // 🟢 Protezione aggiuntiva lato logica
     const user = auth.currentUser;
-    if (!user || user.isAnonymous) {
-        console.warn("Accesso alla classifica negato: utente non autorizzato.");
-        return []; // Restituisce un array vuoto
-    }
-    if (!user || user.isAnonymous) return { top10: [], myPos: null, totalUsers: 0 };
+    const isGuestOrLoggedOut = !user || user.isAnonymous;
+
     try {
         const usersRef = collection(db, "users");
 
@@ -85,6 +82,8 @@ export const getGlobalLeaderboard = async () => {
         const snapCount = await getCountFromServer(usersRef);
         const totalUsers = snapCount.data().count;
 
+        if (isGuestOrLoggedOut) return { top10, myPos: null, totalUsers, myScore: null };
+
         // 3. Trova posizione utente (se fuori dalla top 10)
         const myDoc = await getDoc(doc(db, "users", user.uid));
         const myScore = myDoc.data().score;
@@ -97,7 +96,7 @@ export const getGlobalLeaderboard = async () => {
         return { top10, myPos: position > 10 ? position : null, totalUsers, myScore };
     } catch (error) {
         console.error(error);
-        return { top10: [], myPos: null, totalUsers: 0 };
+        return { top10, myPos: null, totalUsers, myScore: null };
     }
 };
 
