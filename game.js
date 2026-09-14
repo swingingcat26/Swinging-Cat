@@ -171,7 +171,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
                 : `<label style="font-family: 'Nunito', sans-serif;">You are better than ${(((totalUsers - myPos) / totalUsers) * 100).toFixed(1)}% of players</label>`;
 
             htmlClassifica += `
-                <div style=" padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 12px; position: sticky; bottom: -4px;">
+                <div style=" padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px;">
                     ${footerText}
                 </div>`;
         };
@@ -180,7 +180,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
                     let ctaRanks = `<label style="font-family: 'Nunito', sans-serif;">Register to join the ranks <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${highScore} pt</span></label>`;
 
 htmlClassifica += `
-    <div style="padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: #f8fafc; border-radius: 12px; position: sticky; bottom: -4px;">
+    <div style="padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px;">
         ${ctaRanks}
     <button id="btnLogin" style="background: black; color: white; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 700; margin-top: 4px;">Log In</button>
     </div>`;
@@ -1123,7 +1123,7 @@ function updateGameLogic() {
 
          finalScoreText.innerText = `${score}`;
         if (hasPlayedBefore && highScore === score) {
-            scoreLabel.innerHTML = `Your <span style="color: #ff7300; font-size: 28px; letter-spacing: 0; font-style: italic;">Best</span> Score`;
+            scoreLabel.innerHTML = `Your <span style="background: linear-gradient(182deg, #ff5000 25%, #ff7500 50%, #ff5000 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 24px; letter-spacing: 0; font-style: italic;"><span style="font-size: 28px;">B</span>est</span> Score`;
             shareBtn.classList.remove('hidden');
             } else {
                 scoreLabel.innerText = 'Your Score';
