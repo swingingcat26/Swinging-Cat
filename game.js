@@ -138,6 +138,7 @@ closeLeaderboardBtn.addEventListener('click', () => {
 
 // Gestione click sul pulsante "Classifica Globale"
 document.getElementById('ranking2').addEventListener('click', async () => {
+    logEvent('RanksBtn', { status: 'clicked' });
 
     leaderboardPopup.style.zIndex = "10000";
     leaderboardContent.innerHTML = '<p style="text-align: center; color: #333;">Loading...</p>';
@@ -177,12 +178,12 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         };
 
         if (!auth.currentUser || auth.currentUser.isAnonymous) { 
-                    let ctaRanks = `<label style="font-family: 'Nunito', sans-serif;">Register to join the ranks <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${highScore} pt</span></label>`;
+                    let ctaRanks = `<label style="font-family: 'Nunito', sans-serif; color: black;">Register to join the ranks <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${highScore} pt</span></label>`;
 
 htmlClassifica += `
     <div style="padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px;">
-        ${ctaRanks}
-    <button id="btnLogin" style="background: black; color: white; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 700; margin-top: 4px;">Log In</button>
+       <button id="btnLogin" style="background: black; color: white; font-family: 'Nunito', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 700;">Register</button>
+    ${ctaRanks}    
     </div>`;
                 };
 
@@ -770,6 +771,7 @@ document.getElementById('btnDeleteAccount').addEventListener('click', async () =
 
             alert("Account deleted successfully!");
             localStorage.removeItem('playingAsGuest');
+            logEvent('delete', { account: 'deleted' });
             location.reload(); // Ricarica per tornare allo stato di avvio
         } catch (error) {
             console.error("Errore durante l'eliminazione:", error);
@@ -1123,7 +1125,7 @@ function updateGameLogic() {
 
          finalScoreText.innerText = `${score}`;
         if (hasPlayedBefore && highScore === score) {
-            scoreLabel.innerHTML = `Your <span style="background: linear-gradient(182deg, #ff5000 25%, #ff7500 50%, #ff5000 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 24px; letter-spacing: 0; font-style: italic;"><span style="font-size: 28px;">B</span>est</span> Score`;
+            scoreLabel.innerHTML = `Your <span style="background: linear-gradient(182deg, #ff5500 25%, #ff7500 50%, #ff5500 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 24px; letter-spacing: 0; font-style: italic;"><span style="font-size: 28px;">B</span>est</span> Score`;
             shareBtn.classList.remove('hidden');
             } else {
                 scoreLabel.innerText = 'Your Score';

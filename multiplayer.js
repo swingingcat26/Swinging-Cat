@@ -13,6 +13,7 @@ export function initMultiplayer(uiElements) {
     ui.multiplayerBtn.addEventListener('click', async () => {
             
         const savedRoomCode = localStorage.getItem('lastCreatedRoom');
+        logEvent('VSBtn', { status: 'clicked' });
     
         // 🟢 2. CONTROLLO STANZA SCADUTA (se l'utente aveva una stanza salvata/attiva)
         if (savedRoomCode) {
