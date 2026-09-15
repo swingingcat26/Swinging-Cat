@@ -178,7 +178,7 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         };
 
         if (!auth.currentUser || auth.currentUser.isAnonymous) { 
-                    let ctaRanks = `<label style="font-family: 'Nunito', sans-serif; color: black;">Register to join the ranks <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${highScore} pt</span></label>`;
+                    let ctaRanks = `<label style="font-family: 'Nunito', sans-serif; color: black;"> to join the ranks <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${highScore} pt</span></label>`;
 
 htmlClassifica += `
     <div style="padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px;">
