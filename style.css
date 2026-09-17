@@ -106,8 +106,10 @@ button, #divInstall {
 #buttonGame2 {
     background: var(--play-gradient);
     color: white;
-    font-size: 24px;
+    font-size: 26px;
     padding: 20px 40px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
 }
 
 #buttonGame2:hover {
@@ -115,7 +117,15 @@ button, #divInstall {
     box-shadow: 0 15px 30px rgba(254, 81, 21, 0.4);
 }
 
-#mainMenu button:not(#buttonGame2), #divInstall {
+#mainMenu button:not(#buttonGame2) {
+    background: rgb(30, 60, 180);
+    color: white;
+    border: 1px solid rgba(0, 0, 240, 0.2);
+    backdrop-filter: blur(12px);
+    margin-top: 12px;
+}
+
+#divInstall {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);

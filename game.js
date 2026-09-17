@@ -159,17 +159,17 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         top10.forEach((score, index) => {
             let medal = (index === 0) ? '🥇 ' : (index === 1) ? '🥈 ' : (index === 2) ? '🥉 ' : '';
             htmlClassifica += `
-                <li style="display: flex; justify-content: space-between; padding: 12px 6px; border-bottom: 1px solid #f1f5f9;">
-                    <span style="font-weight: 600; font-family: 'Nunito', sans-serif;">${medal}${index + 1}. ${score.displayName || "Player"}</span>
-                    <span style="font-weight: 700; color: #2575fc; font-family: 'Nunito', sans-serif;">${score.score} pt</span>
+                <li style="display: flex; justify-content: space-between; padding: 12px 6px; border-bottom: 1px solid #f1f5f9; font-weight: 600; letter-spacing: 0.5px;">
+                    <span style="font-family: 'Fredoka', sans-serif;">${medal}${index + 1}. ${score.displayName || "Player"}</span>
+                    <span style="color: #2575fc; font-family: 'Fredoka', sans-serif;">${score.score} pt</span>
                 </li>`;
         });
         htmlClassifica += '</ul>';
 
         if (myPos) {
             let footerText = (myPos <= 250)
-                ? `<label style="font-family: 'Nunito', sans-serif;">Your position: ${myPos}°  <span style="font-weight: 700; color: #2575fc; margin-left: 10px; font-family: 'Nunito', sans-serif;">${myScore} pt</span></label>`
-                : `<label style="font-family: 'Nunito', sans-serif;">You are better than ${(((totalUsers - myPos) / totalUsers) * 100).toFixed(1)}% of players</label>`;
+                ? `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600;">Your position: ${myPos}°  <span style="font-weight: 600; color: #2575fc; margin-left: 10px; font-family: 'Fredoka', sans-serif;">${myScore} pt</span></label>`
+                : `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600;">You are better than ${(((totalUsers - myPos) / totalUsers) * 100).toFixed(1)}% of players</label>`;
 
             htmlClassifica += `
                 <div style=" padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px;">
@@ -178,11 +178,11 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         };
 
         if (!auth.currentUser || auth.currentUser.isAnonymous) { 
-                    let ctaRanks = `<label style="font-family: 'Nunito', sans-serif; color: black;"> to join the ranks <span style="font-weight: 700; color: #2575fc; font-family: 'Nunito', sans-serif;">${highScore} pt</span></label>`;
+                    let ctaRanks = `<label style="font-family: 'Fredoka', sans-serif; font-weight: 640; letter-spacing: 0.5px;"> to join the ranks <span style="font-weight: 600; color: #2575fc; font-family: 'Fredoka', sans-serif;">${highScore} pt</span></label>`;
 
 htmlClassifica += `
-    <div style="padding: 16px auto; margin-top: 8px; font-weight: bold; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px;">
-       <button id="btnLogin" style="background: black; color: white; font-family: 'Nunito', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 700;">Register</button>
+    <div style="padding: 16px auto; margin-top: 8px; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px;">
+    <button id="btnLogin" style="background: black; color: white; font-family: 'Fredoka', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 600;">Register</button>
     ${ctaRanks}    
     </div>`;
                 };
@@ -1258,7 +1258,7 @@ function draw() {
 
     // ====== DA QUI IN POI LA UI FISSA (Non subisce la telecamera) ======
     ctx.fillStyle = '#2c3e50';
-    ctx.font = 'bold 26px sans-serif';
+    ctx.font = '600 28px Fredoka';
     ctx.textAlign = 'left';
     ctx.fillText(`Score: ${score}`, 30, h - 40);
 
