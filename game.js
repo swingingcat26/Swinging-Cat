@@ -178,13 +178,13 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         };
 
         if (!auth.currentUser || auth.currentUser.isAnonymous) { 
-                    let ctaRanks = `<label style="font-family: 'Fredoka', sans-serif; font-weight: 640; letter-spacing: 0.5px;"> to join the ranks <span style="font-weight: 600; color: #2575fc; font-family: 'Fredoka', sans-serif;">${highScore} pt</span></label>`;
-
+                    let ctaScore = `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600; letter-spacing: 0.5px; font-size: 16px;">Your score: <span style="font-weight: 600; color: #2575fc; font-family: 'Fredoka', sans-serif;">${highScore} pt</span></label>`;
+                    const btnRanks = '<button id="btnLogin" style="background: black; color: white; font-family: \'Fredoka\', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 600;">Register</button>';
 htmlClassifica += `
-    <div style="padding: 16px auto; margin-top: 8px; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px;">
-    <button id="btnLogin" style="background: black; color: white; font-family: 'Fredoka', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 600;">Register</button>
-    ${ctaRanks}    
-    </div>`;
+    <div style="padding: 16px auto; margin-top: 8px; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px; display: flex; justify-content: center; flex-direction: column;">
+    <label>${btnRanks} <span style="font-family: 'Fredoka', sans-serif; font-weight: 640; letter-spacing: 0.5px; font-size: 16px;">to join the ranks</span></label>
+    ${ctaScore}
+        </div>`;
                 };
 
         leaderboardContent.innerHTML = htmlClassifica;
@@ -1125,7 +1125,7 @@ function updateGameLogic() {
 
          finalScoreText.innerText = `${score}`;
         if (hasPlayedBefore && highScore === score) {
-            scoreLabel.innerHTML = `Your <span style="background: linear-gradient(182deg, #ff5500 25%, #ff7500 50%, #ff5500 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 24px; letter-spacing: 0; font-style: italic;"><span style="font-size: 28px;">B</span>est</span> Score`;
+            scoreLabel.innerHTML = `Your <span style="background: linear-gradient(182deg, #ff5500 25%, #ff7500 50%, #ff5500 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 24px; letter-spacing: 0; font-style: italic; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-weight: bold;"><span style="font-size: 28px; font-family: 'Inter', system-ui, -apple-system, sans-serif; font-weight: bold;">B</span>est</span> Score`;
             shareBtn.classList.remove('hidden');
             } else {
                 scoreLabel.innerText = 'Your Score';

@@ -198,7 +198,7 @@
     </div>
 
     <!-- Bottone per aprire le impostazioni -->
-    <button id="settingsBtn" class="icon-btn" style="position:fixed; top:24px; right:24px; z-index: 1000; background: none; box-shadow: none; "><i class="fa-solid fa-gear" style=" filter: drop-shadow(2px 0 0 white) drop-shadow(-2px 0 0 white) drop-shadow(0 2px 0 white) drop-shadow(0 -2px 0 white); font-size: 26px;"></i></button>
+    <button id="settingsBtn" class="icon-btn" style="position:fixed; top:24px; right:24px; z-index: 1000; background: none; box-shadow: none; border: none;"><i class="fa-solid fa-gear" style=" filter: drop-shadow(2px 0 0 white) drop-shadow(-2px 0 0 white) drop-shadow(0 2px 0 white) drop-shadow(0 -2px 0 white); font-size: 26px;"></i></button>
 
     <!-- Container del Gioco -->
     <div id="gameContainer" class="hidden">
@@ -215,24 +215,24 @@
         </div>
 
         <!-- Schermata Tutorial Overlay -->
-        <div id="tutorialPanel" class="overlay hidden" style="font-weight: 600; ">
+        <div id="tutorialPanel" class="overlay hidden" style="font-weight: 600; display: flex; justify-content: center;">
             <p style="font-size: 32px; font-family: 'Fredoka', sans-serif; ">How to Play</p>
-            <p style="letter-spacing: 1px; text-align: left; font-family: 'Fredoka', sans-serif; margin-left: 40px;">
+            <p style="letter-spacing: 1px; text-align: left; font-family: 'Fredoka', sans-serif; margin-left: auto; margin-right: auto;">
                 Tap the screen to detach from the rope at the right moment and swing towards the next!
-                <ul style="text-align: left; display: flex; justify-content: space-between; height: 56px; flex-direction: column;"> 
-                    <li style="font-family: 'Fredoka', sans-serif; letter-spacing: 1px;"><span style="background-color: rgb(20, 20, 200); font-family: 'Fredoka', sans-serif; padding: 2px; "> Blue ropes </span> : Normal, or Fragile (break instantly)</li>
+                <ul style="text-align: left; display: flex; justify-content: space-between; height: auto; flex-direction: column; margin-left: auto; margin-right: auto;"> 
+                    <li style="font-family: 'Fredoka', sans-serif; letter-spacing: 1px; margin-bottom: 12px;"><span style="background-color: rgb(20, 20, 200); font-family: 'Fredoka', sans-serif; padding: 2px; "> Blue ropes </span> : Normal, or Fragile (break instantly)</li>
                     <li style="font-family: 'Fredoka', sans-serif; letter-spacing: 1px;"><span style="background-color: rgb(55, 155, 55); font-family: 'Fredoka', sans-serif; padding: 2px; "> Green ropes </span> : Sticky (slight jump delay)</li>
                 </ul>
-            </p>            
-            <h3 class="blink">TAP TO START</h3>
+            </p>
+            <h3 class="blink" style="font-family: 'Fredoka', sans-serif; letter-spacing: 1px; font-weight: 600;">TAP TO START</h3>
         </div>
 
         <!-- Schermata Game Over Overlay -->
         <div id="gameOverPanel" class="overlay hidden">
-            <h2 id="scoreLabel" style="letter-spacing: 1px;"></h2>  
-            <p id="finalScore" style="font-size: 44px; font-weight: bold;">0</p>
-            <button id="shareBtn" style="background-color: rgba(0, 0, 0, 0.3); color: white; width: auto; height: auto; padding: 4px 8px; backdrop-filter: blur(8px); font-size: 16px;">Share Score</button>
-            <h3 class="blink">TAP TO RETRY</h3>
+            <h2 id="scoreLabel" style="font-family: 'Fredoka', sans-serif; letter-spacing: 1px; font-weight: 600;"></h2>  
+            <p id="finalScore" style="font-size: 48px; font-family: 'Fredoka', sans-serif; font-weight: 600;">0</p>
+            <button id="shareBtn" style="background-color: rgba(0, 0, 0, 0.3); color: white; width: auto; height: auto; padding: 4px 8px; backdrop-filter: blur(8px); font-size: 18px; font-family: 'Fredoka', sans-serif; letter-spacing: 1px; font-weight: 600;">Share Score</button>
+            <h3 class="blink" style="font-family: 'Fredoka', sans-serif; letter-spacing: 1px; font-weight: 600;">TAP TO RETRY</h3>
         </div>
 
         <!-- Tabella Punteggi Live -->
