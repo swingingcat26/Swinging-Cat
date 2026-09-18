@@ -73,9 +73,10 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
         const user = auth.currentUser;
         const roomCode = generateRoomCode().toUpperCase();
         const roomRef = doc(db, "rooms", roomCode);
+         const chooseAuth = document.getElementById('chooseAuth');
 
         if (!auth.currentUser) {
-                 alert("This Area is not available to non-logged-in users (Settings -> Log in).");
+                 chooseAuth.style.display = 'flex'; // Mostra il popup di login
                 return;
             }
 
@@ -102,9 +103,10 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
     ui.joinRoomBtn.addEventListener('click', async () => {
         const user = auth.currentUser;
         let roomCode = ui.roomCodeInput.value.trim().toUpperCase();
+         const chooseAuth = document.getElementById('chooseAuth');
 
         if (!auth.currentUser) {
-                 alert("This Area is not available to non-logged-in users (Settings -> Log in).");
+                 chooseAuth.style.display = 'flex'; // Mostra il popup di login
                 return;
             }
         
