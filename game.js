@@ -7,31 +7,18 @@ import { logEvent } from "./firebase-init.js";
 const auth = getAuth();
 const authPopup = document.getElementById('authPopup');
 const chooseAuth = document.getElementById('chooseAuth');
-const profileMenu = document.getElementById('profileMenu');
-const userProfile = document.getElementById('userProfile');
 const db = getFirestore();
-let lastClickTime = Date.now();
 
 const savedEmail = window.localStorage.getItem('emailForSignIn');
 if (savedEmail) {
     completeMagicLinkLogin(savedEmail);
 }
 
-// Verifica se siamo in un loop di login senza codice valido
 const emailSaved = window.localStorage.getItem('emailForSignIn');
 if (emailSaved && !window.location.href.includes('apiKey=')) {
     console.warn("Flag di login trovato senza parametri URL: pulizia forzata.");
     window.localStorage.removeItem('emailForSignIn');
 }
-
-// Funzione helper per sincronizzare e aggiornare la UI
-async function loadAndSyncHighScore(user) {
-    const dbRecord = await getPersonalRecord(user.uid);
-    // Il database è la fonte della verità assoluta
-    highScore = dbRecord;
-    localStorage.setItem('highScore2', highScore);
-}
-
 
 onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -40,31 +27,25 @@ onAuthStateChanged(auth, async (user) => {
         chooseAuth.classList.add('hidden');
         chooseAuth.style.display = 'none';
 
-
-        // 🟢 USA L'ID UTENTE PER LA CHIAVE LOCALE
         const localKey = `highScore2_guest`;
         const dbRecord = await getPersonalRecord(user.uid);
         const localRecord = parseInt(localStorage.getItem(localKey)) || 0;
 
-        // Calcola il massimo tra il DB e il record locale di QUESTO specifico utente
         highScore = Math.max(dbRecord, localRecord);
         localStorage.setItem(localKey, highScore);
 
-        // Se il locale è più alto, sincronizza il DB
         if (localRecord > dbRecord && auth.currentUser && !auth.currentUser.isAnonymous) {
-        const userRef = doc(db, "users", user.uid);
-            try {
-                // Usiamo setDoc con merge:true invece di updateDoc per gestire l'eventuale assenza del documento
-                await setDoc(userRef, {
-                    score: highScore,
-                    lastUpdateAt: serverTimestamp()
-                }, { merge: true });
-            } catch (error) {
-                console.error("Errore durante la sincronizzazione iniziale dell'utente:", error.message);
-            }
-             }
+            const userRef = doc(db, "users", user.uid);
+                try {
+                    await setDoc(userRef, {
+                        score: highScore,
+                        lastUpdateAt: serverTimestamp()
+                    }, { merge: true });
+                } catch (error) {
+                    console.error("Errore durante la sincronizzazione iniziale dell'utente:", error.message);
+                }
+        }
 
-                // CONTROLLO ANTI-LOOP: Ricarica la pagina solo se l'utente non era già registrato in questa sessione
         const lastLoggedUid = sessionStorage.getItem('last_logged_uid');
         if (lastLoggedUid !== user.uid) {
             sessionStorage.setItem('last_logged_uid', user.uid);
@@ -76,15 +57,15 @@ onAuthStateChanged(auth, async (user) => {
 
         chooseAuth.style.display = 'none';
         
-         const localKey = 'highScore2_guest';
-            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
+        const localKey = 'highScore2_guest';
+        const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
-            highScore = Math.max(score, currentLocal, highScore);
-            localStorage.setItem(localKey, highScore);
-}
+        highScore = Math.max(score, currentLocal, highScore);
+        localStorage.setItem(localKey, highScore);
+    }
 });
 
-// ====== GESTIONE UI E STATO DI GIOCO (Mappatura MainActivity.kt) ======
+// ====== GESTIONE UI E STATO DI GIOCO  ======
 const mainMenu = document.getElementById('mainMenu');
 const gameContainer = document.getElementById('gameContainer');
 const buttonGame2 = document.getElementById('buttonGame2');
@@ -102,7 +83,6 @@ const emailBtn = document.getElementById('emailBtn');
 const googleBtn = document.getElementById('googleBtn');
 const backBtn = document.getElementById('backBtn');
 const ranking2 = document.getElementById('ranking2');
-const multiplayerBtn = document.getElementById('multiplayerBtn');
 const uiElements = {
     mainMenu: document.getElementById('mainMenu'),
     multiplayerBtn: document.getElementById('multiplayerBtn'),
@@ -119,7 +99,6 @@ const uiElements = {
     startGameBtn: document.getElementById('startGameBtn')
 };
 
-// Riferimenti agli elementi del DOM
 const leaderboardPopup = document.getElementById('leaderboardPopup');
 const leaderboardContent = document.getElementById('leaderboardContent');
 const closeLeaderboardBtn = document.getElementById('closeLeaderboardBtn');
@@ -132,18 +111,15 @@ const userEmailDisplay = document.getElementById('userEmailDisplay');
 
 let isMatchOver = false;
 
-// Chiudi il popup quando si clicca la X
 closeLeaderboardBtn.addEventListener('click', () => {
     leaderboardPopup.classList.add('hidden');
 });
 
-// Chiudi il popup quando si clicca la X
 closeAuthBtn.addEventListener('click', () => {
     chooseAuth.style.display = 'none';
 });
 
-// Gestione click sul pulsante "Classifica Globale"
-document.getElementById('ranking2').addEventListener('click', async () => {
+ranking2.addEventListener('click', async () => {
     logEvent('RanksBtn', { status: 'clicked' });
 
     leaderboardPopup.style.zIndex = "10000";
@@ -151,7 +127,6 @@ document.getElementById('ranking2').addEventListener('click', async () => {
     leaderboardPopup.classList.remove('hidden');
 
     try {
-        // 🟢 Qui riceviamo l'oggetto completo
         const { top10, myPos, totalUsers, myScore } = await getGlobalLeaderboard();
 
         if (!top10 || top10.length === 0 || highScore === 0) {
@@ -161,7 +136,6 @@ document.getElementById('ranking2').addEventListener('click', async () => {
 
         let htmlClassifica = '<ul style="list-style: none; padding: 0; margin: 0; color: #333;">';
 
-        // 🟢 Usiamo top10 per il ciclo
         top10.forEach((score, index) => {
             let medal = (index === 0) ? '🥇 ' : (index === 1) ? '🥈 ' : (index === 2) ? '🥉 ' : '';
             htmlClassifica += `
@@ -184,24 +158,24 @@ document.getElementById('ranking2').addEventListener('click', async () => {
         };
 
         if (!auth.currentUser || auth.currentUser.isAnonymous) { 
-                    let ctaScore = `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600; letter-spacing: 0.5px; font-size: 16px;">Your score: <span style="font-weight: 600; color: #2575fc; font-family: 'Fredoka', sans-serif;">${highScore} pt</span></label>`;
-                    const btnRanks = '<button id="btnLogin" style="background: black; color: white; font-family: \'Fredoka\', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 600;">Register</button>';
-htmlClassifica += `
-    <div style="padding: 16px auto; margin-top: 8px; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px; display: flex; justify-content: center; flex-direction: column;">
-    <label>${btnRanks} <span style="font-family: 'Fredoka', sans-serif; font-weight: 640; letter-spacing: 0.5px; font-size: 16px;">to join the ranks!</span></label>
-    ${ctaScore}
-        </div>`;
-                };
+            let ctaScore = `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600; letter-spacing: 0.5px; font-size: 16px;">Your score: <span style="font-weight: 600; color: #2575fc; font-family: 'Fredoka', sans-serif;">${highScore} pt</span></label>`;
+            const btnRanks = '<button id="btnLogin" style="background: black; color: white; font-family: \'Fredoka\', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 600;">Register</button>';
+            htmlClassifica += `
+                <div style="padding: 16px auto; margin-top: 8px; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px; display: flex; justify-content: center; flex-direction: column;">
+                    <label>${btnRanks} <span style="font-family: 'Fredoka', sans-serif; font-weight: 640; letter-spacing: 0.5px; font-size: 16px;">to join the ranks!</span></label>
+                    ${ctaScore}
+                </div>`;
+        };
 
         leaderboardContent.innerHTML = htmlClassifica;
 
         const btnLogin = document.getElementById('btnLogin');
         if (btnLogin) {
-        btnLogin.addEventListener('click', async () => {
-            await signOut(auth);
-            leaderboardPopup.style.display = 'none';
-            document.getElementById('chooseAuth').style.display = 'flex';
-        });
+            btnLogin.addEventListener('click', async () => {
+                await signOut(auth);
+                leaderboardPopup.style.display = 'none';
+                document.getElementById('chooseAuth').style.display = 'flex';
+            });
         };
 
         console.log("Total Users:", totalUsers);
@@ -227,8 +201,7 @@ window.addEventListener('resize', () => {
     canvas.height = h;
 });
 
-// ====== CONFIGURAZIONE ASSET (Immagini e Audio con Fallback Automatici) ======
-// Spazio predisposto per i tuoi file. Se non presenti, il gioco userà forme geometriche colorate senza crashare.
+// ====== CONFIGURAZIONE ASSET  ======
 const images = {
     catAttached: new Image(),
     slippingCatAttached: new Image(),
@@ -255,11 +228,10 @@ const sounds = {
 
 };
 
-sounds.swing.volume = 0.2;      // Lascia il salto del gatto un po' più alto (80%)
-sounds.falling.volume = 0.4;    // Lascia la caduta all'80%
+sounds.swing.volume = 0.2;      
+sounds.falling.volume = 0.4;    
 sounds.bgm2.volume = 0.5;
 
-// Configurazione loop BGM (Backsound 1 -> Backsound 2 loop come da GameView2.kt)
 let currentBgm = sounds.bgm1;
 function setupAudioLoop() {
     sounds.bgm1.addEventListener('ended', () => {
@@ -280,7 +252,6 @@ setupAudioLoop();
 let isMusicPlaying = true;
 let hasPlayedBefore = localStorage.getItem('hasPlayedBefore') === 'true';
 
-// ====== LOGICA CORE DEL GIOCO ======
 let gameState = 'NOT_STARTED'; // NOT_STARTED, PLAYING, PAUSED, GAME_OVER
 let playerState = 'FLYING';    // ATTACHED, FLYING, STOPPED
 let isCatFalling = false;
@@ -327,15 +298,13 @@ function startMusic() {
 
     console.log("Stato della traccia bgm1:", {
         src: currentBgm.src,
-        readyState: currentBgm.readyState, // 0 = nessun dato, 4 = pronto
+        readyState: currentBgm.readyState, 
         error: currentBgm.error ? currentBgm.error.code : "Nessun errore",
         paused: currentBgm.paused
     });
 
-    // Assicuriamoci che riparta da capo
     currentBgm.currentTime = 0;
 
-    // Tenta la riproduzione e gestisci il fallimento
     const playPromise = currentBgm.play();
 
     if (playPromise !== undefined) {
@@ -345,24 +314,26 @@ function startMusic() {
         });
     }
 }
+
 function pauseMusic() { currentBgm.pause(); }
+
 function resumeMusic() {
-    // Controlla se la musica dovrebbe essere in riproduzione secondo le preferenze utente
     if (isMusicPlaying && gameState === 'PLAYING') {
         currentBgm.play().catch(e => { });
         soundOn.classList.remove('hidden');
         soundOff.classList.add('hidden');
     } else {
-        // Se isMusicPlaying è false, forza il tasto su "Muto"
         soundOn.classList.add('hidden');
         soundOff.classList.remove('hidden');
     }
 }
+
 function stopAndReleaseMusic() {
     sounds.bgm1.pause(); sounds.bgm1.currentTime = 0;
     sounds.bgm2.pause(); sounds.bgm2.currentTime = 0;
     currentBgm = sounds.bgm1;
 }
+
 function playSound(sound) {
     if (isMusicPlaying) {
         sound.currentTime = 0;
@@ -372,7 +343,6 @@ function playSound(sound) {
 
 const cookieDiv = document.getElementById('cookiePrivacyLinks');
 
-// Inizializzazione cicli e flussi di gioco
 buttonGame2.addEventListener('click', () => {
     sounds.bgm1.play().catch(e => { });
     sounds.bgm1.pause();
@@ -391,9 +361,6 @@ buttonGame2.addEventListener('click', () => {
     authPopup.style.display = 'none';
     chooseAuth.style.display = 'none';
 
-
-
-    // Forza dimensioni canvas all'attivazione
     w = window.innerWidth;
     h = window.innerHeight;
     canvas.width = w;
@@ -412,20 +379,22 @@ buttonGame2.addEventListener('click', () => {
     logEvent('level_start', {
         level_name: 'Singleplayer_Mode'
     });
-    // Avvia stabilmente il ciclo di disegno e fisica
+
     requestAnimationFrame(gameLoop);
 });
 
 exitButton.addEventListener('click', async (e) => {
     e.stopPropagation();
     const roomIdToLeave = currentRoomId;
-    // 1. Disiscrizione immediata da tutti i listener attivi di Firebase
+
     if (unsubscribeGameSession) {
         unsubscribeGameSession();
         unsubscribeGameSession = null;
     }
-    leaveRoomCleanup(); // Ferma il listener di multiplayer.js e resetta l'ID stanza lì
-     currentRoomId = null;
+
+    leaveRoomCleanup(); 
+    currentRoomId = null;
+
     if (roomIdToLeave && auth.currentUser) {
         const roomRef = doc(db, "rooms", roomIdToLeave);
         try {
@@ -446,7 +415,6 @@ exitButton.addEventListener('click', async (e) => {
         }
     }
 
-    // 3. Pulizia totale della UI e degli stati di gioco
     isMatchOver = false;
     isGameRunning = false;
     const scoreboard = document.getElementById('liveScoreboard');
@@ -514,15 +482,12 @@ tutorialButton.addEventListener('click', (e) => {
 });
 
 
-// Nel game.js, sostituisci il listener del vecchio MagicLinkBtn
-// In game.js
 document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     const form = e.target.closest('form');
     
-    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; // Interrompe l'esecuzione se il form non è valido
+        return; 
     }
     e.preventDefault();
 
@@ -534,7 +499,6 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
         await signOut(auth);
     }
 
-
     try {
         await loginWithEmail(email, password);
         logEvent('login', { method: 'email' });
@@ -542,7 +506,6 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     } catch (error) {
         if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
             try {
-                // Passiamo il nome alla funzione di registrazione
                 await registerWithEmail(email, password, displayName);
                 logEvent('sign_up', { method: 'email' });
                 alert("Account created!");
@@ -553,12 +516,10 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     }
 });
 
-// Gestione Ospite
-// In game.js - dentro il listener di guestBtn
+
 document.getElementById('guestBtn').addEventListener('click', async () => {
     if (!checkPrivacy()) return;
     try {
-        // Esegue lo stesso flusso di "signInAnonymously" usato per i minori
         await signInAnonymously(auth);
         logEvent('login', { method: 'anonymous' });
 
@@ -574,15 +535,15 @@ document.getElementById('guestBtn').addEventListener('click', async () => {
 document.getElementById('emailBtn').addEventListener('click', async (e) => {
      const form = e.target.closest('form');
     
-    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; // Interrompe l'esecuzione se il form non è valido
+        return; 
     }
+
     e.preventDefault();
     if (!checkPrivacy()) return;
     const isOver18 = document.getElementById('ageCheck').checked;
-    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
+  
     if (!isOver18) {
         try {
             await signInAnonymously(auth);
@@ -591,10 +552,10 @@ document.getElementById('emailBtn').addEventListener('click', async (e) => {
         } catch (error) {
             alert("Error: " + error.message);
         }
-        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
+        return; 
     }
     chooseAuth.classList.add('hidden');
-    chooseAuth.style.setProperty('display', 'none', 'important'); // Sforza la sparizione
+    chooseAuth.style.setProperty('display', 'none', 'important'); 
 
     authPopup.classList.remove('hidden');
     authPopup.style.display = 'flex';
@@ -605,16 +566,16 @@ document.getElementById('emailBtn').addEventListener('click', async (e) => {
 document.getElementById('googleBtn').addEventListener('click', async (e) => {
      const form = e.target.closest('form');
     
-    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; // Interrompe l'esecuzione se il form non è valido
+        return; 
     }
+
     e.preventDefault();
     if (!checkPrivacy()) return;
     const displayName = document.getElementById('nameInput').value;
     const isOver18 = document.getElementById('ageCheck').checked;
-    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
+  
     if (!isOver18) {
         try {
             await signInAnonymously(auth);
@@ -623,7 +584,7 @@ document.getElementById('googleBtn').addEventListener('click', async (e) => {
         } catch (error) {
             alert("Error: " + error.message);
         }
-        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
+        return; 
     }
 
     signInWithGoogle(displayName);
@@ -632,7 +593,7 @@ document.getElementById('googleBtn').addEventListener('click', async (e) => {
 
 });
 
-document.getElementById('backBtn').addEventListener('click', () => {
+backBtn.addEventListener('click', () => {
     authPopup.classList.add('hidden');
     authPopup.style.display = 'none';
     chooseAuth.classList.remove('hidden');
@@ -640,17 +601,15 @@ document.getElementById('backBtn').addEventListener('click', () => {
 });
 
 
-
 document.getElementById('joinRoomBtn').addEventListener('click', () => {
     const code = document.getElementById('roomCodeInput').value;
     joinGame(code);
 });
 
-// In game.js
+
 document.getElementById('returnLobbyBtn').addEventListener('click', async () => {
     if (!currentRoomId || !auth.currentUser) return;
 
-    // 🟢 B: Nascondi SUBITO la tabella prima di toccare il database
     document.getElementById('liveScoreboard').classList.add('hidden');
 
     isGameRunning = false;
@@ -660,15 +619,13 @@ document.getElementById('returnLobbyBtn').addEventListener('click', async () => 
 
     const roomRef = doc(db, "rooms", currentRoomId);
 
-    // 1. Reset dello stato del giocatore corrente nel DB
     await updateDoc(roomRef, {
         [`players.${auth.currentUser.uid}.isGameOver`]: false,
-        [`players.${auth.currentUser.uid}.ready`]: false, // Forza lo stato "Non Pronto"
+        [`players.${auth.currentUser.uid}.ready`]: false, 
         [`players.${auth.currentUser.uid}.score`]: 0,
-        status: 'WAITING' // Riporta la stanza in attesa
+        status: 'WAITING' 
     });
 
-    // 2. Pulizia UI locale
     document.getElementById('liveScoreboard').classList.remove('center-zoomed');
     document.getElementById('liveScoreboard').classList.add('hidden');
     document.getElementById('returnLobbyBtn').classList.add('hidden');
@@ -677,26 +634,24 @@ document.getElementById('returnLobbyBtn').addEventListener('click', async () => 
     cookieDiv.classList.remove('hide-ui');
     settingsBtn.classList.remove('hidden');
 
-    // 3. Reset dei bottoni locali
     const readyBtn = document.getElementById('readyBtn');
     readyBtn.innerText = "Not ready";
     readyBtn.style.backgroundColor = "#e74c3c";
 
-    // 4. Reset stato di gioco
     gameState = 'NOT_STARTED';
 });
 
 settingsBtn.addEventListener('click', () => {
-    // 🟢 Aggiorna l'email prima di mostrare il pannello
     const upgradeBtn = document.getElementById('btnUpgradeAccount');
     const user = auth.currentUser;
+
     if (user && !user.isAnonymous) {
         userEmailDisplay.innerText = "Account: " + user.email;
         btnDeleteAccount.classList.remove('hidden');
         upgradeBtn.classList.add('hidden');
         btnLogoutSettings.classList.remove('hidden');
-        btnLogoutSettings.textContent = 'Log Out'; // o il testo originale che avevi
-        btnLogoutSettings.style.color = ''; // Rimuove lo stile inline per tornare al CSS originale
+        btnLogoutSettings.textContent = 'Log Out'; 
+        btnLogoutSettings.style.color = ''; 
         btnLogoutSettings.style.background = '';
     } else if (user && user.isAnonymous) {
         userEmailDisplay.innerText = "Account: Player_ " + auth.currentUser.uid.substring(0, 4);
@@ -715,7 +670,7 @@ settingsBtn.addEventListener('click', () => {
     }
 
     settingsPanel.classList.toggle('hidden');
-});;
+});
 
 document.getElementById('btnUpgradeAccount').addEventListener('click', async () => {
     const isOver18 = confirm("To convert your guest account to a registered account and save your highscores in the cloud, you must be at least 18 years old. By clicking 'OK', you confirm that you are of legal age.");
