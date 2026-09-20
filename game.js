@@ -677,9 +677,9 @@ document.getElementById('btnUpgradeAccount').addEventListener('click', async () 
     
     if (!isOver18) {
         alert("Registration is restricted to adults only.");
-        return; // Interrompe qui, senza eseguire nulla
+        return; 
     }
-    // Apri un mini-form o usa degli input già presenti
+
     const email = prompt("Enter your email:");
     const password = prompt("Enter your password:");
     const name = prompt("Choose a nickname:");
@@ -688,14 +688,13 @@ document.getElementById('btnUpgradeAccount').addEventListener('click', async () 
         try {
             await upgradeAnonymousAccount(email, password, name);
             alert("Account registered successfully!");
-            location.reload(); // Ricarica per pulire lo stato da ospite
+            location.reload(); 
         } catch (error) {
             alert("Error: " + error.message);
         }
     }
 });
 
-// 3. Regolazione Volume
 musicVolume.addEventListener('input', (e) => {
     sounds.bgm1.volume = e.target.value;
     sounds.bgm2.volume = e.target.value;
@@ -706,7 +705,6 @@ sfxVolume.addEventListener('input', (e) => {
     sounds.falling.volume = e.target.value;
 });
 
-// 4. Logout e Cambio Account dal pannello
 document.getElementById('btnLogoutSettings').addEventListener('click', async () => {
     await signOut(auth);
     settingsPanel.classList.add('hidden');
@@ -723,17 +721,15 @@ document.getElementById('btnDeleteAccount').addEventListener('click', async () =
 
     if (confirmDelete) {
         try {
-            // 1. Elimina i dati da Firestore
             const db = getFirestore();
             await deleteDoc(doc(db, "users", user.uid));
 
-            // 2. Elimina l'utente da Firebase Auth
             await deleteUser(user);
 
             alert("Account deleted successfully!");
             localStorage.removeItem('playingAsGuest');
             logEvent('delete', { account: 'deleted' });
-            location.reload(); // Ricarica per tornare allo stato di avvio
+            location.reload(); 
         } catch (error) {
             console.error("Errore durante l'eliminazione:", error);
             if (error.code === 'auth/requires-recent-login') {
@@ -766,7 +762,6 @@ document.getElementById('forgotPasswordBtn').addEventListener('click', async () 
 });
 
 shareBtn.addEventListener('click', async () => {
-            // Verifica se il browser supporta la Web Share API
             if (navigator.share) {
                 try {
                     await navigator.share({
@@ -779,7 +774,6 @@ shareBtn.addEventListener('click', async () => {
                     console.error('Errore durante la condivisione:', error);
                 }
             } else {
-                // Fallback per i browser che non supportano l'API (es. vecchi desktop)
                 alert('The sharing function is not supported by this browser.');
             }
         });
@@ -789,13 +783,11 @@ initMultiplayer(uiElements);
 let isGameRunning = false;
 let unsubscribeGameSession = null;
 
-// Questa funzione viene chiamata in automatico da multiplayer.js quando il creatore clicca "Avvia"
 window.startMultiplayerSession = async function (roomId) {
     const roomRef = doc(db, "rooms", roomId);
     const roomSnap = await getDoc(roomRef);
-    const players = roomSnap.data().players || {};
 
-    if (isGameRunning) return; // Impedisce il doppio avvio
+    if (isGameRunning) return; 
     isGameRunning = true;
 
     currentRoomId = roomId;
@@ -812,55 +804,43 @@ window.startMultiplayerSession = async function (roomId) {
     settingsBtn.classList.add('hidden');
     settingsPanel.classList.add('hidden');
     roomWaitingScreen.classList.add('hidden');
-    gameContainer.classList.remove('hidden'); // Rimuove la schermata nera
+    gameContainer.classList.remove('hidden'); 
     cookieDiv.classList.add('hide-ui');
 
-    // Inizializza lo stato del gioco
     resetGame();
     gameState = 'PLAYING';
     startMusic();
     requestAnimationFrame(gameLoop);
 
-    // Mostra la UI della tabella punteggi live
     document.getElementById('liveScoreboard').classList.remove('hidden');
 
-    // AGGIUNGI QUESTO BLOCCO: Ascoltatore in tempo reale della stanza
     onSnapshot(roomRef, (docSnap) => {
         if (currentRoomId !== roomId) return;
         if (docSnap.exists()) {
             const data = docSnap.data();
             if (!data.players || !data.players[auth.currentUser.uid]) {
-                return; // Ignora gli aggiornamenti se sei stato rimosso o sei uscito
+                return; 
             }
             if (data.players) {
-                // Aggiorna la tabella ogni volta che un punteggio cambia
                 if (isMatchOver && !document.getElementById('returnLobbyBtn').classList.contains('hidden')) {
                     return;
                 }
                 updateScoreboardUI(data.players, isMatchOver);
 
                 const playersArray = Object.values(data.players);
-                // Controlla se ogni giocatore ha "isGameOver" impostato a true
                 const allDead = playersArray.length > 0 && playersArray.every(p => p.isGameOver === true);
 
-                // Dentro window.startMultiplayerSession, nel blocco onSnapshot:
                 if (allDead && !isMatchOver) {
-                    // 1. Aggiorna lo stato per bloccare il loop
                     isMatchOver = true;
                     gameState = 'GAME_OVER';
                     updateScoreboardUI(data.players, isMatchOver);
                     stopGameLoop();
 
-
-                    // 2. Forza l'animazione della tabella
                     const scoreboard = document.getElementById('liveScoreboard');
-                    scoreboard.classList.remove('hidden'); // Assicurati che sia visibile
-                    scoreboard.classList.add('center-zoomed'); // Aggiunge l'animazione
-
-                    // 3. Mostra il tasto per tornare alla lobby
+                    scoreboard.classList.remove('hidden'); 
+                    scoreboard.classList.add('center-zoomed'); 
                     document.getElementById('returnLobbyBtn').classList.remove('hidden');
 
-                    // 4. Stop audio
                     stopAndReleaseMusic();
                 }
             }
@@ -868,18 +848,6 @@ window.startMultiplayerSession = async function (roomId) {
     });
 };
 
-// 4. Logica speciale per gli Ospiti
-// Se l'utente è ospite, il profilo in alto dovrebbe essere diverso
-function checkUserStatus() {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const btnAuth = document.getElementById('btnAuth');
-
-    if (localStorage.getItem('playingAsGuest') === 'true' && !user) {
-        // È ospite: mostra bottone "Accedi" nel menu
-        btnAuth.classList.remove('hidden');
-    }
-}
 
 function closeTutorialAndResume() {
     showTutorialPanel = false;
@@ -909,7 +877,6 @@ function resetGame() {
     graceFramesAfterReset = 5;
     isCatFalling = false;
 
-    // Prima corda iniziale di salvataggio
     ropes.push({ x: w / 4, y: 0, length: h * 0.6, isFragile: false, isSlippery: false, isBroken: false });
 
     gameOverPanel.classList.add('hidden');
@@ -952,7 +919,6 @@ function generateRopes() {
         });
     }
 
-    // Ottimizzazione memoria array corde uscite a sinistra dello schermo
     if (ropes.length > 15) {
         ropes = ropes.filter(r => r.x >= cameraOffsetX - 300);
     }
@@ -965,9 +931,7 @@ function checkRopeCollision() {
     for (let rope of ropes) {
         if (rope.isBroken) continue;
 
-        // Margine di tolleranza collisione orizzontale
         const isHorizontallyAligned = playerX > (rope.x - 45) && playerX < (rope.x + 45);
-        // Verifica allineamento verticale lungo l'asse della corda
         const isVerticallyAligned = playerY > rope.y && playerY < (rope.y + rope.length + 30);
         const isFalling = velocityY > 0;
 
@@ -983,11 +947,9 @@ function checkRopeCollision() {
             attachedRope = rope;
             anchorX = rope.x;
             anchorY = rope.y;
-            ropeLength = playerY - anchorY; // Aggancio dinamico basato sull'altezza corrente
-
-            // Calcola l'angolo di aggancio iniziale basato sulla trigonometria della posizione reale
+            ropeLength = playerY - anchorY;
             angle = Math.atan2(playerX - anchorX, playerY - anchorY);
-            angularVelocity = velocityX / ropeLength; // Trasferimento quantità di moto lineare in angolare
+            angularVelocity = velocityX / ropeLength; 
             return true;
         }
     }
@@ -1000,19 +962,16 @@ function updateGameLogic() {
     frame++;
 
     if (playerState === 'ATTACHED') {
-        const g = isMobile ? 0.52 : 0.6; // Gravità pendolare bilanciata
-        const damping = 0.998; // Conservazione energia del moto armonico
+        const g = isMobile ? 0.52 : 0.6;
+        const damping = 0.998; 
 
         const acceleration = (-g / ropeLength) * Math.sin(angle);
         angularVelocity += acceleration;
         angularVelocity *= damping;
         angle += angularVelocity;
-
-        // Calcolo della posizione orbitale del gatto rispetto al perno (anchor)
         playerX = anchorX + (ropeLength * Math.sin(angle));
         playerY = anchorY + (ropeLength * Math.cos(angle));
 
-        // Gestione corda fragile (isFragile) come da file sorgente Kotlin
         if (attachedRope && attachedRope.isFragile && Math.abs(angle) > 0.3) {
             attachedRope.isBroken = true;
             playerState = 'STOPPED';
@@ -1022,13 +981,11 @@ function updateGameLogic() {
             velocityY = -tangentialVelocity * Math.sin(angle);
         }
 
-        // Se oscilla troppo lentamente, si ferma
         if (Math.abs(angularVelocity) < 0.001 && Math.abs(angle) < 0.03) {
             playerState = 'STOPPED';
         }
 
     } else if (playerState === 'STOPPED') {
-        // Se il gatto era attaccato ma ha perso slancio, si stacca
         if (!isCatFalling) {
             isCatFalling = true;
         }
@@ -1038,7 +995,7 @@ function updateGameLogic() {
 
     } else if (playerState === 'FLYING') {
         velocityY += gravity;
-        velocityX *= 0.995; // Attrito dell'aria passivo
+        velocityX *= 0.995; 
 
         playerX += velocityX;
         playerY += velocityY;
@@ -1047,75 +1004,60 @@ function updateGameLogic() {
 
     const targetX = playerX - (w * 0.33);
 
-    // Inseguimento fluido solo in avanti. Impedisce alla camera di tornare indietro se il gatto oscilla.
     if (targetX > cameraOffsetX) {
         cameraOffsetX += (targetX - cameraOffsetX) * 0.1;
     }
 
     generateRopes();
 
-
-    // Condizione di Game Over (Caduta oltre il limite inferiore dello schermo)
-    if (playerY > h + playerHeight + 100) {
-        // 1. BLOCCO IMMEDIATO: Se siamo già in Game Over, esci subito dalla 
-        
+    if (playerY > h + playerHeight + 100) { 
         if (gameState === 'GAME_OVER') return;
 
-        gameState = 'GAME_OVER'; // Cambio stato prima di ogni altra cosa
+        gameState = 'GAME_OVER'; 
 
         logEvent('level_end', {
         level_name: currentRoomId ? 'Multiplayer_Mode' : 'Singleplayer_Mode',
         score: score
     });
 
-     playSound(sounds.falling);
+        playSound(sounds.falling);
         stopAndReleaseMusic();
 
-         const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
-            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
+        const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
+        const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
-        // 2. LOGICA DI SALVATAGGIO (Eseguita una sola volta)
+        const isNewBest = score > currentLocal;
 
-            // Salvataggio Locale (sempre attivo)
-            const isNewBest = score > currentLocal;
+        highScore = Math.max(score, currentLocal, highScore);
+        localStorage.setItem(localKey, highScore);
 
-            highScore = Math.max(score, currentLocal, highScore);
-            localStorage.setItem(localKey, highScore);
-
-            // 3. CAMBIO STATO E UI (Eseguito una sola volta)
-
-
-         finalScoreText.innerText = `${score}`;
+        finalScoreText.innerText = `${score}`;
         if (hasPlayedBefore && isNewBest) {
             scoreLabel.innerHTML = `Your <span style="background: linear-gradient(180deg, #ff5500 25%, #ff7500 50%, #ff5500 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 28px; letter-spacing: 0; font-family: 'Fredoka', sans-serif; font-weight: 640;">Best</span> Score`;
             shareBtn.classList.remove('hidden');
-            } else {
-                scoreLabel.innerText = 'Your Score';
-                shareBtn.classList.add('hidden');
-            }
+        } else {
+            scoreLabel.innerText = 'Your Score';
+            shareBtn.classList.add('hidden');
+        }
         gameOverPanel.classList.remove('hidden');
         gameOverPanel.style.display = 'flex';
 
         localStorage.setItem('hasPlayedBefore', 'true');
         hasPlayedBefore = true;
 
-            // Salvataggio Cloud (solo per utenti non anonimi)
-if (auth.currentUser && !auth.currentUser.isAnonymous) {
+    if (auth.currentUser && !auth.currentUser.isAnonymous) {
         const userRef = doc(db, "users", auth.currentUser.uid);
     
-    try {
-        // Inviamo solo le informazioni necessarie verificate dalle nuove regole
-        setDoc(userRef, {
-            score: highScore,
-            lastUpdateAt: serverTimestamp()
+        try {
+            setDoc(userRef, {
+                score: highScore,
+                lastUpdateAt: serverTimestamp()
         }, { merge: true });
-    } catch (error) {
-        console.error("Firebase ha rifiutato il salvataggio a fine partita. Verifica le Security Rules:", error.message);
-    };
-}
+        } catch (error) {
+            console.error("Firebase ha rifiutato il salvataggio a fine partita. Verifica le Security Rules:", error.message);
+        };
+    }
 
-
-        // 4. Gestione Multiplayer
         if (currentRoomId && auth.currentUser) {
             const roomRef = doc(db, "rooms", currentRoomId);
             updateDoc(roomRef, {
