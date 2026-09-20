@@ -121,7 +121,12 @@
     </div>
 
     <div id="multiplayerLobby" class="hidden">
-        <h2  style="font-family: 'Fredoka', sans-serif; font-weight: 600;">Lobby Multiplayer</h2>
+        <div style="display: flex; justify-content: center; flex-direction: row;">
+            <h2 style="font-family: 'Fredoka', sans-serif; font-weight: 600; position: absolute;">Lobby Multiplayer</h2>
+            <button id="backToMenuBtn" style="background: white; border: none; cursor: pointer; padding: 4px; z-index: 2; width: 34px; position: relative; right: 150px;">
+                <i class="fa-solid fa-arrow-left-long" style="font-size: 24px; color: #000;"></i>
+            </button>
+        </div>
         <div class="lobby-card">
             <h3 style="font-family: 'Fredoka', sans-serif; font-weight: 600;">Create Your Room</h3>
             <button id="createRoomBtn" style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px;">Create Room</button>
@@ -131,15 +136,18 @@
             <input type="text" id="roomCodeInput" placeholder="Room Code (e.g., XJ92K)">
             <button id="joinRoomBtn" style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px;">Join</button>
         </div>
-        <button id="backToMenuBtn" style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px;">Back to Menu</button>
     </div>
 
     <div id="roomWaitingScreen" class="hidden">
-        <h2>Room: <span id="displayRoomCode"></span></h2>
+        <div style="display: flex; justify-content: center; flex-direction: row;">
+            <h2 style="position: absolute;">Room: <span id="displayRoomCode"></span></h2>
+            <button id="backToLobbyBtn" style="background: white; border: none; cursor: pointer; padding: 4px; z-index: 2; width: 34px; position: relative; right: 130px;">
+                <i class="fa-solid fa-arrow-left-long" style="font-size: 24px; color: #000;"></i>
+            </button>
+        </div>
         <ul id="playersList"></ul>
         <button id="readyBtn" class="hidden" style="background-color: #2ecc71;">Ready!</button>
         <button id="startGameBtn" class="hidden" disabled>Start Game</button>
-        <button id="backToLobbyBtn">Back to Lobby</button>
     </div>
 
     <div id="settingsPanel" class="hidden">
