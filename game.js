@@ -7,13 +7,17 @@ import { logEvent } from "./firebase-init.js";
 const auth = getAuth();
 const authPopup = document.getElementById('authPopup');
 const chooseAuth = document.getElementById('chooseAuth');
+const profileMenu = document.getElementById('profileMenu');
+const userProfile = document.getElementById('userProfile');
 const db = getFirestore();
+let lastClickTime = Date.now();
 
 const savedEmail = window.localStorage.getItem('emailForSignIn');
 if (savedEmail) {
     completeMagicLinkLogin(savedEmail);
 }
 
+// Verifica se siamo in un loop di login senza codice valido
 const emailSaved = window.localStorage.getItem('emailForSignIn');
 if (emailSaved && !window.location.href.includes('apiKey=')) {
     console.warn("Flag di login trovato senza parametri URL: pulizia forzata.");
@@ -28,16 +32,21 @@ onAuthStateChanged(auth, async (user) => {
         chooseAuth.classList.add('hidden');
         chooseAuth.style.display = 'none';
 
+
+        // 🟢 USA L'ID UTENTE PER LA CHIAVE LOCALE
         const localKey = `highScore2_guest`;
         const dbRecord = await getPersonalRecord(user.uid);
         const localRecord = parseInt(localStorage.getItem(localKey)) || 0;
 
+        // Calcola il massimo tra il DB e il record locale di QUESTO specifico utente
         highScore = Math.max(dbRecord, localRecord);
         localStorage.setItem(localKey, highScore);
 
+        // Se il locale è più alto, sincronizza il DB
         if (localRecord > dbRecord && auth.currentUser && !auth.currentUser.isAnonymous) {
         const userRef = doc(db, "users", user.uid);
             try {
+                // Usiamo setDoc con merge:true invece di updateDoc per gestire l'eventuale assenza del documento
                 await setDoc(userRef, {
                     score: highScore,
                     lastUpdateAt: serverTimestamp()
@@ -47,6 +56,7 @@ onAuthStateChanged(auth, async (user) => {
             }
              }
 
+             // CONTROLLO ANTI-LOOP: Ricarica la pagina solo se l'utente non era già registrato in questa sessione
         const lastLoggedUid = sessionStorage.getItem('last_logged_uid');
         if (lastLoggedUid !== user.uid) {
             sessionStorage.setItem('last_logged_uid', user.uid);
@@ -102,6 +112,7 @@ const uiElements = {
     startGameBtn: document.getElementById('startGameBtn')
 };
 
+// Riferimenti agli elementi del DOM
 const leaderboardPopup = document.getElementById('leaderboardPopup');
 const leaderboardContent = document.getElementById('leaderboardContent');
 const closeLeaderboardBtn = document.getElementById('closeLeaderboardBtn');
@@ -114,16 +125,19 @@ const userEmailDisplay = document.getElementById('userEmailDisplay');
 
 let isMatchOver = false;
 
+// Chiudi il popup quando si clicca la X
 closeLeaderboardBtn.addEventListener('click', () => {
     leaderboardPopup.classList.add('hidden');
 });
 
+// Chiudi il popup quando si clicca la X
 closeAuthBtn.addEventListener('click', () => {
     chooseAuth.style.display = 'none';
 });
 
 
-ranking2.addEventListener('click', async () => {
+// Gestione click sul pulsante "Classifica Globale"
+document.getElementById('ranking2').addEventListener('click', async () => {
    logEvent('RanksBtn', { status: 'clicked' });
   
     leaderboardPopup.style.zIndex = "10000";
@@ -131,6 +145,7 @@ ranking2.addEventListener('click', async () => {
     leaderboardPopup.classList.remove('hidden');
 
     try {
+        // 🟢 Qui riceviamo l'oggetto completo
         const { top10, myPos, totalUsers, myScore } = await getGlobalLeaderboard();
 
         if (!top10 || top10.length === 0 || highScore === 0) {
@@ -140,6 +155,7 @@ ranking2.addEventListener('click', async () => {
 
         let htmlClassifica = '<ul style="list-style: none; padding: 0; margin: 0; color: #333;">';
 
+        // 🟢 Usiamo top10 per il ciclo
         top10.forEach((score, index) => {
             let medal = (index === 0) ? '🥇 ' : (index === 1) ? '🥈 ' : (index === 2) ? '🥉 ' : '';
             htmlClassifica += `
@@ -150,6 +166,7 @@ ranking2.addEventListener('click', async () => {
         });
         htmlClassifica += '</ul>';
 
+        // 🟢 AGGIUNTA SBARRA IN FONDO
         if (myPos) {
             let footerText = (myPos <= 250)
                 ? `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600;">Your position: ${myPos}°  <span style="font-weight: 600; color: #2575fc; margin-left: 10px; font-family: 'Fredoka', sans-serif;">${myScore} pt</span></label>`
@@ -204,7 +221,8 @@ window.addEventListener('resize', () => {
     canvas.height = h;
 });
 
-// ====== CONFIGURAZIONE ASSET ======
+// ====== CONFIGURAZIONE ASSET (Immagini e Audio con Fallback Automatici) ======
+// Spazio predisposto per i tuoi file. Se non presenti, il gioco userà forme geometriche colorate senza crashare.
 const images = {
     catAttached: new Image(),
     slippingCatAttached: new Image(),
@@ -231,10 +249,11 @@ const sounds = {
 
 };
 
-sounds.swing.volume = 0.2;      
-sounds.falling.volume = 0.4;    
+sounds.swing.volume = 0.2;      // Lascia il salto del gatto un po' più alto (80%)
+sounds.falling.volume = 0.4;    // Lascia la caduta all'80%
 sounds.bgm2.volume = 0.5;
 
+// Configurazione loop BGM (Backsound 1 -> Backsound 2 loop come da GameView2.kt)
 let currentBgm = sounds.bgm1;
 function setupAudioLoop() {
     sounds.bgm1.addEventListener('ended', () => {
@@ -255,8 +274,9 @@ setupAudioLoop();
 let isMusicPlaying = true;
 let hasPlayedBefore = localStorage.getItem('hasPlayedBefore') === 'true';
 
-let gameState = 'NOT_STARTED'; 
-let playerState = 'FLYING';   
+// ====== LOGICA CORE DEL GIOCO (Mappatura GameView2.kt) ======
+let gameState = 'NOT_STARTED'; // NOT_STARTED, PLAYING, PAUSED, GAME_OVER
+let playerState = 'FLYING';    // ATTACHED, FLYING, STOPPED
 let isCatFalling = false;
 let score = 0;
 let highScore = parseInt(localStorage.getItem('highScore2_guest')) || 0;
@@ -264,6 +284,7 @@ let frame = 0;
 let graceFramesAfterReset = 0;
 let showTutorialPanel = false;
 
+// Fisica del Giocatore
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 1 || window.innerWidth <= 768;
 let playerX = 150;
 let playerY = 100;
@@ -273,7 +294,9 @@ let velocityX = 0;
 let velocityY = 0;
 const gravity = isMobile ? 0.72 : 0.8;
 let cameraOffsetX = 0;
+const cameraFollowSpeed = 0.35;
 
+// Fisica del Pendolo / Corda
 let anchorX = 0;
 let anchorY = 0;
 let attachedRope = null;
@@ -293,7 +316,9 @@ function checkPrivacy() {
     return true;
 }
 
+// Funzioni Audio Ausiliarie
 function startMusic() {
+    // RIMOSSO: currentBgm.load(); perché rompe il contesto del gesto dell'utente nei browser mobile
 
     console.log("Stato della traccia bgm1:", {
         src: currentBgm.src,
@@ -301,8 +326,11 @@ function startMusic() {
         error: currentBgm.error ? currentBgm.error.code : "Nessun errore",
         paused: currentBgm.paused
     });
+
+    // Assicuriamoci che riparta da capo
     currentBgm.currentTime = 0;
 
+    // Tenta la riproduzione e gestisci il fallimento
     const playPromise = currentBgm.play();
 
     if (playPromise !== undefined) {
@@ -314,11 +342,13 @@ function startMusic() {
 }
 function pauseMusic() { currentBgm.pause(); }
 function resumeMusic() {
+    // Controlla se la musica dovrebbe essere in riproduzione secondo le preferenze utente
     if (isMusicPlaying && gameState === 'PLAYING') {
         currentBgm.play().catch(e => { });
         soundOn.classList.remove('hidden');
         soundOff.classList.add('hidden');
     } else {
+        // Se isMusicPlaying è false, forza il tasto su "Muto"
         soundOn.classList.add('hidden');
         soundOff.classList.remove('hidden');
     }
@@ -337,6 +367,7 @@ function playSound(sound) {
 
 const cookieDiv = document.getElementById('cookiePrivacyLinks');
 
+// Inizializzazione cicli e flussi di gioco
 buttonGame2.addEventListener('click', () => {
     sounds.bgm1.play().catch(e => { });
     sounds.bgm1.pause();
@@ -355,6 +386,9 @@ buttonGame2.addEventListener('click', () => {
     authPopup.style.display = 'none';
     chooseAuth.style.display = 'none';
 
+
+
+    // Forza dimensioni canvas all'attivazione
     w = window.innerWidth;
     h = window.innerHeight;
     canvas.width = w;
@@ -373,17 +407,19 @@ buttonGame2.addEventListener('click', () => {
     logEvent('level_start', {
         level_name: 'Singleplayer_Mode'
     });
+    // Avvia stabilmente il ciclo di disegno e fisica
     requestAnimationFrame(gameLoop);
 });
 
 exitButton.addEventListener('click', async (e) => {
     e.stopPropagation();
     const roomIdToLeave = currentRoomId;
+    // 1. Disiscrizione immediata da tutti i listener attivi di Firebase
     if (unsubscribeGameSession) {
         unsubscribeGameSession();
         unsubscribeGameSession = null;
     }
-    leaveRoomCleanup(); 
+    leaveRoomCleanup(); // Ferma il listener di multiplayer.js e resetta l'ID stanza lì
      currentRoomId = null;
     if (roomIdToLeave && auth.currentUser) {
         const roomRef = doc(db, "rooms", roomIdToLeave);
@@ -405,6 +441,7 @@ exitButton.addEventListener('click', async (e) => {
         }
     }
 
+    // 3. Pulizia totale della UI e degli stati di gioco
     isMatchOver = false;
     isGameRunning = false;
     const scoreboard = document.getElementById('liveScoreboard');
@@ -472,12 +509,15 @@ tutorialButton.addEventListener('click', (e) => {
 });
 
 
+// Nel game.js, sostituisci il listener del vecchio MagicLinkBtn
+// In game.js
 document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     const form = e.target.closest('form');
     
+    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; 
+        return; // Interrompe l'esecuzione se il form non è valido
     }
     e.preventDefault();
 
@@ -497,6 +537,7 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     } catch (error) {
         if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
             try {
+                // Passiamo il nome alla funzione di registrazione
                 await registerWithEmail(email, password, displayName);
                 logEvent('sign_up', { method: 'email' });
                 alert("Account created!");
@@ -507,9 +548,12 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     }
 });
 
+// Gestione Ospite
+// In game.js - dentro il listener di guestBtn
 document.getElementById('guestBtn').addEventListener('click', async () => {
     if (!checkPrivacy()) return;
     try {
+        // Esegue lo stesso flusso di "signInAnonymously" usato per i minori
         await signInAnonymously(auth);
         logEvent('login', { method: 'anonymous' });
 
@@ -522,16 +566,18 @@ document.getElementById('guestBtn').addEventListener('click', async () => {
     }
 });
 
-emailBtn.addEventListener('click', async (e) => {
+document.getElementById('emailBtn').addEventListener('click', async (e) => {
      const form = e.target.closest('form');
     
+    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; 
+        return; // Interrompe l'esecuzione se il form non è valido
     }
     e.preventDefault();
     if (!checkPrivacy()) return;
     const isOver18 = document.getElementById('ageCheck').checked;
+    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
     if (!isOver18) {
         try {
             await signInAnonymously(auth);
@@ -540,10 +586,10 @@ emailBtn.addEventListener('click', async (e) => {
         } catch (error) {
             alert("Error: " + error.message);
         }
-        return; 
+        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
     }
     chooseAuth.classList.add('hidden');
-    chooseAuth.style.setProperty('display', 'none', 'important'); 
+    chooseAuth.style.setProperty('display', 'none', 'important'); // Sforza la sparizione
 
     authPopup.classList.remove('hidden');
     authPopup.style.display = 'flex';
@@ -551,17 +597,19 @@ emailBtn.addEventListener('click', async (e) => {
 
 });
 
-googleBtn.addEventListener('click', async (e) => {
+document.getElementById('googleBtn').addEventListener('click', async (e) => {
      const form = e.target.closest('form');
     
+    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; 
+        return; // Interrompe l'esecuzione se il form non è valido
     }
     e.preventDefault();
     if (!checkPrivacy()) return;
     const displayName = document.getElementById('nameInput').value;
     const isOver18 = document.getElementById('ageCheck').checked;
+    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
     if (!isOver18) {
         try {
             await signInAnonymously(auth);
@@ -570,7 +618,7 @@ googleBtn.addEventListener('click', async (e) => {
         } catch (error) {
             alert("Error: " + error.message);
         }
-        return; 
+        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
     }
 
     signInWithGoogle(displayName);
@@ -591,9 +639,11 @@ document.getElementById('joinRoomBtn').addEventListener('click', () => {
     joinGame(code);
 });
 
+// In game.js
 document.getElementById('returnLobbyBtn').addEventListener('click', async () => {
     if (!currentRoomId || !auth.currentUser) return;
 
+    // 🟢 B: Nascondi SUBITO la tabella prima di toccare il database
     document.getElementById('liveScoreboard').classList.add('hidden');
 
     isGameRunning = false;
@@ -603,13 +653,15 @@ document.getElementById('returnLobbyBtn').addEventListener('click', async () => 
 
     const roomRef = doc(db, "rooms", currentRoomId);
 
+    // 1. Reset dello stato del giocatore corrente nel DB
     await updateDoc(roomRef, {
         [`players.${auth.currentUser.uid}.isGameOver`]: false,
-        [`players.${auth.currentUser.uid}.ready`]: false, 
+        [`players.${auth.currentUser.uid}.ready`]: false, // Forza lo stato "Non Pronto"
         [`players.${auth.currentUser.uid}.score`]: 0,
-        status: 'WAITING' 
+        status: 'WAITING' // Riporta la stanza in attesa
     });
 
+    // 2. Pulizia UI locale
     document.getElementById('liveScoreboard').classList.remove('center-zoomed');
     document.getElementById('liveScoreboard').classList.add('hidden');
     document.getElementById('returnLobbyBtn').classList.add('hidden');
@@ -618,13 +670,17 @@ document.getElementById('returnLobbyBtn').addEventListener('click', async () => 
     cookieDiv.classList.remove('hide-ui');
     settingsBtn.classList.remove('hidden');
 
+    // 3. Reset dei bottoni locali
     const readyBtn = document.getElementById('readyBtn');
     readyBtn.innerText = "Not ready";
     readyBtn.style.backgroundColor = "#e74c3c";
+
+    // 4. Reset stato di gioco
     gameState = 'NOT_STARTED';
 });
 
 settingsBtn.addEventListener('click', () => {
+    // 🟢 Aggiorna l'email prima di mostrare il pannello
     const upgradeBtn = document.getElementById('btnUpgradeAccount');
     const user = auth.currentUser;
     if (user && !user.isAnonymous) {
@@ -632,8 +688,8 @@ settingsBtn.addEventListener('click', () => {
         btnDeleteAccount.classList.remove('hidden');
         upgradeBtn.classList.add('hidden');
         btnLogoutSettings.classList.remove('hidden');
-        btnLogoutSettings.textContent = 'Log Out'; 
-        btnLogoutSettings.style.color = ''; 
+        btnLogoutSettings.textContent = 'Log Out'; // o il testo originale che avevi
+        btnLogoutSettings.style.color = ''; // Rimuove lo stile inline per tornare al CSS originale
         btnLogoutSettings.style.background = '';
     } else if (user && user.isAnonymous) {
         userEmailDisplay.innerText = "Account: Player_ " + auth.currentUser.uid.substring(0, 4);
@@ -659,8 +715,9 @@ document.getElementById('btnUpgradeAccount').addEventListener('click', async () 
     
     if (!isOver18) {
         alert("Registration is restricted to adults only.");
-        return; 
+        return; // Interrompe qui, senza eseguire nulla
     }
+    // Apri un mini-form o usa degli input già presenti
     const email = prompt("Enter your email:");
     const password = prompt("Enter your password:");
     const name = prompt("Choose a nickname:");
@@ -676,6 +733,7 @@ document.getElementById('btnUpgradeAccount').addEventListener('click', async () 
     }
 });
 
+// 3. Regolazione Volume
 musicVolume.addEventListener('input', (e) => {
     sounds.bgm1.volume = e.target.value;
     sounds.bgm2.volume = e.target.value;
@@ -686,6 +744,7 @@ sfxVolume.addEventListener('input', (e) => {
     sounds.falling.volume = e.target.value;
 });
 
+// 4. Logout e Cambio Account dal pannello
 document.getElementById('btnLogoutSettings').addEventListener('click', async () => {
     await signOut(auth);
     settingsPanel.classList.add('hidden');
@@ -703,15 +762,17 @@ document.getElementById('btnDeleteAccount').addEventListener('click', async () =
 
     if (confirmDelete) {
         try {
+            // 1. Elimina i dati da Firestore
             const db = getFirestore();
             await deleteDoc(doc(db, "users", user.uid));
 
+            // 2. Elimina l'utente da Firebase Auth
             await deleteUser(user);
              localStorage.removeItem('playingAsGuest');
               localStorage.removeItem('highScore2_guest');
             alert("Account deleted successfully!");
             logEvent('delete', { account: 'deleted' });
-            location.reload(); 
+            location.reload(); // Ricarica per tornare allo stato di avvio
         } catch (error) {
             console.error("Errore durante l'eliminazione:", error);
             if (error.code === 'auth/requires-recent-login') {
@@ -744,6 +805,7 @@ document.getElementById('forgotPasswordBtn').addEventListener('click', async () 
 });
 
 shareBtn.addEventListener('click', async () => {
+            // Verifica se il browser supporta la Web Share API
             if (navigator.share) {
                 try {
                     await navigator.share({
@@ -756,6 +818,7 @@ shareBtn.addEventListener('click', async () => {
                     console.error('Errore durante la condivisione:', error);
                 }
             } else {
+                // Fallback per i browser che non supportano l'API (es. vecchi desktop)
                 alert('The sharing function is not supported by this browser.');
             }
         });
@@ -765,10 +828,13 @@ initMultiplayer(uiElements);
 let isGameRunning = false;
 let unsubscribeGameSession = null;
 
+// Questa funzione viene chiamata in automatico da multiplayer.js quando il creatore clicca "Avvia"
 window.startMultiplayerSession = async function (roomId) {
     const roomRef = doc(db, "rooms", roomId);
+    const roomSnap = await getDoc(roomRef);
+    const players = roomSnap.data().players || {};
 
-    if (isGameRunning) return; 
+    if (isGameRunning) return; // Impedisce il doppio avvio
     isGameRunning = true;
 
     currentRoomId = roomId;
@@ -788,47 +854,59 @@ window.startMultiplayerSession = async function (roomId) {
     gameContainer.classList.remove('hidden'); // Rimuove la schermata nera
     cookieDiv.classList.add('hide-ui');
 
+    // Inizializza lo stato del gioco
     resetGame();
     gameState = 'PLAYING';
     startMusic();
     requestAnimationFrame(gameLoop);
 
+    // Mostra la UI della tabella punteggi live
     document.getElementById('liveScoreboard').classList.remove('hidden');
 
+    // AGGIUNGI QUESTO BLOCCO: Ascoltatore in tempo reale della stanza
     onSnapshot(roomRef, (docSnap) => {
         if (currentRoomId !== roomId) return;
         if (docSnap.exists()) {
             const data = docSnap.data();
             if (!data.players || !data.players[auth.currentUser.uid]) {
-                return; 
+                return; // Ignora gli aggiornamenti se sei stato rimosso o sei uscito
             }
             if (data.players) {
+                // Aggiorna la tabella ogni volta che un punteggio cambia
                 if (isMatchOver && !document.getElementById('returnLobbyBtn').classList.contains('hidden')) {
                     return;
                 }
                 updateScoreboardUI(data.players, isMatchOver);
 
                 const playersArray = Object.values(data.players);
+                // Controlla se ogni giocatore ha "isGameOver" impostato a true
                 const allDead = playersArray.length > 0 && playersArray.every(p => p.isGameOver === true);
 
+                // Dentro window.startMultiplayerSession, nel blocco onSnapshot:
                 if (allDead && !isMatchOver) {
+                    // 1. Aggiorna lo stato per bloccare il loop
                     isMatchOver = true;
                     gameState = 'GAME_OVER';
                     updateScoreboardUI(data.players, isMatchOver);
                     stopGameLoop();
 
-                    const scoreboard = document.getElementById('liveScoreboard');
-                    scoreboard.classList.remove('hidden'); 
-                    scoreboard.classList.add('center-zoomed'); 
 
+                    // 2. Forza l'animazione della tabella
+                    const scoreboard = document.getElementById('liveScoreboard');
+                    scoreboard.classList.remove('hidden'); // Assicurati che sia visibile
+                    scoreboard.classList.add('center-zoomed'); // Aggiunge l'animazione
+
+                    // 3. Mostra il tasto per tornare alla lobby
                     document.getElementById('returnLobbyBtn').classList.remove('hidden');
 
+                    // 4. Stop audio
                     stopAndReleaseMusic();
                 }
             }
         }
     });
 };
+
 
 function closeTutorialAndResume() {
     showTutorialPanel = false;
@@ -858,6 +936,7 @@ function resetGame() {
     graceFramesAfterReset = 5;
     isCatFalling = false;
 
+    // Prima corda iniziale di salvataggio
     ropes.push({ x: w / 4, y: 0, length: h * 0.6, isFragile: false, isSlippery: false, isBroken: false });
 
     gameOverPanel.classList.add('hidden');
@@ -900,6 +979,7 @@ function generateRopes() {
         });
     }
 
+    // Ottimizzazione memoria array corde uscite a sinistra dello schermo
     if (ropes.length > 15) {
         ropes = ropes.filter(r => r.x >= cameraOffsetX - 300);
     }
@@ -912,7 +992,9 @@ function checkRopeCollision() {
     for (let rope of ropes) {
         if (rope.isBroken) continue;
 
+        // Margine di tolleranza collisione orizzontale
         const isHorizontallyAligned = playerX > (rope.x - 45) && playerX < (rope.x + 45);
+        // Verifica allineamento verticale lungo l'asse della corda
         const isVerticallyAligned = playerY > rope.y && playerY < (rope.y + rope.length + 30);
         const isFalling = velocityY > 0;
 
@@ -928,10 +1010,11 @@ function checkRopeCollision() {
             attachedRope = rope;
             anchorX = rope.x;
             anchorY = rope.y;
-            ropeLength = playerY - anchorY; 
+            ropeLength = playerY - anchorY; // Aggancio dinamico basato sull'altezza corrente
 
+            // Calcola l'angolo di aggancio iniziale basato sulla trigonometria della posizione reale
             angle = Math.atan2(playerX - anchorX, playerY - anchorY);
-            angularVelocity = velocityX / ropeLength; 
+            angularVelocity = velocityX / ropeLength; // Trasferimento quantità di moto lineare in angolare
             return true;
         }
     }
@@ -944,17 +1027,19 @@ function updateGameLogic() {
     frame++;
 
     if (playerState === 'ATTACHED') {
-        const g = isMobile ? 0.52 : 0.6; 
-        const damping = 0.998; 
+        const g = isMobile ? 0.52 : 0.6; // Gravità pendolare bilanciata
+        const damping = 0.998; // Conservazione energia del moto armonico
 
         const acceleration = (-g / ropeLength) * Math.sin(angle);
         angularVelocity += acceleration;
         angularVelocity *= damping;
         angle += angularVelocity;
 
+        // Calcolo della posizione orbitale del gatto rispetto al perno (anchor)
         playerX = anchorX + (ropeLength * Math.sin(angle));
         playerY = anchorY + (ropeLength * Math.cos(angle));
 
+        // Gestione corda fragile (isFragile) come da file sorgente Kotlin
         if (attachedRope && attachedRope.isFragile && Math.abs(angle) > 0.3) {
             attachedRope.isBroken = true;
             playerState = 'STOPPED';
@@ -964,11 +1049,13 @@ function updateGameLogic() {
             velocityY = -tangentialVelocity * Math.sin(angle);
         }
 
+        // Se oscilla troppo lentamente, si ferma
         if (Math.abs(angularVelocity) < 0.001 && Math.abs(angle) < 0.03) {
             playerState = 'STOPPED';
         }
 
     } else if (playerState === 'STOPPED') {
+        // Se il gatto era attaccato ma ha perso slancio, si stacca
         if (!isCatFalling) {
             isCatFalling = true;
         }
@@ -978,7 +1065,7 @@ function updateGameLogic() {
 
     } else if (playerState === 'FLYING') {
         velocityY += gravity;
-        velocityX *= 0.995; 
+        velocityX *= 0.995; // Attrito dell'aria passivo
 
         playerX += velocityX;
         playerY += velocityY;
@@ -987,17 +1074,21 @@ function updateGameLogic() {
 
     const targetX = playerX - (w * 0.33);
 
+    // Inseguimento fluido solo in avanti. Impedisce alla camera di tornare indietro se il gatto oscilla.
     if (targetX > cameraOffsetX) {
         cameraOffsetX += (targetX - cameraOffsetX) * 0.1;
     }
 
     generateRopes();
 
+
+    // Condizione di Game Over (Caduta oltre il limite inferiore dello schermo)
     if (playerY > h + playerHeight + 100) {
+        // 1. BLOCCO IMMEDIATO: Se siamo già in Game Over, esci subito dalla 
         
         if (gameState === 'GAME_OVER') return;
 
-        gameState = 'GAME_OVER';
+        gameState = 'GAME_OVER'; // Cambio stato prima di ogni altra cosa
 
         logEvent('level_end', {
         level_name: currentRoomId ? 'Multiplayer_Mode' : 'Singleplayer_Mode',
@@ -1010,11 +1101,15 @@ function updateGameLogic() {
          const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
             const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
+        // 2. LOGICA DI SALVATAGGIO (Eseguita una sola volta)
+
+            // Salvataggio Locale (sempre attivo)
             const isNewBest = score > currentLocal;
 
             highScore = Math.max(score, currentLocal, highScore);
             localStorage.setItem(localKey, highScore);
 
+            // 3. CAMBIO STATO E UI (Eseguito una sola volta)
 
         finalScoreText.innerText = `${score}`;
         if (hasPlayedBefore && isNewBest) {
@@ -1030,10 +1125,12 @@ function updateGameLogic() {
         localStorage.setItem('hasPlayedBefore', 'true');
         hasPlayedBefore = true;
 
+            // Salvataggio Cloud (solo per utenti non anonimi)
 if (auth.currentUser && !auth.currentUser.isAnonymous) {
         const userRef = doc(db, "users", auth.currentUser.uid);
     
     try {
+        // Inviamo solo le informazioni necessarie verificate dalle nuove regole
         setDoc(userRef, {
             score: highScore,
             lastUpdateAt: serverTimestamp()
@@ -1043,6 +1140,8 @@ if (auth.currentUser && !auth.currentUser.isAnonymous) {
     };
 }
 
+
+        // 4. Gestione Multiplayer
         if (currentRoomId && auth.currentUser) {
             const roomRef = doc(db, "rooms", currentRoomId);
             updateDoc(roomRef, {
