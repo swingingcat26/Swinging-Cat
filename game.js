@@ -22,12 +22,6 @@ if (emailSaved && !window.location.href.includes('apiKey=')) {
 
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        const lastLoggedUid = sessionStorage.getItem('last_logged_uid');
-        if (lastLoggedUid !== user.uid) {
-            sessionStorage.setItem('last_logged_uid', user.uid);
-            location.reload();
-        }
-
         authPopup.classList.add('hidden');
         authPopup.style.display = 'none';
         chooseAuth.classList.add('hidden');
@@ -36,33 +30,38 @@ onAuthStateChanged(auth, async (user) => {
         const localKey = `highScore2_guest`;
         const dbRecord = await getPersonalRecord(user.uid);
         const localRecord = parseInt(localStorage.getItem(localKey)) || 0;
-
         highScore = Math.max(dbRecord, localRecord);
         localStorage.setItem(localKey, highScore);
 
         if (localRecord > dbRecord && auth.currentUser && !auth.currentUser.isAnonymous) {
-            const userRef = doc(db, "users", user.uid);
-                try {
-                    await setDoc(userRef, {
-                        score: highScore,
-                        lastUpdateAt: serverTimestamp()
-                    }, { merge: true });
-                } catch (error) {
-                    console.error("Errore durante la sincronizzazione iniziale dell'utente:", error.message);
-                }
-        }
+        const userRef = doc(db, "users", user.uid);
+            try {
+                await setDoc(userRef, {
+                    score: highScore,
+                    lastUpdateAt: serverTimestamp()
+                }, { merge: true });
+            } catch (error) {
+                console.error("Errore durante la sincronizzazione iniziale dell'utente:", error.message);
+            }
+             }
 
+        const lastLoggedUid = sessionStorage.getItem('last_logged_uid');
+        if (lastLoggedUid !== user.uid) {
+            sessionStorage.setItem('last_logged_uid', user.uid);
+            location.reload();
+        }
+             
     } else {
         sessionStorage.removeItem('last_logged_uid');
 
         chooseAuth.style.display = 'none';
         
-        const localKey = 'highScore2_guest';
-        const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
+         const localKey = 'highScore2_guest';
+            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
-        highScore = Math.max(score, currentLocal, highScore);
-        localStorage.setItem(localKey, highScore);
-    }
+            highScore = Math.max(score, currentLocal, highScore);
+            localStorage.setItem(localKey, highScore);
+}
 });
 
 // ====== GESTIONE UI E STATO DI GIOCO  ======
@@ -785,7 +784,6 @@ let unsubscribeGameSession = null;
 
 window.startMultiplayerSession = async function (roomId) {
     const roomRef = doc(db, "rooms", roomId);
-    const roomSnap = await getDoc(roomRef);
 
     if (isGameRunning) return; 
     isGameRunning = true;
@@ -1020,42 +1018,43 @@ function updateGameLogic() {
         score: score
     });
 
-     playSound(sounds.falling);
+        playSound(sounds.falling);
         stopAndReleaseMusic();
 
-         const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
-            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
-            const isNewBest = score > currentLocal;
+        const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
+        const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
-            highScore = Math.max(score, currentLocal, highScore);
-            localStorage.setItem(localKey, highScore);
+        const isNewBest = score > currentLocal;
+
+        highScore = Math.max(score, currentLocal, highScore);
+        localStorage.setItem(localKey, highScore);
 
         finalScoreText.innerText = `${score}`;
         if (hasPlayedBefore && isNewBest) {
             scoreLabel.innerHTML = `Your <span style="background: linear-gradient(180deg, #ff5500 25%, #ff7500 50%, #ff5500 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 28px; letter-spacing: 0; font-family: 'Fredoka', sans-serif; font-weight: 640;">Best</span> Score`;
             shareBtn.classList.remove('hidden');
-            } else {
-                scoreLabel.innerText = 'Your Score';
-                shareBtn.classList.add('hidden');
-            }
+        } else {
+            scoreLabel.innerText = 'Your Score';
+            shareBtn.classList.add('hidden');
+        }
         gameOverPanel.classList.remove('hidden');
         gameOverPanel.style.display = 'flex';
-        
+
         localStorage.setItem('hasPlayedBefore', 'true');
         hasPlayedBefore = true;
 
-if (auth.currentUser && !auth.currentUser.isAnonymous) {
+    if (auth.currentUser && !auth.currentUser.isAnonymous) {
         const userRef = doc(db, "users", auth.currentUser.uid);
     
-    try {
-        setDoc(userRef, {
-            score: highScore,
-            lastUpdateAt: serverTimestamp()
+        try {
+            setDoc(userRef, {
+                score: highScore,
+                lastUpdateAt: serverTimestamp()
         }, { merge: true });
-    } catch (error) {
-        console.error("Firebase ha rifiutato il salvataggio a fine partita. Verifica le Security Rules:", error.message);
-    };
-}
+        } catch (error) {
+            console.error("Firebase ha rifiutato il salvataggio a fine partita. Verifica le Security Rules:", error.message);
+        };
+    }
 
         if (currentRoomId && auth.currentUser) {
             const roomRef = doc(db, "rooms", currentRoomId);
