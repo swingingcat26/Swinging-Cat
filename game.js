@@ -21,6 +21,7 @@ if (emailSaved && !window.location.href.includes('apiKey=')) {
     window.localStorage.removeItem('emailForSignIn');
 }
 
+window.stop();
 
 onAuthStateChanged(auth, async (user) => {
     if (user) {
