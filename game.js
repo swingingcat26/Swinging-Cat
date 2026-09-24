@@ -8,7 +8,6 @@ const auth = getAuth();
 const authPopup = document.getElementById('authPopup');
 const chooseAuth = document.getElementById('chooseAuth');
 const db = getFirestore();
-let lastClickTime = Date.now();
 
 const savedEmail = window.localStorage.getItem('emailForSignIn');
 if (savedEmail) {
@@ -33,15 +32,12 @@ onAuthStateChanged(auth, async (user) => {
         const dbRecord = await getPersonalRecord(user.uid);
         const localRecord = parseInt(localStorage.getItem(localKey)) || 0;
 
-        // Calcola il massimo tra il DB e il record locale di QUESTO specifico utente
         highScore = Math.max(dbRecord, localRecord);
         localStorage.setItem(localKey, highScore);
 
-        // Se il locale è più alto, sincronizza il DB
         if (localRecord > dbRecord && auth.currentUser && !auth.currentUser.isAnonymous) {
         const userRef = doc(db, "users", user.uid);
             try {
-                // Usiamo setDoc con merge:true invece di updateDoc per gestire l'eventuale assenza del documento
                 await setDoc(userRef, {
                     score: highScore,
                     lastUpdateAt: serverTimestamp()
@@ -51,18 +47,14 @@ onAuthStateChanged(auth, async (user) => {
             }
              }
 
-             // CONTROLLO ANTI-LOOP: Ricarica la pagina solo se l'utente non era già registrato in questa sessione
-        const lastLoggedUid = sessionStorage.getItem('last_logged_uid');
-        const lastLoggedUid2 = localStorage.getItem('last_logged_uid2');
-        if (lastLoggedUid !== user.uid && lastLoggedUid2 !== user.uid ) {
-            sessionStorage.setItem('last_logged_uid', user.uid);
-            localStorage.setItem('last_logged_uid2', user.uid);
+        const lastLoggedUid = localStorage.getItem('last_logged_uid');
+        if (lastLoggedUid !== user.uid ) {
+            localStorage.setItem('last_logged_uid', user.uid);
             location.reload();
         }
              
     } else {
-        sessionStorage.removeItem('last_logged_uid');
-        localStorage.removeItem('last_logged_uid2');
+        localStorage.removeItem('last_logged_uid');
 
         chooseAuth.style.display = 'none';
         
