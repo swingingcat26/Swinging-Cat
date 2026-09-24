@@ -8,6 +8,7 @@ const auth = getAuth();
 const authPopup = document.getElementById('authPopup');
 const chooseAuth = document.getElementById('chooseAuth');
 const db = getFirestore();
+let lastClickTime = Date.now();
 
 const savedEmail = window.localStorage.getItem('emailForSignIn');
 if (savedEmail) {
