@@ -48,15 +48,23 @@ onAuthStateChanged(auth, async (user) => {
             }
              }
 
+        localStorage.removeItem('not_logged');    
         const lastLoggedUid = localStorage.getItem('last_logged_uid');
         if (lastLoggedUid !== user.uid ) {
             localStorage.setItem('last_logged_uid', user.uid);
             location.reload();
-        }
+        };
              
     } else {
         localStorage.removeItem('last_logged_uid');
 
+        const notLogged = localStorage.getItem('not_logged');
+
+         if (!notLogged) {
+            localStorage.setItem('not_logged', true);
+            location.reload();
+        };
+        
         chooseAuth.style.display = 'none';
         
          const localKey = 'highScore2_guest';
@@ -85,7 +93,6 @@ const emailBtn = document.getElementById('emailBtn');
 const googleBtn = document.getElementById('googleBtn');
 const backBtn = document.getElementById('backBtn');
 const ranking2 = document.getElementById('ranking2');
-const multiplayerBtn = document.getElementById('multiplayerBtn');
 const shareBtn = document.getElementById('shareBtn');
 const uiElements = {
     mainMenu: document.getElementById('mainMenu'),
@@ -103,7 +110,6 @@ const uiElements = {
     startGameBtn: document.getElementById('startGameBtn')
 };
 
-// Riferimenti agli elementi del DOM
 const leaderboardPopup = document.getElementById('leaderboardPopup');
 const leaderboardContent = document.getElementById('leaderboardContent');
 const closeLeaderboardBtn = document.getElementById('closeLeaderboardBtn');
@@ -116,19 +122,16 @@ const userEmailDisplay = document.getElementById('userEmailDisplay');
 
 let isMatchOver = false;
 
-// Chiudi il popup quando si clicca la X
 closeLeaderboardBtn.addEventListener('click', () => {
     leaderboardPopup.classList.add('hidden');
 });
 
-// Chiudi il popup quando si clicca la X
 closeAuthBtn.addEventListener('click', () => {
     chooseAuth.style.display = 'none';
 });
 
 
-// Gestione click sul pulsante "Classifica Globale"
-document.getElementById('ranking2').addEventListener('click', async () => {
+ranking2.addEventListener('click', async () => {
    logEvent('RanksBtn', { status: 'clicked' });
   
     leaderboardPopup.style.zIndex = "10000";
@@ -213,7 +216,6 @@ window.addEventListener('resize', () => {
 });
 
 // ====== CONFIGURAZIONE ASSET (Immagini e Audio con Fallback Automatici) ======
-// Spazio predisposto per i tuoi file. Se non presenti, il gioco userà forme geometriche colorate senza crashare.
 const images = {
     catAttached: new Image(),
     slippingCatAttached: new Image(),
@@ -285,7 +287,6 @@ let velocityX = 0;
 let velocityY = 0;
 const gravity = isMobile ? 0.72 : 0.8;
 let cameraOffsetX = 0;
-const cameraFollowSpeed = 0.35;
 
 // Fisica del Pendolo / Corda
 let anchorX = 0;
@@ -500,8 +501,6 @@ tutorialButton.addEventListener('click', (e) => {
 });
 
 
-// Nel game.js, sostituisci il listener del vecchio MagicLinkBtn
-// In game.js
 document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     const form = e.target.closest('form');
     
@@ -539,8 +538,6 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     }
 });
 
-// Gestione Ospite
-// In game.js - dentro il listener di guestBtn
 document.getElementById('guestBtn').addEventListener('click', async () => {
     if (!checkPrivacy()) return;
     try {
@@ -557,7 +554,7 @@ document.getElementById('guestBtn').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('emailBtn').addEventListener('click', async (e) => {
+emailBtn.addEventListener('click', async (e) => {
      const form = e.target.closest('form');
     
     // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
@@ -588,7 +585,7 @@ document.getElementById('emailBtn').addEventListener('click', async (e) => {
 
 });
 
-document.getElementById('googleBtn').addEventListener('click', async (e) => {
+googleBtn.addEventListener('click', async (e) => {
      const form = e.target.closest('form');
     
     // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
@@ -618,7 +615,7 @@ document.getElementById('googleBtn').addEventListener('click', async (e) => {
 
 });
 
-document.getElementById('backBtn').addEventListener('click', () => {
+backBtn.addEventListener('click', () => {
     authPopup.classList.add('hidden');
     authPopup.style.display = 'none';
     chooseAuth.classList.remove('hidden');
