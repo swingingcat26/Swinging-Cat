@@ -7,8 +7,6 @@ import { logEvent } from "./firebase-init.js";
 const auth = getAuth();
 const authPopup = document.getElementById('authPopup');
 const chooseAuth = document.getElementById('chooseAuth');
-const profileMenu = document.getElementById('profileMenu');
-const userProfile = document.getElementById('userProfile');
 const db = getFirestore();
 let lastClickTime = Date.now();
 
@@ -17,7 +15,6 @@ if (savedEmail) {
     completeMagicLinkLogin(savedEmail);
 }
 
-// Verifica se siamo in un loop di login senza codice valido
 const emailSaved = window.localStorage.getItem('emailForSignIn');
 if (emailSaved && !window.location.href.includes('apiKey=')) {
     console.warn("Flag di login trovato senza parametri URL: pulizia forzata.");
@@ -32,8 +29,6 @@ onAuthStateChanged(auth, async (user) => {
         chooseAuth.classList.add('hidden');
         chooseAuth.style.display = 'none';
 
-
-        // 🟢 USA L'ID UTENTE PER LA CHIAVE LOCALE
         const localKey = `highScore2_guest`;
         const dbRecord = await getPersonalRecord(user.uid);
         const localRecord = parseInt(localStorage.getItem(localKey)) || 0;
@@ -58,13 +53,16 @@ onAuthStateChanged(auth, async (user) => {
 
              // CONTROLLO ANTI-LOOP: Ricarica la pagina solo se l'utente non era già registrato in questa sessione
         const lastLoggedUid = sessionStorage.getItem('last_logged_uid');
-        if (lastLoggedUid !== user.uid) {
+        const lastLoggedUid2 = localStorage.getItem('last_logged_uid2');
+        if (lastLoggedUid !== user.uid && lastLoggedUid2 !== user.uid ) {
             sessionStorage.setItem('last_logged_uid', user.uid);
+            localStorage.setItem('last_logged_uid2', user.uid);
             location.reload();
         }
              
     } else {
         sessionStorage.removeItem('last_logged_uid');
+        localStorage.removeItem('last_logged_uid2');
 
         chooseAuth.style.display = 'none';
         
