@@ -21,9 +21,12 @@ if (emailSaved && !window.location.href.includes('apiKey=')) {
     window.localStorage.removeItem('emailForSignIn');
 }
 
-window.stop();
-
 onAuthStateChanged(auth, async (user) => {
+    const isFirstVisit = !localStorage.getItem('app_initialized');
+    if (isFirstVisit) {
+            localStorage.setItem('app_initialized', 'true');
+        };
+
     if (user) {
         authPopup.classList.add('hidden');
         authPopup.style.display = 'none';
@@ -53,7 +56,7 @@ onAuthStateChanged(auth, async (user) => {
         const lastLoggedUid = localStorage.getItem('last_logged_uid');
         if (lastLoggedUid !== user.uid ) {
             localStorage.setItem('last_logged_uid', user.uid);
-            location.reload();
+            if (!isFirstVisit) location.reload();
         };
              
     } else {
@@ -63,7 +66,7 @@ onAuthStateChanged(auth, async (user) => {
 
          if (!notLogged) {
             localStorage.setItem('not_logged', true);
-            location.reload();
+            if (!isFirstVisit) location.reload();
         };
         
         chooseAuth.style.display = 'none';
@@ -76,7 +79,7 @@ onAuthStateChanged(auth, async (user) => {
 }
 });
 
-// ====== GESTIONE UI E STATO DI GIOCO (Mappatura MainActivity.kt) ======
+// ====== GESTIONE UI E STATO DI GIOCO ======
 const mainMenu = document.getElementById('mainMenu');
 const gameContainer = document.getElementById('gameContainer');
 const buttonGame2 = document.getElementById('buttonGame2');
@@ -140,7 +143,6 @@ ranking2.addEventListener('click', async () => {
     leaderboardPopup.classList.remove('hidden');
 
     try {
-        // 🟢 Qui riceviamo l'oggetto completo
         const { top10, myPos, totalUsers, myScore } = await getGlobalLeaderboard();
 
         if (!top10 || top10.length === 0 || highScore === 0) {
@@ -150,7 +152,6 @@ ranking2.addEventListener('click', async () => {
 
         let htmlClassifica = '<ul style="list-style: none; padding: 0; margin: 0; color: #333;">';
 
-        // 🟢 Usiamo top10 per il ciclo
         top10.forEach((score, index) => {
             let medal = (index === 0) ? '🥇 ' : (index === 1) ? '🥈 ' : (index === 2) ? '🥉 ' : '';
             htmlClassifica += `
@@ -161,7 +162,6 @@ ranking2.addEventListener('click', async () => {
         });
         htmlClassifica += '</ul>';
 
-        // 🟢 AGGIUNTA SBARRA IN FONDO
         if (myPos) {
             let footerText = (myPos <= 250)
                 ? `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600;">Your position: ${myPos}°  <span style="font-weight: 600; color: #2575fc; margin-left: 10px; font-family: 'Fredoka', sans-serif;">${myScore} pt</span></label>`
@@ -216,7 +216,7 @@ window.addEventListener('resize', () => {
     canvas.height = h;
 });
 
-// ====== CONFIGURAZIONE ASSET (Immagini e Audio con Fallback Automatici) ======
+// ====== CONFIGURAZIONE ASSET ======
 const images = {
     catAttached: new Image(),
     slippingCatAttached: new Image(),
@@ -243,11 +243,11 @@ const sounds = {
 
 };
 
-sounds.swing.volume = 0.2;      // Lascia il salto del gatto un po' più alto (80%)
-sounds.falling.volume = 0.4;    // Lascia la caduta all'80%
+sounds.swing.volume = 0.2;    
+sounds.falling.volume = 0.4;    
 sounds.bgm2.volume = 0.5;
 
-// Configurazione loop BGM (Backsound 1 -> Backsound 2 loop come da GameView2.kt)
+
 let currentBgm = sounds.bgm1;
 function setupAudioLoop() {
     sounds.bgm1.addEventListener('ended', () => {
@@ -268,7 +268,7 @@ setupAudioLoop();
 let isMusicPlaying = true;
 let hasPlayedBefore = localStorage.getItem('hasPlayedBefore') === 'true';
 
-// ====== LOGICA CORE DEL GIOCO (Mappatura GameView2.kt) ======
+// ====== LOGICA CORE DEL GIOCO ======
 let gameState = 'NOT_STARTED'; // NOT_STARTED, PLAYING, PAUSED, GAME_OVER
 let playerState = 'FLYING';    // ATTACHED, FLYING, STOPPED
 let isCatFalling = false;
@@ -278,7 +278,6 @@ let frame = 0;
 let graceFramesAfterReset = 0;
 let showTutorialPanel = false;
 
-// Fisica del Giocatore
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 1 || window.innerWidth <= 768;
 let playerX = 150;
 let playerY = 100;
@@ -289,7 +288,6 @@ let velocityY = 0;
 const gravity = isMobile ? 0.72 : 0.8;
 let cameraOffsetX = 0;
 
-// Fisica del Pendolo / Corda
 let anchorX = 0;
 let anchorY = 0;
 let attachedRope = null;
