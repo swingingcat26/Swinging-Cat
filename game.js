@@ -30,8 +30,7 @@ onAuthStateChanged(auth, async (user) => {
     if (user) {
         authPopup.classList.add('hidden');
         authPopup.style.display = 'none';
-        chooseAuth.classList.add('hidden');
-        chooseAuth.style.display = 'none';
+        chooseAuth.style.zIndex = -20;
 
         const localKey = `highScore2_guest`;
         const dbRecord = await getPersonalRecord(user.uid);
@@ -69,7 +68,7 @@ onAuthStateChanged(auth, async (user) => {
             if (!isFirstVisit) location.reload();
         };
         
-        chooseAuth.style.display = 'none';
+       chooseAuth.style.zIndex = -20;
         
          const localKey = 'highScore2_guest';
             const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
@@ -131,7 +130,7 @@ closeLeaderboardBtn.addEventListener('click', () => {
 });
 
 closeAuthBtn.addEventListener('click', () => {
-    chooseAuth.style.display = 'none';
+    chooseAuth.style.zIndex = -20;
 });
 
 
@@ -189,7 +188,7 @@ if (btnLogin) {
 btnLogin.addEventListener('click', async () => {
     await signOut(auth);
     leaderboardPopup.style.display = 'none';
-    document.getElementById('chooseAuth').style.display = 'flex';
+    chooseAuth.style.zIndex = 99999;
 });
 };
 
@@ -307,21 +306,17 @@ function checkPrivacy() {
     return true;
 }
 
-// Funzioni Audio Ausiliarie
 function startMusic() {
-    // RIMOSSO: currentBgm.load(); perché rompe il contesto del gesto dell'utente nei browser mobile
 
     console.log("Stato della traccia bgm1:", {
         src: currentBgm.src,
-        readyState: currentBgm.readyState, // 0 = nessun dato, 4 = pronto
+        readyState: currentBgm.readyState, 
         error: currentBgm.error ? currentBgm.error.code : "Nessun errore",
         paused: currentBgm.paused
     });
 
-    // Assicuriamoci che riparta da capo
     currentBgm.currentTime = 0;
 
-    // Tenta la riproduzione e gestisci il fallimento
     const playPromise = currentBgm.play();
 
     if (playPromise !== undefined) {
@@ -333,13 +328,11 @@ function startMusic() {
 }
 function pauseMusic() { currentBgm.pause(); }
 function resumeMusic() {
-    // Controlla se la musica dovrebbe essere in riproduzione secondo le preferenze utente
     if (isMusicPlaying && gameState === 'PLAYING') {
         currentBgm.play().catch(e => { });
         soundOn.classList.remove('hidden');
         soundOff.classList.add('hidden');
     } else {
-        // Se isMusicPlaying è false, forza il tasto su "Muto"
         soundOn.classList.add('hidden');
         soundOff.classList.remove('hidden');
     }
@@ -358,7 +351,6 @@ function playSound(sound) {
 
 const cookieDiv = document.getElementById('cookiePrivacyLinks');
 
-// Inizializzazione cicli e flussi di gioco
 buttonGame2.addEventListener('click', () => {
     sounds.bgm1.play().catch(e => { });
     sounds.bgm1.pause();
@@ -375,7 +367,7 @@ buttonGame2.addEventListener('click', () => {
     cookieDiv.classList.add('hide-ui');
     tutorialButton.classList.remove('hidden');
     authPopup.style.display = 'none';
-    chooseAuth.style.display = 'none';
+    chooseAuth.style.zIndex = -20;
 
 
 
@@ -545,7 +537,7 @@ document.getElementById('guestBtn').addEventListener('click', async () => {
         logEvent('login', { method: 'anonymous' });
 
         localStorage.setItem('playingAsGuest', 'true');
-        chooseAuth.style.display = 'none';
+       chooseAuth.style.zIndex = -20;
 
         alert("You're playing in guest mode. Your games will only be saved locally.");
     } catch (error) {
@@ -569,14 +561,13 @@ emailBtn.addEventListener('click', async (e) => {
         try {
             await signInAnonymously(auth);
             alert("You are not at least 18 years old and cannot register, so your account has been switched to a guest account and your scores will only be saved locally.");
-            document.getElementById('chooseAuth').style.display = 'none';
+            chooseAuth.style.zIndex = -20;
         } catch (error) {
             alert("Error: " + error.message);
         }
         return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
     }
-    chooseAuth.classList.add('hidden');
-    chooseAuth.style.setProperty('display', 'none', 'important'); // Sforza la sparizione
+    chooseAuth.style.zIndex = -20;
 
     authPopup.classList.remove('hidden');
     authPopup.style.display = 'flex';
@@ -601,7 +592,7 @@ googleBtn.addEventListener('click', async (e) => {
         try {
             await signInAnonymously(auth);
             alert("You are not at least 18 years old and cannot register, so your account has been switched to a guest account and your scores will only be saved locally.");
-            document.getElementById('chooseAuth').style.display = 'none';
+            chooseAuth.style.zIndex = -20;
         } catch (error) {
             alert("Error: " + error.message);
         }
@@ -610,15 +601,14 @@ googleBtn.addEventListener('click', async (e) => {
 
     signInWithGoogle(displayName);
     logEvent('sign_up', { method: 'google' });
-    chooseAuth.style.display = 'none';
+   chooseAuth.style.zIndex = -20;
 
 });
 
 backBtn.addEventListener('click', () => {
     authPopup.classList.add('hidden');
     authPopup.style.display = 'none';
-    chooseAuth.classList.remove('hidden');
-    chooseAuth.style.display = 'flex';
+    chooseAuth.style.zIndex = 99999;
 });
 
 document.getElementById('joinRoomBtn').addEventListener('click', () => {
@@ -735,7 +725,7 @@ sfxVolume.addEventListener('input', (e) => {
 document.getElementById('btnLogoutSettings').addEventListener('click', async () => {
     await signOut(auth);
     settingsPanel.classList.add('hidden');
-    document.getElementById('chooseAuth').style.display = 'flex';
+    chooseAuth.style.zIndex = 99999;
 });
 
 

@@ -76,7 +76,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
          const chooseAuth = document.getElementById('chooseAuth');
 
         if (!auth.currentUser) {
-                 chooseAuth.style.display = 'flex'; // Mostra il popup di login
+                 chooseAuth.style.zIndex = 99999; // Mostra il popup di login
                 return;
             }
 
@@ -106,7 +106,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
          const chooseAuth = document.getElementById('chooseAuth');
 
         if (!auth.currentUser) {
-                 chooseAuth.style.display = 'flex'; // Mostra il popup di login
+                 chooseAuth.style.zIndex = 99999; // Mostra il popup di login
                 return;
             }
         
