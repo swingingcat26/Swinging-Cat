@@ -1,6 +1,5 @@
-import { getFirestore, doc, setDoc, updateDoc, onSnapshot, getDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import { db, auth, logEvent } from "./firebase-init.js"; // Usa l'istanza centralizzata
+import { doc, setDoc, updateDoc, onSnapshot, getDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { db, auth, logEvent } from "./firebase-init.js"; 
 
 let currentRoomId = null;
 let isCreator = false;
@@ -15,7 +14,6 @@ export function initMultiplayer(uiElements) {
         const savedRoomCode = localStorage.getItem('lastCreatedRoom');
         logEvent('VSBtn', { status: 'clicked' });
     
-        // 🟢 2. CONTROLLO STANZA SCADUTA (se l'utente aveva una stanza salvata/attiva)
         if (savedRoomCode) {
             const roomRef = doc(db, "rooms", savedRoomCode);
             const roomSnap = await getDoc(roomRef);
@@ -27,32 +25,28 @@ export function initMultiplayer(uiElements) {
                     const now = Date.now();
                     const oneHour = 60 * 60 * 1000;
     
-                    // Se è passata più di un'ora
                     if (now - creationTime > oneHour) {
-                        await deleteDoc(roomRef); // Elimina la stanza scaduta
+                        await deleteDoc(roomRef); 
                         localStorage.removeItem('lastCreatedRoom');
                         alert("Your previous room has been deleted because 1 hour has passed.");
                         currentRoomId = null;
                     }
                     else {
-                        // Se non è ancora passata un'ora, reimposta la variabile corrente
                         currentRoomId = savedRoomCode;
                         isCreator = true;
                     }
                 }
             } else {
-                // Se la stanza non esiste più nel DB, pulisci lo stato locale
                 localStorage.removeItem('lastCreatedRoom');
             }
         }
     
-        // 3. Mostra la lobby normalmente
         ui.mainMenu.classList.add('hidden');
         ui.multiplayerLobby.classList.remove('hidden');
     });
 
 ui.backToLobbyBtn.addEventListener('click', async () => {
-    // Se sono il creatore, elimino la stanza
+
     if (isCreator && currentRoomId) {
         await deleteRoom(currentRoomId);
         localStorage.removeItem('lastCreatedRoom');
@@ -76,7 +70,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
          const chooseAuth = document.getElementById('chooseAuth');
 
         if (!auth.currentUser) {
-                 chooseAuth.style.zIndex = 99999; // Mostra il popup di login
+                 chooseAuth.style.zIndex = 99999; 
                 return;
             }
 
@@ -87,7 +81,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
             players: {
                 [user.uid]: {
                     name: user.displayName || "Player",
-                    ready: true, // Il creatore è sempre pronto
+                    ready: true, 
                     score: 0
                 }
             }
@@ -106,9 +100,9 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
          const chooseAuth = document.getElementById('chooseAuth');
 
         if (!auth.currentUser) {
-                 chooseAuth.style.zIndex = 99999; // Mostra il popup di login
-                return;
-            }
+            chooseAuth.style.zIndex = 99999; 
+            return;
+        }
         
         if (!roomCode) return alert("Please enter a valid room code.");
         
@@ -120,7 +114,6 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
 
         await updateDoc(roomRef, {
             [`players.${user.uid}`]: {
-        // Se displayName è null/undefined, usa una stringa sicura
         name: user.displayName || "Player-" + user.uid.substring(0, 4), 
         ready: false,
         score: 0
@@ -159,14 +152,10 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
     
             const roomRef = doc(db, "rooms", currentRoomId);
     
-            // Se l'utente è il creatore, eliminiamo la stanza
             if (isCreator) {
-                // Usiamo sendBeacon o una chiamata sincrona/rapida se possibile, 
-                // ma in Firestore possiamo fare una richiesta di eliminazione asincrona
                 deleteDoc(roomRef).catch(err => console.error("Errore pulizia stanza alla chiusura:", err));
                 localStorage.removeItem('lastCreatedRoom');
             } else {
-                // Se è un semplice partecipante, lo rimuoviamo dalla lista dei giocatori
                 updateDoc(roomRef, {
                     [`players.${auth.currentUser.uid}`]: deleteField()
                 }).catch(err => console.error("Errore rimozione giocatore alla chiusura:", err));
@@ -191,10 +180,8 @@ function enterWaitingRoom(roomCode) {
 
     const roomRef = doc(db, "rooms", roomCode);
     
-    // Ascolto in tempo reale dello stato della stanza
 unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
     if (!docSnap.exists()) {
-        // La stanza è stata eliminata!
         alert("The room has been closed by the creator.");
         ui.roomWaitingScreen.classList.add('hidden');
         ui.multiplayerLobby.classList.remove('hidden');
@@ -207,13 +194,12 @@ unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
     const playersCount = playersEntries.length;
     ui.playersList.innerHTML = '';
     let allReady = true;
-
-    const playerCounterEl = document.getElementById('playerCounter'); // L'elemento <span id="playerCounter"> creato prima
+ 
     const maxSlots = 4;
 
     if (playersEntries < 2) {
         console.warn("Avvio bloccato: servono almeno 2 giocatori.");
-        return; // Interrompe l'avvio se c'è solo un giocatore
+        return; 
     }
 
     playersEntries.forEach(([uid, p]) => {
@@ -223,17 +209,15 @@ unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
         if (!p.ready) allReady = false;
     });
 
-    // 3. (Opzionale) Aggiunge degli slot "vuoti" per completare visivamente i 4 posti
     const emptySlots = maxSlots - playersCount;
     for (let i = 0; i < emptySlots; i++) {
         const li = document.createElement('li');
-        li.style.color = '#94a3b8'; // Colore grigino/disattivato
+        li.style.color = '#94a3b8'; 
         li.style.fontStyle = 'italic';
         li.innerHTML = `⏳ Free Slot (${playersCount + i + 1}/4)`;
        ui.playersList.appendChild(li);
     }
 
-    // Il creatore può avviare solo se TUTTI hanno cliccato "Pronto"
     if (isCreator) {
         if (playersCount < 2) {
             ui.startGameBtn.disabled = true;
@@ -246,7 +230,6 @@ unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
         }
     }
 
-    // Se lo stato torna su 'PLAYING' (di nuovo avviata)
     if (data.status === 'PLAYING') {
         ui.roomWaitingScreen.classList.add('hidden');
         if(window.startMultiplayerSession) {
@@ -260,7 +243,7 @@ export async function deleteRoom(roomCode) {
     if (!roomCode) return;
     const roomRef = doc(db, "rooms", roomCode);
     try {
-        await deleteDoc(roomRef); // Richiede l'import di deleteDoc da firestore
+        await deleteDoc(roomRef); 
         console.log("Stanza eliminata con successo.");
     } catch (e) {
         console.error("Errore eliminazione stanza:", e);
@@ -268,13 +251,11 @@ export async function deleteRoom(roomCode) {
 }
 
 function generateRoomCode() {
-    // Escludiamo caratteri simili come I, l, 1, O, 0 per evitare errori umani
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'; 
     let code = '';
-    for (let i = 0; i < 6; i++) { // Codice a 6 caratteri
+    for (let i = 0; i < 6; i++) { 
         code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    // Aggiungiamo un prefisso per identificare la versione del gioco o la regione
     return code; 
 }
 
