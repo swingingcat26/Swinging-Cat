@@ -24,8 +24,8 @@ if (emailSaved && !window.location.href.includes('apiKey=')) {
 onAuthStateChanged(auth, async (user) => {
     const isFirstVisit = !localStorage.getItem('app_initialized');
     if (isFirstVisit) {
-            localStorage.setItem('app_initialized', 'true');
-        };
+        localStorage.setItem('app_initialized', 'true');
+    };
 
     if (user) {
         authPopup.classList.add('hidden');
@@ -49,7 +49,7 @@ onAuthStateChanged(auth, async (user) => {
             } catch (error) {
                 console.error("Errore durante la sincronizzazione iniziale dell'utente:", error.message);
             }
-             }
+        }
 
         localStorage.removeItem('not_logged');    
         const lastLoggedUid = localStorage.getItem('last_logged_uid');
@@ -68,14 +68,14 @@ onAuthStateChanged(auth, async (user) => {
             if (!isFirstVisit) location.reload();
         };
         
-       chooseAuth.style.zIndex = -20;
+        chooseAuth.style.zIndex = -20;
         
-         const localKey = 'highScore2_guest';
-            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
+        const localKey = 'highScore2_guest';
+        const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
 
-            highScore = Math.max(score, currentLocal, highScore);
-            localStorage.setItem(localKey, highScore);
-}
+        highScore = Math.max(score, currentLocal, highScore);
+        localStorage.setItem(localKey, highScore);
+    }
 });
 
 // ====== GESTIONE UI E STATO DI GIOCO ======
@@ -159,6 +159,7 @@ ranking2.addEventListener('click', async () => {
                     <span style="color: #2575fc; font-family: 'Fredoka', sans-serif;">${score.score} pt</span>
                 </li>`;
         });
+
         htmlClassifica += '</ul>';
 
         if (myPos) {
@@ -171,26 +172,28 @@ ranking2.addEventListener('click', async () => {
                     ${footerText}
                 </div>`;
         };
-                if (!auth.currentUser || auth.currentUser.isAnonymous) { 
-                    let ctaScore = `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600; letter-spacing: 0.5px; font-size: 16px;">Your score: <span style="font-weight: 600; color: #2575fc; font-family: 'Fredoka', sans-serif;">${highScore} pt</span></label>`;
-                    const btnRanks = '<button id="btnLogin" style="background: black; color: white; font-family: \'Fredoka\', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 600;">Register</button>';
-htmlClassifica += `
-    <div style="padding: 16px auto; margin-top: 8px; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px; display: flex; justify-content: center; flex-direction: column;">
-    <label>${btnRanks} <span style="font-family: 'Fredoka', sans-serif; font-weight: 640; letter-spacing: 0.5px; font-size: 16px;">to join the ranks!</span></label>
-    ${ctaScore}
-        </div>`;
-                };
+                
+        if (!auth.currentUser || auth.currentUser.isAnonymous) { 
+            let ctaScore = `<label style="font-family: 'Fredoka', sans-serif; font-weight: 600; letter-spacing: 0.5px; font-size: 16px;">Your score: <span style="font-weight: 600; color: #2575fc; font-family: 'Fredoka', sans-serif;">${highScore} pt</span></label>`;
+            const btnRanks = '<button id="btnLogin" style="background: black; color: white; font-family: \'Fredoka\', sans-serif; width: auto; height: auto; padding: 4px 8px; font-size: 18px; font-weight: 600;">Register</button>';
+            
+            htmlClassifica += `
+            <div style="padding: 16px auto; margin-top: 8px; text-align: center; background: white; border-radius: 12px; position: sticky; bottom: -4px; display: flex; justify-content: center; flex-direction: column;">
+                <label>${btnRanks} <span style="font-family: 'Fredoka', sans-serif; font-weight: 640; letter-spacing: 0.5px; font-size: 16px;">to join the ranks!</span></label>
+                ${ctaScore}
+            </div>`;
+        };
 
         leaderboardContent.innerHTML = htmlClassifica;
 
         const btnLogin = document.getElementById('btnLogin');
-if (btnLogin) {
-btnLogin.addEventListener('click', async () => {
-    await signOut(auth);
-    leaderboardPopup.style.display = 'none';
-    chooseAuth.style.zIndex = 99999;
-});
-};
+        if (btnLogin) {
+            btnLogin.addEventListener('click', async () => {
+            await signOut(auth);
+            leaderboardPopup.style.display = 'none';
+            chooseAuth.style.zIndex = 99999;
+            });
+        };
 
         console.log("Total Users:", totalUsers);
 
@@ -369,9 +372,6 @@ buttonGame2.addEventListener('click', () => {
     authPopup.style.display = 'none';
     chooseAuth.style.zIndex = -20;
 
-
-
-    // Forza dimensioni canvas all'attivazione
     w = window.innerWidth;
     h = window.innerHeight;
     canvas.width = w;
@@ -390,19 +390,17 @@ buttonGame2.addEventListener('click', () => {
     logEvent('level_start', {
         level_name: 'Singleplayer_Mode'
     });
-    // Avvia stabilmente il ciclo di disegno e fisica
     requestAnimationFrame(gameLoop);
 });
 
 exitButton.addEventListener('click', async (e) => {
     e.stopPropagation();
     const roomIdToLeave = currentRoomId;
-    // 1. Disiscrizione immediata da tutti i listener attivi di Firebase
     if (unsubscribeGameSession) {
         unsubscribeGameSession();
         unsubscribeGameSession = null;
     }
-    leaveRoomCleanup(); // Ferma il listener di multiplayer.js e resetta l'ID stanza lì
+    leaveRoomCleanup(); 
      currentRoomId = null;
     if (roomIdToLeave && auth.currentUser) {
         const roomRef = doc(db, "rooms", roomIdToLeave);
@@ -424,7 +422,6 @@ exitButton.addEventListener('click', async (e) => {
         }
     }
 
-    // 3. Pulizia totale della UI e degli stati di gioco
     isMatchOver = false;
     isGameRunning = false;
     const scoreboard = document.getElementById('liveScoreboard');
@@ -495,10 +492,9 @@ tutorialButton.addEventListener('click', (e) => {
 document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     const form = e.target.closest('form');
     
-    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; // Interrompe l'esecuzione se il form non è valido
+        return; 
     }
     e.preventDefault();
 
@@ -518,7 +514,6 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
     } catch (error) {
         if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
             try {
-                // Passiamo il nome alla funzione di registrazione
                 await registerWithEmail(email, password, displayName);
                 logEvent('sign_up', { method: 'email' });
                 alert("Account created!");
@@ -532,7 +527,6 @@ document.getElementById('magicLinkBtn').addEventListener('click', async (e) => {
 document.getElementById('guestBtn').addEventListener('click', async () => {
     if (!checkPrivacy()) return;
     try {
-        // Esegue lo stesso flusso di "signInAnonymously" usato per i minori
         await signInAnonymously(auth);
         logEvent('login', { method: 'anonymous' });
 
@@ -548,15 +542,14 @@ document.getElementById('guestBtn').addEventListener('click', async () => {
 emailBtn.addEventListener('click', async (e) => {
      const form = e.target.closest('form');
     
-    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; // Interrompe l'esecuzione se il form non è valido
+        return; 
     }
     e.preventDefault();
     if (!checkPrivacy()) return;
     const isOver18 = document.getElementById('ageCheck').checked;
-    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
+
     if (!isOver18) {
         try {
             await signInAnonymously(auth);
@@ -565,7 +558,7 @@ emailBtn.addEventListener('click', async (e) => {
         } catch (error) {
             alert("Error: " + error.message);
         }
-        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
+        return; 
     }
     chooseAuth.style.zIndex = -20;
 
@@ -578,16 +571,15 @@ emailBtn.addEventListener('click', async (e) => {
 googleBtn.addEventListener('click', async (e) => {
      const form = e.target.closest('form');
     
-    // Se c'è un form e i campi required non sono validi, lascia che il browser mostri i suoi avvisi
     if (form && !form.checkValidity()) {
         form.reportValidity();
-        return; // Interrompe l'esecuzione se il form non è valido
+        return;
     }
     e.preventDefault();
     if (!checkPrivacy()) return;
     const displayName = document.getElementById('nameInput').value;
     const isOver18 = document.getElementById('ageCheck').checked;
-    // 1. FLUSSO MINORI: Accesso anonimo esclusivo
+
     if (!isOver18) {
         try {
             await signInAnonymously(auth);
@@ -596,7 +588,7 @@ googleBtn.addEventListener('click', async (e) => {
         } catch (error) {
             alert("Error: " + error.message);
         }
-        return; // <--- FONDAMENTALE: Interrompe qui, non esegue il resto
+        return; 
     }
 
     signInWithGoogle(displayName);
@@ -616,11 +608,9 @@ document.getElementById('joinRoomBtn').addEventListener('click', () => {
     joinGame(code);
 });
 
-// In game.js
 document.getElementById('returnLobbyBtn').addEventListener('click', async () => {
     if (!currentRoomId || !auth.currentUser) return;
 
-    // 🟢 B: Nascondi SUBITO la tabella prima di toccare il database
     document.getElementById('liveScoreboard').classList.add('hidden');
 
     isGameRunning = false;
@@ -630,15 +620,13 @@ document.getElementById('returnLobbyBtn').addEventListener('click', async () => 
 
     const roomRef = doc(db, "rooms", currentRoomId);
 
-    // 1. Reset dello stato del giocatore corrente nel DB
     await updateDoc(roomRef, {
         [`players.${auth.currentUser.uid}.isGameOver`]: false,
-        [`players.${auth.currentUser.uid}.ready`]: false, // Forza lo stato "Non Pronto"
+        [`players.${auth.currentUser.uid}.ready`]: false, 
         [`players.${auth.currentUser.uid}.score`]: 0,
-        status: 'WAITING' // Riporta la stanza in attesa
+        status: 'WAITING' 
     });
 
-    // 2. Pulizia UI locale
     document.getElementById('liveScoreboard').classList.remove('center-zoomed');
     document.getElementById('liveScoreboard').classList.add('hidden');
     document.getElementById('returnLobbyBtn').classList.add('hidden');
@@ -647,17 +635,14 @@ document.getElementById('returnLobbyBtn').addEventListener('click', async () => 
     cookieDiv.classList.remove('hide-ui');
     settingsBtn.classList.remove('hidden');
 
-    // 3. Reset dei bottoni locali
     const readyBtn = document.getElementById('readyBtn');
     readyBtn.innerText = "Not ready";
     readyBtn.style.backgroundColor = "#e74c3c";
 
-    // 4. Reset stato di gioco
     gameState = 'NOT_STARTED';
 });
 
 settingsBtn.addEventListener('click', () => {
-    // 🟢 Aggiorna l'email prima di mostrare il pannello
     const upgradeBtn = document.getElementById('btnUpgradeAccount');
     const user = auth.currentUser;
     if (user && !user.isAnonymous) {
@@ -665,8 +650,8 @@ settingsBtn.addEventListener('click', () => {
         btnDeleteAccount.classList.remove('hidden');
         upgradeBtn.classList.add('hidden');
         btnLogoutSettings.classList.remove('hidden');
-        btnLogoutSettings.textContent = 'Log Out'; // o il testo originale che avevi
-        btnLogoutSettings.style.color = ''; // Rimuove lo stile inline per tornare al CSS originale
+        btnLogoutSettings.textContent = 'Log Out'; 
+        btnLogoutSettings.style.color = ''; 
         btnLogoutSettings.style.background = '';
     } else if (user && user.isAnonymous) {
         userEmailDisplay.innerText = "Account: Player_ " + auth.currentUser.uid.substring(0, 4);
@@ -692,9 +677,9 @@ document.getElementById('btnUpgradeAccount').addEventListener('click', async () 
     
     if (!isOver18) {
         alert("Registration is restricted to adults only.");
-        return; // Interrompe qui, senza eseguire nulla
+        return; 
     }
-    // Apri un mini-form o usa degli input già presenti
+
     const email = prompt("Enter your email:");
     const password = prompt("Enter your password:");
     const name = prompt("Choose a nickname:");
@@ -702,15 +687,13 @@ document.getElementById('btnUpgradeAccount').addEventListener('click', async () 
     if (email && password && name) {
         try {
             await upgradeAnonymousAccount(email, password, name);
-            alert("Account registered successfully!");
-            location.reload(); // Ricarica per pulire lo stato da ospite
+            alert("Account registered successfully!"); 
         } catch (error) {
             alert("Error: " + error.message);
         }
     }
 });
 
-// 3. Regolazione Volume
 musicVolume.addEventListener('input', (e) => {
     sounds.bgm1.volume = e.target.value;
     sounds.bgm2.volume = e.target.value;
@@ -721,7 +704,6 @@ sfxVolume.addEventListener('input', (e) => {
     sounds.falling.volume = e.target.value;
 });
 
-// 4. Logout e Cambio Account dal pannello
 document.getElementById('btnLogoutSettings').addEventListener('click', async () => {
     await signOut(auth);
     settingsPanel.classList.add('hidden');
@@ -739,17 +721,13 @@ document.getElementById('btnDeleteAccount').addEventListener('click', async () =
 
     if (confirmDelete) {
         try {
-            // 1. Elimina i dati da Firestore
             const db = getFirestore();
             await deleteDoc(doc(db, "users", user.uid));
-
-            // 2. Elimina l'utente da Firebase Auth
             await deleteUser(user);
              localStorage.removeItem('playingAsGuest');
               localStorage.removeItem('highScore2_guest');
             alert("Account deleted successfully!");
             logEvent('delete', { account: 'deleted' });
-            location.reload(); // Ricarica per tornare allo stato di avvio
         } catch (error) {
             console.error("Errore durante l'eliminazione:", error);
             if (error.code === 'auth/requires-recent-login') {
@@ -782,7 +760,6 @@ document.getElementById('forgotPasswordBtn').addEventListener('click', async () 
 });
 
 shareBtn.addEventListener('click', async () => {
-            // Verifica se il browser supporta la Web Share API
             if (navigator.share) {
                 try {
                     await navigator.share({
@@ -795,7 +772,6 @@ shareBtn.addEventListener('click', async () => {
                     console.error('Errore durante la condivisione:', error);
                 }
             } else {
-                // Fallback per i browser che non supportano l'API (es. vecchi desktop)
                 alert('The sharing function is not supported by this browser.');
             }
         });
@@ -805,13 +781,10 @@ initMultiplayer(uiElements);
 let isGameRunning = false;
 let unsubscribeGameSession = null;
 
-// Questa funzione viene chiamata in automatico da multiplayer.js quando il creatore clicca "Avvia"
 window.startMultiplayerSession = async function (roomId) {
     const roomRef = doc(db, "rooms", roomId);
-    const roomSnap = await getDoc(roomRef);
-    const players = roomSnap.data().players || {};
 
-    if (isGameRunning) return; // Impedisce il doppio avvio
+    if (isGameRunning) return; 
     isGameRunning = true;
 
     currentRoomId = roomId;
@@ -828,55 +801,43 @@ window.startMultiplayerSession = async function (roomId) {
     settingsBtn.classList.add('hidden');
     settingsPanel.classList.add('hidden');
     roomWaitingScreen.classList.add('hidden');
-    gameContainer.classList.remove('hidden'); // Rimuove la schermata nera
+    gameContainer.classList.remove('hidden'); 
     cookieDiv.classList.add('hide-ui');
 
-    // Inizializza lo stato del gioco
     resetGame();
     gameState = 'PLAYING';
     startMusic();
     requestAnimationFrame(gameLoop);
 
-    // Mostra la UI della tabella punteggi live
     document.getElementById('liveScoreboard').classList.remove('hidden');
 
-    // AGGIUNGI QUESTO BLOCCO: Ascoltatore in tempo reale della stanza
     onSnapshot(roomRef, (docSnap) => {
         if (currentRoomId !== roomId) return;
         if (docSnap.exists()) {
             const data = docSnap.data();
             if (!data.players || !data.players[auth.currentUser.uid]) {
-                return; // Ignora gli aggiornamenti se sei stato rimosso o sei uscito
+                return; 
             }
             if (data.players) {
-                // Aggiorna la tabella ogni volta che un punteggio cambia
                 if (isMatchOver && !document.getElementById('returnLobbyBtn').classList.contains('hidden')) {
                     return;
                 }
                 updateScoreboardUI(data.players, isMatchOver);
 
                 const playersArray = Object.values(data.players);
-                // Controlla se ogni giocatore ha "isGameOver" impostato a true
                 const allDead = playersArray.length > 0 && playersArray.every(p => p.isGameOver === true);
 
-                // Dentro window.startMultiplayerSession, nel blocco onSnapshot:
                 if (allDead && !isMatchOver) {
-                    // 1. Aggiorna lo stato per bloccare il loop
                     isMatchOver = true;
                     gameState = 'GAME_OVER';
                     updateScoreboardUI(data.players, isMatchOver);
                     stopGameLoop();
 
-
-                    // 2. Forza l'animazione della tabella
                     const scoreboard = document.getElementById('liveScoreboard');
-                    scoreboard.classList.remove('hidden'); // Assicurati che sia visibile
-                    scoreboard.classList.add('center-zoomed'); // Aggiunge l'animazione
-
-                    // 3. Mostra il tasto per tornare alla lobby
+                    scoreboard.classList.remove('hidden'); 
+                    scoreboard.classList.add('center-zoomed'); 
                     document.getElementById('returnLobbyBtn').classList.remove('hidden');
 
-                    // 4. Stop audio
                     stopAndReleaseMusic();
                 }
             }
@@ -913,7 +874,6 @@ function resetGame() {
     graceFramesAfterReset = 5;
     isCatFalling = false;
 
-    // Prima corda iniziale di salvataggio
     ropes.push({ x: w / 4, y: 0, length: h * 0.6, isFragile: false, isSlippery: false, isBroken: false });
 
     gameOverPanel.classList.add('hidden');
@@ -956,7 +916,6 @@ function generateRopes() {
         });
     }
 
-    // Ottimizzazione memoria array corde uscite a sinistra dello schermo
     if (ropes.length > 15) {
         ropes = ropes.filter(r => r.x >= cameraOffsetX - 300);
     }
@@ -969,9 +928,7 @@ function checkRopeCollision() {
     for (let rope of ropes) {
         if (rope.isBroken) continue;
 
-        // Margine di tolleranza collisione orizzontale
         const isHorizontallyAligned = playerX > (rope.x - 45) && playerX < (rope.x + 45);
-        // Verifica allineamento verticale lungo l'asse della corda
         const isVerticallyAligned = playerY > rope.y && playerY < (rope.y + rope.length + 30);
         const isFalling = velocityY > 0;
 
@@ -987,11 +944,10 @@ function checkRopeCollision() {
             attachedRope = rope;
             anchorX = rope.x;
             anchorY = rope.y;
-            ropeLength = playerY - anchorY; // Aggancio dinamico basato sull'altezza corrente
+            ropeLength = playerY - anchorY; 
 
-            // Calcola l'angolo di aggancio iniziale basato sulla trigonometria della posizione reale
             angle = Math.atan2(playerX - anchorX, playerY - anchorY);
-            angularVelocity = velocityX / ropeLength; // Trasferimento quantità di moto lineare in angolare
+            angularVelocity = velocityX / ropeLength; 
             return true;
         }
     }
@@ -1004,19 +960,16 @@ function updateGameLogic() {
     frame++;
 
     if (playerState === 'ATTACHED') {
-        const g = isMobile ? 0.52 : 0.6; // Gravità pendolare bilanciata
-        const damping = 0.998; // Conservazione energia del moto armonico
+        const g = isMobile ? 0.52 : 0.6; 
+        const damping = 0.998; 
 
         const acceleration = (-g / ropeLength) * Math.sin(angle);
         angularVelocity += acceleration;
         angularVelocity *= damping;
         angle += angularVelocity;
-
-        // Calcolo della posizione orbitale del gatto rispetto al perno (anchor)
         playerX = anchorX + (ropeLength * Math.sin(angle));
         playerY = anchorY + (ropeLength * Math.cos(angle));
 
-        // Gestione corda fragile (isFragile) come da file sorgente Kotlin
         if (attachedRope && attachedRope.isFragile && Math.abs(angle) > 0.3) {
             attachedRope.isBroken = true;
             playerState = 'STOPPED';
@@ -1026,13 +979,11 @@ function updateGameLogic() {
             velocityY = -tangentialVelocity * Math.sin(angle);
         }
 
-        // Se oscilla troppo lentamente, si ferma
         if (Math.abs(angularVelocity) < 0.001 && Math.abs(angle) < 0.03) {
             playerState = 'STOPPED';
         }
 
     } else if (playerState === 'STOPPED') {
-        // Se il gatto era attaccato ma ha perso slancio, si stacca
         if (!isCatFalling) {
             isCatFalling = true;
         }
@@ -1042,7 +993,7 @@ function updateGameLogic() {
 
     } else if (playerState === 'FLYING') {
         velocityY += gravity;
-        velocityX *= 0.995; // Attrito dell'aria passivo
+        velocityX *= 0.995;
 
         playerX += velocityX;
         playerY += velocityY;
@@ -1051,63 +1002,51 @@ function updateGameLogic() {
 
     const targetX = playerX - (w * 0.33);
 
-    // Inseguimento fluido solo in avanti. Impedisce alla camera di tornare indietro se il gatto oscilla.
     if (targetX > cameraOffsetX) {
         cameraOffsetX += (targetX - cameraOffsetX) * 0.1;
     }
 
     generateRopes();
 
-
-    // Condizione di Game Over (Caduta oltre il limite inferiore dello schermo)
     if (playerY > h + playerHeight + 100) {
-        // 1. BLOCCO IMMEDIATO: Se siamo già in Game Over, esci subito dalla 
         
         if (gameState === 'GAME_OVER') return;
 
-        gameState = 'GAME_OVER'; // Cambio stato prima di ogni altra cosa
+        gameState = 'GAME_OVER'; 
 
         logEvent('level_end', {
         level_name: currentRoomId ? 'Multiplayer_Mode' : 'Singleplayer_Mode',
         score: score
     });
 
-     playSound(sounds.falling);
-        stopAndReleaseMusic();
+    playSound(sounds.falling);
+    stopAndReleaseMusic();
 
-         const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
-            const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
+    const localKey = auth.currentUser ? `highScore2_${auth.currentUser.uid}` : 'highScore2_guest';
+    const currentLocal = parseInt(localStorage.getItem(localKey)) || 0;
+    const isNewBest = score > currentLocal;
 
-        // 2. LOGICA DI SALVATAGGIO (Eseguita una sola volta)
+    highScore = Math.max(score, currentLocal, highScore);
+    localStorage.setItem(localKey, highScore);
 
-            // Salvataggio Locale (sempre attivo)
-            const isNewBest = score > currentLocal;
-
-            highScore = Math.max(score, currentLocal, highScore);
-            localStorage.setItem(localKey, highScore);
-
-            // 3. CAMBIO STATO E UI (Eseguito una sola volta)
-
-        finalScoreText.innerText = `${score}`;
-        if (hasPlayedBefore && isNewBest) {
-            scoreLabel.innerHTML = `Your <span style="background: linear-gradient(180deg, #ff5500 25%, #ff7500 50%, #ff5500 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 28px; letter-spacing: 0; font-family: 'Fredoka', sans-serif; font-weight: 640;">Best</span> Score`;
-            shareBtn.classList.remove('hidden');
-            } else {
-                scoreLabel.innerText = 'Your Score';
-                shareBtn.classList.add('hidden');
-            }
-        gameOverPanel.classList.remove('hidden');
-        gameOverPanel.style.display = 'flex';
+    finalScoreText.innerText = `${score}`;
+    if (hasPlayedBefore && isNewBest) {
+        scoreLabel.innerHTML = `Your <span style="background: linear-gradient(180deg, #ff5500 25%, #ff7500 50%, #ff5500 75%); background-clip: text; -webkit-background-clip: text; color: transparent; font-size: 28px; letter-spacing: 0; font-family: 'Fredoka', sans-serif; font-weight: 640;">Best</span> Score`;
+        shareBtn.classList.remove('hidden');
+    } else {
+        scoreLabel.innerText = 'Your Score';
+        shareBtn.classList.add('hidden');
+    }
+    gameOverPanel.classList.remove('hidden');
+    gameOverPanel.style.display = 'flex';
         
-        localStorage.setItem('hasPlayedBefore', 'true');
-        hasPlayedBefore = true;
+    localStorage.setItem('hasPlayedBefore', 'true');
+    hasPlayedBefore = true;
 
-            // Salvataggio Cloud (solo per utenti non anonimi)
-if (auth.currentUser && !auth.currentUser.isAnonymous) {
+    if (auth.currentUser && !auth.currentUser.isAnonymous) {
         const userRef = doc(db, "users", auth.currentUser.uid);
     
     try {
-        // Inviamo solo le informazioni necessarie verificate dalle nuove regole
         setDoc(userRef, {
             score: highScore,
             lastUpdateAt: serverTimestamp()
@@ -1117,8 +1056,6 @@ if (auth.currentUser && !auth.currentUser.isAnonymous) {
     };
 }
 
-
-        // 4. Gestione Multiplayer
         if (currentRoomId && auth.currentUser) {
             const roomRef = doc(db, "rooms", currentRoomId);
             updateDoc(roomRef, {
@@ -1131,25 +1068,18 @@ if (auth.currentUser && !auth.currentUser.isAnonymous) {
 function draw() {
     ctx.clearRect(0, 0, w, h);
 
-    // Rendering Sfondo Sfumato Dinamico (Statico rispetto alla camera)
     let skyGradient = ctx.createLinearGradient(0, 0, 0, h);
     skyGradient.addColorStop(0, '#0392f1');
     skyGradient.addColorStop(1, '#ffffff');
     ctx.fillStyle = skyGradient;
     ctx.fillRect(0, 0, w, h);
-
-    // APPLICHIAMO LA TELECAMERA SUL MONDO
     ctx.save();
     ctx.translate(-Math.floor(cameraOffsetX), 0);
 
-    // ====== DA QUI IN POI USIAMO SOLO LE COORDINATE MONDO (SENZA SOTTRARRE CAMERAOFFSTX) ======
-
-    // Disegno Corde e Perni superiori
     for (let rope of ropes) {
         if (rope.isBroken) continue;
 
         if (rope === attachedRope && playerState === 'ATTACHED') {
-            // Corda attiva sotto tensione oscillante (Usa coordinate pure del mondo)
             ctx.strokeStyle = attachedRope.isSlippery ? '#3a8a5c' : '#0000a5';
             ctx.lineWidth = 12;
             ctx.beginPath();
@@ -1157,16 +1087,14 @@ function draw() {
             ctx.lineTo(playerX, playerY);
             ctx.stroke();
         } else {
-            // Corda statica verticale (Usa coordinate pure del mondo)
             let currentRopeImg = rope.isSlippery ? images.ropeSlippery : (rope.isFragile ? images.ropeFragile : images.rope);
             const wRope = rope.isSlippery || rope.isFragile ? 70 : 150;
             const hRope = rope.isSlippery || rope.isFragile ? rope.length - 20 : rope.length;
-            const drawX = rope.x - (wRope / 2); // Centrato rispetto a rope.x del mondo
+            const drawX = rope.x - (wRope / 2); 
 
             if (currentRopeImg.complete && currentRopeImg.naturalHeight !== 0) {
                 ctx.drawImage(currentRopeImg, drawX, rope.y, wRope, hRope);
             } else {
-                // Fallback geometrico visivo colorato
                 ctx.strokeStyle = rope.isSlippery ? '#2ecc71' : (rope.isFragile ? '#e74c3c' : '#7f8c8d');
                 ctx.lineWidth = 5;
                 ctx.beginPath();
@@ -1176,14 +1104,12 @@ function draw() {
             }
         }
 
-        // Perno superiore della corda (Usa coordinata pura del mondo)
         ctx.fillStyle = '#2c3e50';
         ctx.beginPath();
         ctx.arc(rope.x, rope.y, 10, 0, Math.PI * 2);
         ctx.fill();
     }
 
-    // Selezione dell'immagine del Gatto
     let currentCatImg = images.catFlying;
     if (playerState === 'ATTACHED') {
         currentCatImg = attachedRope?.isSlippery ? images.slippingCatAttached : images.catAttached;
@@ -1191,9 +1117,8 @@ function draw() {
         if (isCatFalling) currentCatImg = images.catFalling;
     }
 
-    // Rendering ed orientamento grafico del Gatto
     ctx.save();
-    ctx.translate(playerX, playerY); // Si posiziona sulla coordinata pura del mondo
+    ctx.translate(playerX, playerY); 
 
     if (playerState === 'ATTACHED') {
         ctx.rotate(-angle - 0.04);
@@ -1205,23 +1130,18 @@ function draw() {
     if (currentCatImg.complete && currentCatImg.naturalHeight !== 0) {
         ctx.drawImage(currentCatImg, -playerWidth / 2, -playerHeight / 2, playerWidth, playerHeight);
     } else {
-        // Fallback Geometrico
         ctx.fillStyle = playerState === 'ATTACHED' ? '#f39c12' : '#e67e22';
         ctx.beginPath();
         ctx.arc(0, 0, playerWidth / 2, 0, Math.PI * 2);
         ctx.fill();
-
-        // Occhi di orientamento
         ctx.fillStyle = '#ffffff';
         ctx.beginPath(); ctx.arc(12, -8, 6, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#000000';
         ctx.beginPath(); ctx.arc(14, -8, 3, 0, Math.PI * 2); ctx.fill();
     }
 
-    ctx.restore(); // Ripristina rotazione gatto
-    ctx.restore(); // Rilascia la traslazione della telecamera globale
-
-    // ====== DA QUI IN POI LA UI FISSA (Non subisce la telecamera) ======
+    ctx.restore(); 
+    ctx.restore(); 
     ctx.fillStyle = '#2c3e50';
     ctx.font = '600 28px Fredoka';
     ctx.textAlign = 'left';
@@ -1231,7 +1151,7 @@ function draw() {
     ctx.fillText(`HighScore: ${highScore}`, w - 30, h - 40);
 }
 
-let animationFrameId = null; // Aggiungi in alto
+let animationFrameId = null; 
 
 function gameLoop(timestamp) {
     updateGameLogic();
@@ -1239,7 +1159,6 @@ function gameLoop(timestamp) {
     animationFrameId = requestAnimationFrame(gameLoop);
 }
 
-// Quando il gioco finisce o torni alla lobby:
 function stopGameLoop() {
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
@@ -1253,12 +1172,10 @@ function stopGameLoop() {
 function handleActionInput(e) {
 
     if (e && e.target) {
-        // Evita che i click sui bottoni di gioco attivino il salto
         if (e.target.tagName === 'BUTTON' || e.target.classList.contains('icon-btn')) {
             return;
         }
 
-        // 🔴 NUOVO CONTROLLO: Ignora l'input se si sta interagendo con Iubenda
         if (e.target.closest('#iubenda-cs-banner') ||
             e.target.closest('.iubenda-cs-container') ||
             e.target.classList.contains('iubenda-embed')) {
@@ -1284,7 +1201,6 @@ function handleActionInput(e) {
         if (isMusicPlaying) {
             resumeMusic();
         } else {
-            // Se siamo muti, assicurati che il tasto rimanga corretto
             soundOn.classList.add('hidden');
             soundOff.classList.remove('hidden');
         }
@@ -1294,7 +1210,6 @@ function handleActionInput(e) {
     if (gameState === 'PLAYING') {
         if (playerState === 'ATTACHED' || playerState === 'STOPPED') {
 
-            // Gestione corda scivolosa (Slippery) con distacco ritardato passivo
             if (attachedRope && attachedRope.isSlippery) {
                 if (!isSlipping) {
                     isSlipping = true;
@@ -1313,16 +1228,13 @@ function handleActionInput(e) {
 
             isCatFalling = false;
 
-            // Calcolo velocità tangenziale di rilascio vettoriale (conversione polare-cartesiana)
             const tangentialSpeed = angularVelocity * ropeLength;
 
             const releaseMultiplier = 0.01;
 
-            // Proiezione vettoriale ortogonale all'angolo della corda al momento del rilascio
             velocityX = tangentialSpeed * Math.cos(angle);
             velocityY = -tangentialSpeed * Math.sin(angle) * releaseMultiplier;
 
-            // Spinta minima propulsiva in avanti per fluidità e prevenzione stallo verticale
             if (velocityX < 7) velocityX = 8.5;
             if (velocityX > 15) velocityX = 15;
             if (velocityY < -10) velocityY = isMobile ? -8 : -10;
@@ -1330,7 +1242,6 @@ function handleActionInput(e) {
     }
 }
 
-// Assicura compatibilità cross-platform istantanea sia desktop che mobile
 window.addEventListener('mousedown', handleActionInput);
 window.addEventListener('touchstart', (e) => {
     handleActionInput(e);
@@ -1340,12 +1251,10 @@ window.addEventListener('touchstart', (e) => {
 
 let currentRoomId = null;
 
-// 1. Creare o Entrare in una stanza
 async function joinGame(roomId) {
     currentRoomId = roomId;
     const roomRef = doc(db, "rooms", roomId);
 
-    // Aggiungi il giocatore alla stanza
     await updateDoc(roomRef, {
         [`players.${auth.currentUser.uid}`]: {
             name: auth.currentUser.displayName,
@@ -1353,19 +1262,15 @@ async function joinGame(roomId) {
         }
     });
 
-    // Avvia l'ascolto dei punteggi degli altri
     onSnapshot(roomRef, (doc) => {
         if (doc.exists()) {
             const data = doc.data();
             const players = data.players || {};
-
-            // Aggiorna la tabella
             updateScoreboardUI(players);;
         }
     });
 }
 
-// Modifica la funzione in game.js
 function updateScoreboardUI(players, matchEnded) {
     const scoreBody = document.getElementById('scoreBody');
     scoreBody.innerHTML = "";
@@ -1376,7 +1281,6 @@ function updateScoreboardUI(players, matchEnded) {
         const position = index + 1;
         let medal = "";
 
-        // 🟢 Usa il parametro passato per decidere se mostrare le medaglie
         if (matchEnded) {
             if (position === 1) medal = "🥇 ";
             else if (position === 2) medal = "🥈 ";
@@ -1388,8 +1292,6 @@ function updateScoreboardUI(players, matchEnded) {
     });
 }
 
-// 3. Chiamata da inserire nel tuo ciclo di gioco
-// Ogni volta che il giocatore segna un punto, chiama questa:
 function sendMyScore(newScore) {
     if (!currentRoomId || !auth.currentUser) return;
     const roomRef = doc(db, "rooms", currentRoomId);
@@ -1400,7 +1302,6 @@ function sendMyScore(newScore) {
 
 window.addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
-        // Impedisce lo scrolling della pagina quando premi spazio
         e.preventDefault();
         handleActionInput(e);
     }
@@ -1411,13 +1312,11 @@ let deferredPrompt;
 const installBtn = document.getElementById('btnInstall');
 const divInstall = document.getElementById('divInstall');
 
-// Funzione helper per verificare se l'app è aperta in modalità PWA (Standalone)
 function isStandalone() {
     return window.matchMedia('(display-mode: standalone)').matches || 
            window.navigator.standalone === true;
 }
 
-// Controllo immediato all'avvio della pagina
 if (isStandalone() || localStorage.getItem('pwaInstalled') === 'true') {
     if (installBtn) {
         divInstall.style.display = 'none';
@@ -1425,18 +1324,14 @@ if (isStandalone() || localStorage.getItem('pwaInstalled') === 'true') {
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Se l'app è aperta come PWA standalone o è già stata installata in precedenza, non fare nulla
     if (isStandalone() || localStorage.getItem('pwaInstalled') === 'true') {
         if (installBtn) divInstall.style.display = 'none';
         return;
     }
 
-    // Impedisce al browser di mostrare il banner automatico standard
     e.preventDefault();
-    // Salva l'evento per poterlo richiamare con il click del bottone
     deferredPrompt = e;
     
-    // Mostra il pulsante personalizzato nel menu
     if (installBtn) {
         divInstall.style.display = 'flex';
     }
@@ -1445,26 +1340,21 @@ window.addEventListener('beforeinstallprompt', (e) => {
 if (installBtn) {
     installBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
-            // Mostra la finestra di dialogo nativa del browser per l'installazione
             deferredPrompt.prompt();
             
-            // Attendi la risposta dell'utente
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
                 console.log('L\'utente ha accettato di installare la PWA');
-                // Salva lo stato in localStorage per nascondere il tasto nelle visite future
                 localStorage.setItem('pwaInstalled', 'true');
                 divInstall.style.display = 'none';
             } else {
                 console.log('L\'utente ha rifiutato l\'installazione');
             }
-            // L'evento può essere usato una sola volta, azzeriamolo
             deferredPrompt = null;
         }
     });
 }
 
-// Nascondi il bottone ed esegui il salvataggio quando l'app viene installata con successo
 window.addEventListener('appinstalled', () => {
     console.log('PWA installata con successo');
     logEvent('pwa', { app: 'installed' });
