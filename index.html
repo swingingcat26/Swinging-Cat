@@ -107,7 +107,7 @@
         <button id="buttonGame2">Play</button>
         <div style="display: flex; flex-direction: row; max-width: 300px; gap: 8px; width: 100%;">
             <button id="ranking2" style="width: 50%; display: flex; flex-direction: row; justify-content: center; align-items: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: 1px; padding: 12px 24px;">Ranks</button>
-            <button id="dailyBtn" style="width: 50%; display: flex; justify-content: center; align-items: center; padding: 12px 24px;"><a style="text-decoration: none; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: 1px; color: white;" href="https://youtube.com/playlist?list=PLFlXV5P9am8E&si=Wr2HSgx4IgbhbpSJ">Daily</a></button>
+            <button id="dailyBtn" style="width: 50%; display: flex; justify-content: center; align-items: center; padding: 12px 24px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: 1px;">Daily</button>
             <button id="multiplayerBtn" style="width: 50%; display: flex; flex-direction: row; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: 1px;  padding: 12px 24px;">VS</button>
         </div>
         <div id="divInstall" style="text-align: left; cursor: default; padding: 2px 2px 2px 12px; align-items: center; display: flex; flex-direction: row; width: 100%; box-sizing: border-box;">
@@ -220,6 +220,31 @@
             <button id="returnLobbyBtn" class="hidden" style="margin-top: 15px; width: 100%;">Return to Lobby</button>
         </div>
     </div>
+
+    <div id="dailyFrameContainer" class="overlay hidden" style="position: fixed; z-index: 99999;">
+    <div class="popup-content" style="min-height: 50vh; max-width: 500px; padding: 8px;">
+        <button id="closeDailyBtn" class="close-popup-btn" style="position: sticky; top: 3px; left: 100%; width: auto; padding: 6px 12px; margin: 0; font-size: 16px; font-family: 'Fredoka', sans-serif; font-weight: 600; box-shadow: none; color: #475569;">Close</button>
+    
+        <h2 style="margin-top: 0; font-family: 'Fredoka', sans-serif; font-weight: 600;">Daily Challenges</h2>
+
+        <iframe 
+        id="dailyIframe" 
+        width="100%" 
+        height="315" 
+        src="about:blank" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen>
+        </iframe>
+
+        <div style="font-weight: 600; margin: 12px 0 6px; text-align: left; font-family: 'Fredoka', sans-serif;">Choose a Challenge:</div>
+        <div id="challengeList" class="challenge-selector" style="gap: 8px; display: flex; flex-direction: row; align-items: center; justify-content: left;">
+            <span style="font-size: 14px; opacity: 0.7;">Loading...</span>
+        </div>
+
+  </div>
+</div>
 
     <script type="module" src="firebase-init.js"></script>
     <script type="module" src="game.js"></script>

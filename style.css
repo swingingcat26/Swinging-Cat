@@ -252,6 +252,13 @@ button, #divInstall {
     line-height: 1.5;
 }
 
+.popup-content iframe {
+    width: 100%;
+    border-radius: 12px;
+    border: none;
+    display: block;
+}
+
 /* Pulsanti di login specifici */
 #magicLinkBtn {
     background: black;
@@ -618,4 +625,26 @@ button, #divInstall {
   
   /* Leggera ombra/glow attorno alla testa per amalgamare il cutout */
   filter: drop-shadow(0 0 2px rgb(255, 255, 255, 0.6)) drop-shadow(0 0 6px rgb(255, 255, 255, 0.35)) drop-shadow(0 0 8px rgb(255, 255, 255, 0.1));
+}
+
+#challBtn {
+    position: relative;
+    z-index: 3; /* Sta sopra ai raggi */
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Fredoka', sans-serif;
+    padding: 4px;
+    border-radius: var(--radius-md);
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#challBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 117, 252, 0.3);
 }

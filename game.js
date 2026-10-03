@@ -776,6 +776,84 @@ shareBtn.addEventListener('click', async () => {
             }
         });
 
+const YOUTUBE_API_KEY = 'AIzaSyCmZ_TSCj8WEVXG_8EL2H551725mo5sg4Q';
+const UPLOADS_PLAYLIST_ID = 'PLFlXV5P9am8E';
+
+const dailyFrameContainer = document.getElementById('dailyFrameContainer'); 
+const dailyIframe = document.getElementById('dailyIframe');
+const closeDailyBtn = document.getElementById('closeDailyBtn');
+const challengeList = document.getElementById('challengeList');
+
+let isLoaded = false;
+
+dailyBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  dailyFrameContainer.classList.remove('hidden');
+
+  if (dailyIframe.src === 'about:blank') {
+        dailyIframe.src = `https://www.youtube-nocookie.com/embed/videoseries?si=CM1MLUfklZ2_XAKK&amp;list=PLFlXV5P9am8E`;
+      }
+
+  if (!isLoaded) {
+    await fetchLatestChallenges();
+  }
+});
+
+async function fetchLatestChallenges() {
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${UPLOADS_PLAYLIST_ID}&maxResults=10&key=${YOUTUBE_API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.items || data.items.length === 0) {
+      challengeList.innerHTML = 'No videos found';
+      return;
+    }
+
+    challengeList.innerHTML = ''; 
+
+    data.items.forEach((item, index) => {
+      const videoId = item.snippet.resourceId.videoId;
+      const rawTitle = item.snippet.title;
+
+      const cleanTitle = rawTitle
+    .replace(/#\w+/g, '') 
+    .replace(/\s+/g, ' ') 
+    .replace('Challenge No.', '')
+    .trim();
+
+      if (index === 0) {
+        dailyIframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
+      }
+
+      const challBtn = document.createElement('button');
+      challBtn.className = `challenge-card ${index === 0 ? 'active' : ''}`;
+      challBtn.innerText = cleanTitle;
+      challBtn.id = 'challBtn';
+      
+      challBtn.onclick = () => {
+        dailyIframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+        document.querySelectorAll('.challenge-card').forEach(b => b.classList.remove('active'));
+        challBtn.classList.add('active');
+      };
+
+      challengeList.appendChild(challBtn);
+    });
+
+    isLoaded = true; 
+  } catch (error) {
+    console.error('Errore durante il recupero dei video:', error);
+    challengeList.innerHTML = 'Error loading videos';
+  }
+}
+
+if (closeDailyBtn) {
+  closeDailyBtn.addEventListener('click', () => {
+    dailyFrameContainer.classList.add('hidden');
+    dailyIframe.src = 'about:blank'; 
+  });
+}        
+
 initMultiplayer(uiElements);
 
 let isGameRunning = false;
