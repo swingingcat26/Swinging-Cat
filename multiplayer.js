@@ -137,7 +137,7 @@ ui.backToLobbyBtn.addEventListener('click', async () => {
             const isReady = roomSnap.data().players[user.uid].ready;
             await updateDoc(roomRef, { [`players.${user.uid}.ready`]: !isReady });
             ui.readyBtn.innerText = !isReady ? "Ready!" : "Not Ready";
-            ui.readyBtn.style.backgroundColor = !isReady ? "#2ecc71" : "#e74c3c";
+            ui.readyBtn.style.backgroundColor = !isReady ? "#2ecc43" : "#f00000";
         }
     });
 
@@ -175,7 +175,7 @@ function enterWaitingRoom(roomCode) {
         ui.startGameBtn.classList.add('hidden');
         ui.readyBtn.classList.remove('hidden');
         ui.readyBtn.innerText = "Not Ready";
-        ui.readyBtn.style.backgroundColor = "#e74c3c";
+        ui.readyBtn.style.backgroundColor = "#f00000";
     }
 
     const roomRef = doc(db, "rooms", roomCode);
@@ -205,6 +205,7 @@ unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
     playersEntries.forEach(([uid, p]) => {
         const li = document.createElement('li');
         li.innerText = `${p.name} - ${p.ready ? '🟢 Ready' : '🔴 Waiting'}`;
+        li.style.fontFamily = 'Fredoka';
         ui.playersList.appendChild(li);
         if (!p.ready) allReady = false;
     });
@@ -213,7 +214,7 @@ unsubscribeRoom = onSnapshot(roomRef, (docSnap) => {
     for (let i = 0; i < emptySlots; i++) {
         const li = document.createElement('li');
         li.style.color = '#94a3b8'; 
-        li.style.fontStyle = 'italic';
+        li.style.fontFamily = 'Fredoka';
         li.innerHTML = `⏳ Free Slot (${playersCount + i + 1}/4)`;
        ui.playersList.appendChild(li);
     }

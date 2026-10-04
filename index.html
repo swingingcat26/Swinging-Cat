@@ -141,14 +141,14 @@
 
     <div id="roomWaitingScreen" class="hidden">
         <div style="display: flex; justify-content: center; flex-direction: row;">
-            <h2 style="position: absolute;">Room: <span id="displayRoomCode"></span></h2>
+            <h2 style="position: absolute; font-family: 'Fredoka', sans-serif; font-weight: 600;">Room: <span id="displayRoomCode" style="font-family: 'Fredoka', sans-serif; font-weight: 600; letter-spacing: 2px;"></span></h2>
             <button id="backToLobbyBtn" style="background: white; border: none; cursor: pointer; padding: 4px; z-index: 2; width: 34px; position: relative; right: 130px;">
                 <i class="fa-solid fa-arrow-left-long" style="font-size: 24px; color: #000;"></i>
             </button>
         </div>
         <ul id="playersList"></ul>
-        <button id="readyBtn" class="hidden" style="background-color: #2ecc71;">Ready!</button>
-        <button id="startGameBtn" class="hidden" disabled>Start Game</button>
+        <button id="readyBtn" class="hidden" style="background-color: #2ecc43; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px;">Ready!</button>
+        <button id="startGameBtn" class="hidden" disabled style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px;">Start Game</button>
     </div>
 
     <div id="settingsPanel" class="hidden">
@@ -207,7 +207,6 @@
         </div>
 
         <div id="liveScoreboard" class="hidden">
-            <h3>Live Scoreboard</h3>
             <table id="scoreTable">
                 <thead>
                     <tr>
@@ -217,7 +216,7 @@
                 </thead>
                 <tbody id="scoreBody"></tbody>
             </table>
-            <button id="returnLobbyBtn" class="hidden" style="margin-top: 15px; width: 100%;">Return to Lobby</button>
+            <button id="returnLobbyBtn" class="hidden" style="margin-top: 16px; width: 100%; display: flex; justify-content: center; align-items: center; font-family: 'Fredoka', sans-serif; font-weight: 600; box-shadow: none;">Back to Room</button>
         </div>
     </div>
 

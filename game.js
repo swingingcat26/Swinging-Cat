@@ -1365,7 +1365,7 @@ function updateScoreboardUI(players, matchEnded) {
             else if (position === 3) medal = "🥉 ";
         }
 
-         const row = `<tr><td>${position}°${medal}<strong>${p.name}</strong></td><td><strong style="color: #1853b8;">${p.score}</strong></td></tr>`;
+        const row = `<tr style="display: flex; justify-content: space-between; flex-direction: row; gap: 8px;"><td><label style="font-family: 'Fredoka', sans-serif; font-weight: 600;">${position}°</label>${medal}<label style="font-family: 'Fredoka', sans-serif; font-weight: 600;">${p.name}</label></td><td><label style="color: #1853b8; font-family: 'Fredoka', sans-serif; font-weight: 600;">${p.score}</label></td></tr>`;
         scoreBody.innerHTML += row;
     });
 }
