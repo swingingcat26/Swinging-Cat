@@ -790,6 +790,8 @@ dailyBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   dailyFrameContainer.classList.remove('hidden');
 
+    logEvent('dailyBtn', { status: 'clicked' });
+
   if (dailyIframe.src === 'about:blank') {
         dailyIframe.src = `https://www.youtube-nocookie.com/embed/videoseries?si=CM1MLUfklZ2_XAKK&amp;list=PLFlXV5P9am8E`;
       }
