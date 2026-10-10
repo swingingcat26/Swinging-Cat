@@ -814,7 +814,14 @@ async function fetchLatestChallenges() {
 
     challengeList.innerHTML = ''; 
 
-    data.items.forEach((item, index) => {
+    data.items.filter(item => {
+      const title = item.snippet.title;
+      const isPrivateOrDeleted = title === 'Private video' || title === 'Deleted video' || !item.snippet.resourceId?.videoId;
+      const isScheduled = new Date(item.snippet.publishedAt) > new Date();
+
+      return !isPrivateOrDeleted && !isScheduled;
+    })
+    .forEach((item, index) => {
       const videoId = item.snippet.resourceId.videoId;
       const rawTitle = item.snippet.title;
 
@@ -840,14 +847,6 @@ async function fetchLatestChallenges() {
       };
 
       challengeList.appendChild(challBtn);
-    });
-
-    data.items.filter(item => {
-      const title = item.snippet.title;
-      const isPrivateOrDeleted = title === 'Private video' || title === 'Deleted video' || !item.snippet.resourceId?.videoId;
-      const isScheduled = new Date(item.snippet.publishedAt) > new Date();
-
-      return !isPrivateOrDeleted && !isScheduled;
     });
 
     isLoaded = true; 
