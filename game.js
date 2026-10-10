@@ -842,6 +842,14 @@ async function fetchLatestChallenges() {
       challengeList.appendChild(challBtn);
     });
 
+    data.items.filter(item => {
+      const title = item.snippet.title;
+      const isPrivateOrDeleted = title === 'Private video' || title === 'Deleted video' || !item.snippet.resourceId?.videoId;
+      const isScheduled = new Date(item.snippet.publishedAt) > new Date();
+
+      return !isPrivateOrDeleted && !isScheduled;
+    });
+
     isLoaded = true; 
   } catch (error) {
     console.error('Errore durante il recupero dei video:', error);

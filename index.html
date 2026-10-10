@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Swinging Cat is an endless runner web game based on a cat swinging from rope to rope. It features a global leaderboard and a multiplayer mode for up to 4 players.">
-    <title>Swinging Cat</title>
+    <title>SwingingCat</title>
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="https://embeds.iubenda.com/widgets/5d372bd0-eb09-4f22-b81f-2b9ec266edd0.js"></script>
     <link rel="manifest" href="manifest.json">
@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="assets/caticon.png">
+    <link rel="icon" type="image/png" href="assets/caticon.png">
 </head>
 
 <body>
@@ -239,7 +239,7 @@
         </iframe>
 
         <div style="font-weight: 600; margin: 12px 0 6px; text-align: left; font-family: 'Fredoka', sans-serif;">Choose a Challenge:</div>
-        <div id="challengeList" class="challenge-selector" style="gap: 8px; display: flex; flex-direction: row; align-items: center; justify-content: left;">
+        <div id="challengeList" class="challenge-selector" style="gap: 8px; display: grid; grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));">
             <span style="font-size: 14px; opacity: 0.7;">Loading...</span>
         </div>
 
