@@ -1451,3 +1451,98 @@ window.addEventListener('appinstalled', () => {
     }
     deferredPrompt = null;
 });
+
+const phrases = [
+            "Meeooow!",
+            "Hello World!",
+            "Challenge your friends!",
+            "Climb the leaderboard!",
+            "Play Every Day!",
+            "DO NOT FALL!",
+            "Swing like a Pro!"
+        ];
+
+        let timeoutId = null;
+        let indexQueue = [];
+        let lastIndex = -1;
+
+// (algoritmo di Fisher-Yates)
+function remakeQueue() {
+    indexQueue = phrases.map((_, index) => index);
+    for (let i = indexQueue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indexQueue[i], indexQueue[j]] = [indexQueue[j], indexQueue[i]];
+    }
+};
+
+
+function showBalloon() {
+    if (phrases.length === 0) return;
+
+    if (indexQueue.length === 0) {
+        remakeQueue();
+    };
+
+    let casualIndex;
+
+    const wrapper = document.getElementById("legendary-container");
+    const balloon = document.getElementById("balloon");
+    const arrow = document.getElementById("balloon-arrow");
+
+    if (isMobile) {
+                balloon.style.left = "50%";
+                balloon.style.bottom = "190px";
+                arrow.style.position = "relative";
+                arrow.style.bottom = "36%";
+                arrow.style.left = "-50%";
+                arrow.style.transform = "rotate(0deg)";
+                balloon.style.transformOrigin = "none";
+                balloon.style.transform = "translateX(-50%)";
+            };
+
+    do {
+        casualIndex = indexQueue.pop();
+    } while (casualIndex === lastIndex && phrases.length > 1);
+
+    lastIndex = casualIndex;
+    
+    balloon.innerText = phrases[casualIndex];
+
+    wrapper.classList.remove("active");
+    void wrapper.offsetWidth; 
+    wrapper.classList.add("active");
+
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+        wrapper.classList.remove("active");
+    }, 2000);
+}
+
+document.getElementById("legendary-container").addEventListener('click', showBalloon);
+
+document.addEventListener("DOMContentLoaded", () => {
+    const wrapper = document.getElementById("legendary-container");
+    const balloon = document.getElementById("balloon");
+    const arrow = document.getElementById("balloon-arrow");
+
+    balloon.innerText = "Click me!";
+
+    wrapper.classList.add("active");
+
+     if (isMobile) {
+                balloon.style.left = "50%";
+                balloon.style.bottom = "190px";
+                arrow.style.position = "relative";
+                arrow.style.bottom = "36%";
+                arrow.style.left = "-50%";
+                arrow.style.transform = "rotate(0deg)";
+                balloon.style.transformOrigin = "none";
+                balloon.style.transform = "translateX(-50%)";
+                arrow.style.transition = "opacity 0.2s ease";
+                balloon.style.transition = "opacity 0.2s ease";
+            };
+
+    timeoutId = setTimeout(() => {
+        wrapper.classList.remove("active");
+    }, 2000);
+});

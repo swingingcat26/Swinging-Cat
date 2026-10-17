@@ -91,8 +91,7 @@
     <div id="leaderboardPopup" class="overlay hidden">
         <div class="popup-content" style="max-height: 80vh; overflow-y: auto; scrollbar-color: rgba(0, 0, 0, 0.2) transparent;">
             <button id="closeLeaderboardBtn" class="guest-btn" style="position: sticky; top: 3px; left: 100%; width: auto; padding: 6px 12px; margin: 0; font-size: 16px; font-family: 'Fredoka', sans-serif; font-weight: 600;">Close</button>
-            <h2 style="font-family: 'Fredoka', sans-serif; font-weight: 600;">Global Leaderboard 🏆</h2>
-            <p>The best cats in the community</p>
+            <h3 style="font-family: 'Fredoka', sans-serif; font-weight: 600; color: #484848;">Climb the Leaderboard!</h3>
             <div id="leaderboardContent" style="margin-top: 15px; text-align: left;">
                 <p style="text-align: center;">Loading...</p>
             </div>
@@ -100,9 +99,11 @@
     </div>
 
     <div id="mainMenu">
-        <div class="legendary-container">
+        <div class="legendary-container" id="legendary-container">
             <div class="sunburst"></div>
             <img src="assets/catface.png" alt="Swinging Cat" class="cat-face">
+            <div id="balloon" class="balloon"></div>
+            <div id="balloon-arrow" class="balloon-arrow"></div>
         </div>
         <h1 id="menuTitle">Swinging Cat</h1>
         <button id="buttonGame2">Play</button>
@@ -124,7 +125,7 @@
 
     <div id="multiplayerLobby" class="hidden">
         <div style="display: flex; justify-content: center; flex-direction: row;">
-            <h2 style="font-family: 'Fredoka', sans-serif; font-weight: 600; position: absolute;">Lobby Multiplayer</h2>
+            <h2 style="font-family: 'Fredoka', sans-serif; font-weight: 600; position: absolute;">Lobby</h2>
             <button id="backToMenuBtn" style="background: white; border: none; cursor: pointer; padding: 4px; z-index: 2; width: 34px; position: relative; right: 150px;">
                 <i class="fa-solid fa-arrow-left-long" style="font-size: 24px; color: #000;"></i>
             </button>
@@ -225,7 +226,7 @@
     <div class="popup-content" style="min-height: 50vh; max-width: 500px; padding: 8px;">
         <button id="closeDailyBtn" class="close-popup-btn" style="position: sticky; top: 3px; left: 100%; width: auto; padding: 6px 12px; margin: 0; font-size: 16px; font-family: 'Fredoka', sans-serif; font-weight: 600; box-shadow: none; color: #475569;">Close</button>
     
-        <h2 style="margin-top: 0; font-family: 'Fredoka', sans-serif; font-weight: 600;">Daily Challenges</h2>
+        <h3 style="margin-top: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; color: #484848; margin-bottom: 8px;">Beat the End-of-Video Score!</h3>
 
         <iframe 
         id="dailyIframe" 

@@ -589,6 +589,7 @@ button, #divInstall {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 /* 1. Generatore dei RAGGI LUMINOSI (Sunburst) */
@@ -629,9 +630,14 @@ button, #divInstall {
   width: 150px;
   height: auto;
   display: block;
+  transition: transform 0.1s ease;
   
   /* Leggera ombra/glow attorno alla testa per amalgamare il cutout */
   filter: drop-shadow(0 0 2px rgb(255, 255, 255, 0.6)) drop-shadow(0 0 6px rgb(255, 255, 255, 0.35)) drop-shadow(0 0 8px rgb(255, 255, 255, 0.1));
+}
+
+.cat-face:active {
+    transform: scale(0.95);
 }
 
 #challBtn {
@@ -654,4 +660,57 @@ button, #divInstall {
 #challBtn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(37, 117, 252, 0.3);
+}
+
+.balloon {
+    position: absolute;
+    bottom: 130px;
+    left: calc(70% + 15px);
+    
+    /* Rimossa la translateX(-50%). L'origine parte dal punto di ancoraggio vicino alla freccia */
+    transform-origin: left bottom;
+    transform: scale(0);
+    
+    background-color: #ffffff;
+    color: #333;
+    padding: 12px 18px;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Fredoka', sans-serif;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Freccetta immobile */
+.balloon-arrow {
+    position: absolute;
+    bottom: 114px;
+    left: calc(70% + 8px);
+    
+    /* Mantiene la rotazione fissa senza sovrascriverla */
+    transform: rotate(39deg);
+    
+    border-width: 12px 6px;
+    border-style: solid;
+    border-color: #ffffff transparent transparent transparent;
+    z-index: 1000;
+    
+    /* Nascosta di default, visibile quando active */
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Stato attivo */
+.legendary-container.active .balloon {
+    opacity: 1;
+    transform: scale(1); /* Si espande mantenendo il lato sinistro fisso */
+}
+
+.legendary-container.active .balloon-arrow {
+    opacity: 1; /* La freccia appare semplicemente, senza muoversi o ruotare */
 }
