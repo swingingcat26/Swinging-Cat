@@ -1175,12 +1175,13 @@ function draw() {
             ctx.stroke();
         } else {
             let currentRopeImg = rope.isSlippery ? images.ropeSlippery : (rope.isFragile ? images.ropeFragile : images.rope);
-            const wRope = rope.isSlippery || rope.isFragile ? 70 : 150;
-            const hRope = rope.isSlippery || rope.isFragile ? rope.length - 20 : rope.length;
-            const drawX = rope.x - (wRope / 2); 
+            const wRope = rope.isSlippery || rope.isFragile ? 80 : 180;
+            const hRope = rope.isSlippery || rope.isFragile ? rope.length - 20 : rope.length + 40;
+            const drawX = rope.x - (wRope / 2);
+            const drawY = rope.isSlippery || rope.isFragile ? rope.y : rope.y - 30;
 
             if (currentRopeImg.complete && currentRopeImg.naturalHeight !== 0) {
-                ctx.drawImage(currentRopeImg, drawX, rope.y, wRope, hRope);
+                ctx.drawImage(currentRopeImg, drawX, drawY, wRope, hRope);
             } else {
                 ctx.strokeStyle = rope.isSlippery ? '#2ecc71' : (rope.isFragile ? '#e74c3c' : '#7f8c8d');
                 ctx.lineWidth = 5;
