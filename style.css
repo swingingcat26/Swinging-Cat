@@ -101,6 +101,8 @@ button, #divInstall {
     box-shadow: var(--shadow-md);
     width: 100%;
     max-width: 300px;
+    outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #buttonGame2 {
@@ -590,6 +592,8 @@ button, #divInstall {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* 1. Generatore dei RAGGI LUMINOSI (Sunburst) */

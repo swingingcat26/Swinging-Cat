@@ -291,7 +291,7 @@ const playerWidth = 60;
 const playerHeight = 100;
 let velocityX = 0;
 let velocityY = 0;
-const gravity = isMobile ? 0.72 : 0.8;
+const gravity = isMobile ? 0.7 : 0.8;
 let cameraOffsetX = 0;
 
 let anchorX = 0;
@@ -1073,7 +1073,7 @@ function updateGameLogic() {
     frame++;
 
     if (playerState === 'ATTACHED') {
-        const g = isMobile ? 0.52 : 0.6; 
+        const g = isMobile ? 0.5 : 0.6; 
         const damping = 0.998; 
 
         const acceleration = (-g / ropeLength) * Math.sin(angle);
@@ -1406,7 +1406,7 @@ function handleActionInput(e) {
 
             if (velocityX < 7) velocityX = 8.5;
             if (velocityX > 15) velocityX = 15;
-            if (velocityY < -10) velocityY = isMobile ? -8 : -10;
+            if (velocityY < -10) velocityY = isMobile ? -7.8 : -10;
         }
     }
 }
