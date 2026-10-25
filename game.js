@@ -229,19 +229,23 @@ const images = {
     ropeFragile: new Image()
 };
 
-images.catAttached.src = 'assets/cat_on_rope.png';
-images.slippingCatAttached.src = 'assets/cat_on_slippery_rope.png';
-images.catFlying.src = 'assets/flying_cat.png';
-images.catFalling.src = 'assets/falling_cat.png';
+images.catAttached.src = 'assets/cat_on_rope.webp';
+images.slippingCatAttached.src = 'assets/cat_on_slippery_rope.webp';
+images.catFlying.src = 'assets/flying_cat.webp';
+images.catFalling.src = 'assets/falling_cat.webp';
 images.rope.src = 'assets/rope.png';
-images.ropeSlippery.src = 'assets/slippery_rope.png';
-images.ropeFragile.src = 'assets/fragile_rope.png';
+images.ropeSlippery.src = 'assets/slippery_rope.webp';
+images.ropeFragile.src = 'assets/fragile_rope.webp';
 
 const sounds = {
-    swing: new Audio('assets/jump_cat_sound.ogg'),
-    falling: new Audio('assets/fall_cat_sound.ogg'),
-    bgm1: new Audio('assets/backsound_002.ogg'),
-    bgm2: new Audio('assets/backsound_002.ogg')
+    swing: new Audio('assets/jump_cat_sound.opus'),
+    falling: new Audio('assets/fall_cat_sound.opus'),
+    bgm1: new Audio('assets/backsound_002.opus'),
+    bgm2: new Audio('assets/backsound_002.opus'),
+    pop: new Audio('assets/pop.opus'),
+    break: new Audio('assets/fragile_rope_break.opus'),
+    snap: new Audio('assets/fragile_rope_snap.opus'),
+    slipSnap: new Audio('assets/slippery_rope_snap.opus')
 
 };
 
@@ -292,6 +296,8 @@ let cameraOffsetX = 0;
 
 let anchorX = 0;
 let anchorY = 0;
+let breakWorldX = 0;
+let breakTextTimer = 0; 
 let attachedRope = null;
 let ropeLength = 500;
 let angle = Math.PI / 4;
@@ -371,6 +377,7 @@ buttonGame2.addEventListener('click', () => {
     tutorialButton.classList.remove('hidden');
     authPopup.style.display = 'none';
     chooseAuth.style.zIndex = -20;
+    isMusicPlaying = true;
 
     w = window.innerWidth;
     h = window.innerHeight;
@@ -1058,13 +1065,57 @@ function updateGameLogic() {
         playerY = anchorY + (ropeLength * Math.cos(angle));
 
         if (attachedRope && attachedRope.isFragile && Math.abs(angle) > 0.3) {
+            const fallingRope = document.getElementById('brokenRope');
+            const breakLabel = document.getElementById('breakLabel');
+            playSound(sounds.break);
             attachedRope.isBroken = true;
             playerState = 'STOPPED';
+
+            breakWorldX = anchorX;
+            breakTextTimer = 30; 
+
+            if (breakLabel) {
+                breakLabel.classList.remove('hidden');
+                breakLabel.style.left = (anchorX - cameraOffsetX) + 'px';
+            }
+           
+            fallingRope.style.position = 'absolute';
+            fallingRope.style.left = (anchorX - cameraOffsetX) + 'px';
+            fallingRope.style.top = anchorY + 'px';
+
+            fallingRope.classList.remove('fallingRope');
+            void fallingRope.offsetWidth; 
+
+            fallingRope.classList.remove('hidden');
+            fallingRope.classList.add('fallingRope');
+
+            fallingRope.addEventListener('animationend', () => {
+            fallingRope.classList.remove('fallingRope');
+            fallingRope.classList.add('hidden');
+            }, { once: true });
 
             const tangentialVelocity = angularVelocity * ropeLength;
             velocityX = tangentialVelocity * Math.cos(angle);
             velocityY = -tangentialVelocity * Math.sin(angle);
         }
+
+         if (attachedRope && attachedRope.isFragile) {
+    if (!attachedRope.soundPlayed) {
+        playSound(sounds.snap)
+        attachedRope.soundPlayed = true;
+    }
+} else if (attachedRope) {
+    attachedRope.soundPlayed = false;
+}
+        
+        if (attachedRope && attachedRope.isSlippery) {
+    if (!attachedRope.slipSoundPlayed) {
+        playSound(sounds.slipSnap);
+        attachedRope.slipSoundPlayed = true;
+    }
+} else if (attachedRope) {
+    attachedRope.slipSoundPlayed = false;
+}
 
         if (Math.abs(angularVelocity) < 0.001 && Math.abs(angle) < 0.03) {
             playerState = 'STOPPED';
@@ -1085,6 +1136,17 @@ function updateGameLogic() {
         playerX += velocityX;
         playerY += velocityY;
         checkRopeCollision();
+    }
+
+     if (breakTextTimer > 0) {
+        breakTextTimer--;
+        const breakLabel = document.getElementById('breakLabel');
+        if (breakLabel) {
+            breakLabel.style.left = (breakWorldX - cameraOffsetX) + 'px';
+        }
+        if (breakTextTimer === 0 && breakLabel) {
+            breakLabel.classList.add('hidden');
+        }
     }
 
     const targetX = playerX - (w * 0.33);
@@ -1513,6 +1575,8 @@ function showBalloon() {
     void wrapper.offsetWidth; 
     wrapper.classList.add("active");
 
+    sounds.pop.play();
+
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
         wrapper.classList.remove("active");
@@ -1545,5 +1609,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     timeoutId = setTimeout(() => {
         wrapper.classList.remove("active");
-    }, 2000);
+    }, 3000);
 });

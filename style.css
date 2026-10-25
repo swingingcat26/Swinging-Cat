@@ -714,3 +714,40 @@ button, #divInstall {
 .legendary-container.active .balloon-arrow {
     opacity: 1; /* La freccia appare semplicemente, senza muoversi o ruotare */
 }
+
+.fallingRope {
+    animation: fallingRopeAnimation linear 0.5s forwards;
+}
+
+@keyframes fallingRopeAnimation {
+    25% {
+        transform: translateY(100px) rotate(15deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(250px) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+#brokenRope {
+    position: absolute;
+    width: 150px; /* Larghezza coerente con la corda fragile */
+    height: 400px;
+    pointer-events: none;
+}
+
+#breakLabel {
+    position: absolute;
+    top: 150px;
+    letter-spacing: 1px;
+    color: #000092;
+    font-size: 24px;
+    font-weight: 750;
+    font-family: Impact, sans-serif;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 1;
+    transform: rotate(-15deg);
+    transition: opacity 0.3s ease-in-out; /* Solo opacità, niente transition su left/top */
+}
