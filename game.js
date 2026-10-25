@@ -983,6 +983,22 @@ function resetGame() {
     soundOff.classList.add('hidden');
 }
 
+let ropeTypePool = [];
+
+function refillRopePool() {
+   ropeTypePool = [
+        ...Array(24).fill('slippery'), // 24%
+        ...Array(20).fill('fragile'),  // 20%
+        ...Array(56).fill('normal')    // 56%
+    ];
+
+    // Algoritmo di Fisher-Yates 
+    for (let i = ropeTypePool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [ropeTypePool[i], ropeTypePool[j]] = [ropeTypePool[j], ropeTypePool[i]];
+    }
+}
+
 function generateRopes() {
     if (graceFramesAfterReset > 0) {
         graceFramesAfterReset--;
@@ -994,11 +1010,14 @@ function generateRopes() {
 
     if (lastRopeX < rightEdge + 600) {
         const newRopeX = lastRopeX + 260;
-        const chance = Math.random();
-        let fragile = false, slippery = false;
 
-        if (chance < 0.25) slippery = true;
-        else if (chance >= 0.25 && chance < 0.5) fragile = true;
+        if (ropeTypePool.length === 0) {
+            refillRopePool();
+        }
+
+        const ropeType = ropeTypePool.pop();
+        let fragile = (ropeType === 'fragile');
+        let slippery = (ropeType === 'slippery');
 
         ropes.push({
             x: newRopeX,
@@ -1080,7 +1099,7 @@ function updateGameLogic() {
             }
            
             fallingRope.style.position = 'absolute';
-            fallingRope.style.left = (anchorX - cameraOffsetX) + 'px';
+            fallingRope.style.left = (anchorX - cameraOffsetX - 100) + 'px';
             fallingRope.style.top = anchorY + 'px';
 
             fallingRope.classList.remove('fallingRope');
