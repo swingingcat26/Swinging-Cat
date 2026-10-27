@@ -1404,7 +1404,7 @@ function handleActionInput(e) {
             velocityX = tangentialSpeed * Math.cos(angle);
             velocityY = -tangentialSpeed * Math.sin(angle) * releaseMultiplier;
 
-            if (velocityX < 7) velocityX = 8.5;
+            if (velocityX < 7) velocityX = isMobile ? 7.5 : 8.5;
             if (velocityX > 15) velocityX = 15;
             if (velocityY < -10) velocityY = isMobile ? -7.8 : -10;
         }
