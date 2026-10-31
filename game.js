@@ -124,6 +124,7 @@ const sfxVolume = document.getElementById('sfxVolume');
 const userEmailDisplay = document.getElementById('userEmailDisplay');
 
 let isMatchOver = false;
+let skyGradient;
 
 closeLeaderboardBtn.addEventListener('click', () => {
     leaderboardPopup.classList.add('hidden');
@@ -217,6 +218,13 @@ window.addEventListener('resize', () => {
     canvas.width = w;
     canvas.height = h;
 });
+
+function createSkyGradient() {
+    skyGradient = ctx.createLinearGradient(0, 0, 0, h);
+    skyGradient.addColorStop(0, '#0392f1');
+    skyGradient.addColorStop(1, '#ffffff');
+}
+createSkyGradient();
 
 // ====== CONFIGURAZIONE ASSET ======
 const images = {
@@ -1237,9 +1245,6 @@ function updateGameLogic() {
 function draw() {
     ctx.clearRect(0, 0, w, h);
 
-    let skyGradient = ctx.createLinearGradient(0, 0, 0, h);
-    skyGradient.addColorStop(0, '#0392f1');
-    skyGradient.addColorStop(1, '#ffffff');
     ctx.fillStyle = skyGradient;
     ctx.fillRect(0, 0, w, h);
     ctx.save();

@@ -736,7 +736,7 @@ button, #divInstall {
 
 #brokenRope {
     position: absolute;
-    width: 80px; /* Larghezza coerente con la corda fragile */
+    width: 70px; /* Larghezza coerente con la corda fragile */
     height: 400px;
     pointer-events: none;
 }
