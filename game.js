@@ -233,7 +233,7 @@ images.catAttached.src = 'assets/cat_on_rope.webp';
 images.slippingCatAttached.src = 'assets/cat_on_slippery_rope.webp';
 images.catFlying.src = 'assets/flying_cat.webp';
 images.catFalling.src = 'assets/falling_cat.webp';
-images.rope.src = 'assets/rope.png';
+images.rope.src = 'assets/rope.webp';
 images.ropeSlippery.src = 'assets/slippery_rope.webp';
 images.ropeFragile.src = 'assets/fragile_rope.webp';
 
@@ -649,7 +649,8 @@ document.getElementById('returnLobbyBtn').addEventListener('click', async () => 
     gameState = 'NOT_STARTED';
 });
 
-settingsBtn.addEventListener('click', () => {
+settingsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     const upgradeBtn = document.getElementById('btnUpgradeAccount');
     const user = auth.currentUser;
     if (user && !user.isAnonymous) {
@@ -1256,13 +1257,12 @@ function draw() {
             ctx.stroke();
         } else {
             let currentRopeImg = rope.isSlippery ? images.ropeSlippery : (rope.isFragile ? images.ropeFragile : images.rope);
-            const wRope = rope.isSlippery || rope.isFragile ? 80 : 180;
-            const hRope = rope.isSlippery || rope.isFragile ? rope.length - 20 : rope.length + 40;
+            const wRope = 80;
+            const hRope = rope.length - 20;
             const drawX = rope.x - (wRope / 2);
-            const drawY = rope.isSlippery || rope.isFragile ? rope.y : rope.y - 30;
 
             if (currentRopeImg.complete && currentRopeImg.naturalHeight !== 0) {
-                ctx.drawImage(currentRopeImg, drawX, drawY, wRope, hRope);
+                ctx.drawImage(currentRopeImg, drawX, rope.y, wRope, hRope);
             } else {
                 ctx.strokeStyle = rope.isSlippery ? '#2ecc71' : (rope.isFragile ? '#e74c3c' : '#7f8c8d');
                 ctx.lineWidth = 5;
@@ -1629,4 +1629,8 @@ document.addEventListener("DOMContentLoaded", () => {
     timeoutId = setTimeout(() => {
         wrapper.classList.remove("active");
     }, 3000);
+});
+
+window.addEventListener('click', () => {
+    settingsPanel.classList.add('hidden');
 });
