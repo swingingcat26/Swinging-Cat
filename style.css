@@ -740,18 +740,3 @@ button, #divInstall {
     height: 400px;
     pointer-events: none;
 }
-
-#breakLabel {
-    position: absolute;
-    top: 150px;
-    letter-spacing: 1px;
-    color: #000092;
-    font-size: 24px;
-    font-weight: 750;
-    font-family: Impact, sans-serif;
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 1;
-    transform: rotate(-15deg);
-    transition: opacity 0.3s ease-in-out; /* Solo opacità, niente transition su left/top */
-}

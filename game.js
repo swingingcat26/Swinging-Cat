@@ -1094,18 +1094,12 @@ function updateGameLogic() {
 
         if (attachedRope && attachedRope.isFragile && Math.abs(angle) > 0.3) {
             const fallingRope = document.getElementById('brokenRope');
-            const breakLabel = document.getElementById('breakLabel');
             playSound(sounds.break);
             attachedRope.isBroken = true;
             playerState = 'STOPPED';
 
             breakWorldX = anchorX;
             breakTextTimer = 30; 
-
-            if (breakLabel) {
-                breakLabel.classList.remove('hidden');
-                breakLabel.style.left = (anchorX - cameraOffsetX) + 'px';
-            }
            
             fallingRope.style.position = 'absolute';
             fallingRope.style.left = (anchorX - cameraOffsetX - 100) + 'px';
@@ -1168,13 +1162,6 @@ function updateGameLogic() {
 
      if (breakTextTimer > 0) {
         breakTextTimer--;
-        const breakLabel = document.getElementById('breakLabel');
-        if (breakLabel) {
-            breakLabel.style.left = (breakWorldX - cameraOffsetX) + 'px';
-        }
-        if (breakTextTimer === 0 && breakLabel) {
-            breakLabel.classList.add('hidden');
-        }
     }
 
     const targetX = playerX - (w * 0.33);
@@ -1249,6 +1236,18 @@ function draw() {
     ctx.fillRect(0, 0, w, h);
     ctx.save();
     ctx.translate(-Math.floor(cameraOffsetX), 0);
+
+    if (breakTextTimer > 0) {
+    ctx.save();
+    ctx.fillStyle = '#000092';
+    ctx.font = '26px Impact';
+    ctx.letterSpacing = '1px';
+    ctx.textAlign = 'center';
+    ctx.translate(breakWorldX, 150);
+    ctx.rotate(-15 * Math.PI / 180);
+    ctx.fillText("BREAK", 0, 0);
+    ctx.restore();
+}
 
     for (let rope of ropes) {
         if (rope.isBroken) continue;
