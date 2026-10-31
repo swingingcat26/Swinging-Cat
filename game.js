@@ -1240,7 +1240,7 @@ function draw() {
     if (breakTextTimer > 0) {
     ctx.save();
     ctx.fillStyle = '#000092';
-    ctx.font = '26px Impact';
+    ctx.font = 'normal 26px Impact';
     ctx.letterSpacing = '1px';
     ctx.textAlign = 'center';
     ctx.translate(breakWorldX, 150);
